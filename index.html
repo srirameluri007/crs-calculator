@@ -586,12 +586,12 @@
         <h2 id="h-premium">Your complete CRS score check — with the full chances report</h2>
         <div class="cols">
           <div>
-            <p style="margin:6px 0 0">The calculator above gives you a quick headline estimate. Tap the button and this page generates your <b>full report</b> instantly — a complete personal document you can download, keep and act on:</p>
+            <p style="margin:6px 0 0">Your <b>score and the full point-by-point breakdown are free</b> — tap the button and they appear on this page instantly. The <b>$1.99 full report</b> adds the analysis that tells you what to do next:</p>
             <ul>
-              <li><b>Full breakdown</b> — every factor, your points, and the exact IRCC rule behind each one (as a real PDF file you open and save)</li>
               <li><b>Chances by pathway</b> — CEC, French-language, PNP and category-based rounds, with your gap to each recent cut-off</li>
-              <li><b>Your personal points plan</b> — the 3 changes that would add the most points to <i>your</i> profile, in order</li>
+              <li><b>Every way to gain points</b> — your personal plan, biggest gain first, with the new score each change would give you</li>
               <li><b>Document checklist</b> — ECA, language tests, work letters: what you’ll need to prove every point you claimed</li>
+              <li><b>The complete report as a PDF</b> — the full document to open, save and keep</li>
             </ul>
             <p class="fineprint">Prepared from the same IRCC grid this calculator uses (Nov 3, 2026). An estimate and planning document — not immigration advice and not a guarantee of an invitation.</p>
           </div>
@@ -603,24 +603,24 @@
             <div class="price" id="priceVal">$1.99 <small>one-time</small></div>
             <p class="fineprint" id="priceNote" style="margin-top:6px">Complete score check + report, for one profile. No subscription.</p>
             <ol class="pay-steps">
-              <li><b>Step 1 — Generate your breakdown</b> on this page (button below). It appears right here — nothing is emailed.</li>
-              <li><b>Step 2 — Pay $1.99</b> on Stripe. Stripe opens in a <b>new tab</b>; this tab keeps your answers and your breakdown.</li>
-              <li><b>Step 3 — Come back to this tab</b> and tap <b>“Open my PDF”</b> in the report below. Your PDF opens in a new tab — in the PDF tab, click the download icon at the top to save the file to your device. If Stripe sends you back here after paying, your breakdown appears automatically with the same “Open my PDF” button ready.</li>
+              <li><b>Step 1 — See your free breakdown</b> on this page (button below): your score and every point, line by line. It appears right here — nothing is emailed.</li>
+              <li><b>Step 2 — Want the analysis?</b> Pay $1.99 on Stripe. Stripe opens in a <b>new tab</b>; this tab keeps your answers and your breakdown.</li>
+              <li><b>Step 3 — Come back to this tab</b> and your <b>full report unlocks</b> below — chances analysis, every way to gain points, document checklist, and your PDF. Tap <b>“Open my PDF”</b> and, in the PDF tab, click the download icon at the top to save the file. If Stripe sends you back here after paying, the full report unlocks automatically.</li>
             </ol>
-            <button type="button" class="cta" id="generateReportBtn" style="border:none;cursor:pointer;width:100%;font:inherit">Step 1 · Generate my full breakdown now ↓</button>
-            <p class="fineprint">Your full report is generated instantly on this page from the answers you entered above — full breakdown, chances by pathway, personal points plan and document checklist. Open it as a PDF and save it from the PDF viewer. No waiting, no email needed.</p>
-            <a class="cta-secondary" id="reportCta" href="https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00" target="_blank" rel="noopener">Step 2 · Pay $1.99 via Stripe</a>
+            <button type="button" class="cta" id="generateReportBtn" style="border:none;cursor:pointer;width:100%;font:inherit">Step 1 · Show my free breakdown ↓</button>
+            <p class="fineprint">Free: your score and the complete point-by-point breakdown, generated instantly on this page from the answers you entered above. No waiting, no email needed. The analysis, points plan and PDF are in the $1.99 full report.</p>
+            <a class="cta-secondary" id="reportCta" href="https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00" target="_blank" rel="noopener">Step 2 · Unlock the full report · $1.99 via Stripe</a>
             <p class="fineprint">One-time payment, no subscription. Pay securely with Stripe. Paying does not take you away from your breakdown — Stripe opens in a new tab and this page stays exactly as you left it.</p>
-            <p class="fineprint hidden" id="payNotice" style="color:var(--green);font-weight:700">Stripe is open in a new tab. Your full breakdown has been generated on this page — after paying, return to this tab and tap “Open my PDF” in the report below. In the PDF tab, click the download icon at the top to save the file to your device.</p>
-            <button type="button" class="btn-ghost" id="paidAlreadyBtn" style="width:100%;margin-top:10px">I already paid — show my breakdown ↓</button>
-            <p class="fineprint">Already paid on Stripe and landed back here without your report? Tap the button above — it rebuilds your full breakdown from the answers in the calculator, no second payment needed.</p>
+            <p class="fineprint hidden" id="payNotice" style="color:var(--green);font-weight:700">Stripe is open in a new tab. After paying, return to this tab — your full report unlocks in the report section below, with “Open my PDF” ready. In the PDF tab, click the download icon at the top to save the file to your device.</p>
+            <button type="button" class="btn-ghost" id="paidAlreadyBtn" style="width:100%;margin-top:10px">I already paid — unlock my full report ↓</button>
+            <p class="fineprint">Already paid on Stripe and landed back here without your full report? Tap the button above — it unlocks the full report from the answers in the calculator, no second payment needed.</p>
           </div>
         </div>
       </section>
 
       <!-- ================= FULL REPORT ================= -->
       <section class="report hidden" id="fullReport" aria-labelledby="h-report">
-        <div class="paid-banner hidden" id="paidBanner"><b>Payment received — thank you.</b> Your complete CRS breakdown is below, built from the answers in the calculator. Your PDF is already generated at the bottom of this report — tap <b>“Open my PDF — then tap the download icon to save it”</b>. In the PDF tab, click the download icon at the top to save the file to your device. If the answers above were reset on the way back, re-enter them and tap “Generate my full breakdown” again — you will not be charged again.</div>
+        <div class="paid-banner hidden" id="paidBanner"><b>Payment received — thank you.</b> Your complete CRS report is unlocked below, built from the answers in the calculator. Your PDF is already generated at the bottom of this report — tap <b>“Open my PDF — then tap the download icon to save it”</b>. In the PDF tab, click the download icon at the top to save the file to your device. If the answers above were reset on the way back, re-enter them and tap “Show my free breakdown”, then “I already paid” — you will not be charged again.</div>
         <div class="report-head">
           <div>
             <h2 id="h-report">Your full CRS report</h2>
@@ -636,6 +636,21 @@
         <p class="muted">Each line is one IRCC factor: what you earned, the maximum for that factor, and the rule behind it.</p>
         <div id="reportBreakdown"></div>
 
+        <div id="paywallBox" style="margin-top:24px;border:2px dashed #FBAF00;border-radius:14px;padding:18px">
+          <h3 style="margin-top:0">🔒 Full report — analysis &amp; every way to gain points · $1.99</h3>
+          <p>Your score and the full breakdown above are <b>free</b>. The full report adds the parts that tell you what to do next:</p>
+          <ul>
+            <li><b>Chances analysis, by pathway</b> — CEC, French-language, PNP and category rounds, with your exact gap to each recent cut-off</li>
+            <li><b>Every way to gain points</b> — your personal plan, biggest gain first, with the new score each change gives you</li>
+            <li><b>Document checklist</b> — what you’ll need to prove every point you claimed</li>
+            <li><b>Next steps, plus the NOC &amp; median-wage reference</b></li>
+            <li><b>The complete report as a PDF</b> — open it and save it to your device</li>
+          </ul>
+          <a class="cta-secondary" id="reportCta2" href="https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00" target="_blank" rel="noopener" style="text-decoration:none">Unlock the full report · $1.99 via Stripe</a>
+          <p class="fineprint">One-time payment, no subscription. Stripe opens in a new tab; after paying, come back to this tab — or use “I already paid” above — and the full report unlocks right here.</p>
+        </div>
+
+        <div id="paidSections" class="hidden">
         <h3>3 · Your chances, by pathway</h3>
         <div id="reportVerdict"></div>
         <div id="reportChances"></div>
@@ -670,6 +685,7 @@
           <p style="margin:0 0 6px"><b>Your PDF file is ready:</b> <span id="pdfReadyName">CRS-Full-Report.pdf</span><span id="pdfReadyMeta"></span> — the complete breakdown, generated from your answers.</p>
           <p style="margin:0 0 6px"><a id="pdfReadyOpen" href="#" target="_blank" rel="noopener" style="font-weight:700">Open my PDF — then tap the download icon to save it</a></p>
           <p style="margin:0">In the PDF tab, click the download icon at the top to save the file to your device. If nothing saves with a direct download, use Open PDF above.</p>
+        </div>
         </div>
       </section>
 
@@ -1113,11 +1129,24 @@
         $("clbNote2").innerHTML = inp.hasSecond
           ? "Second language ("+l2name+") CLB: <b>"+inp.clb2.join(" · ")+"</b>."
           : "No second-language scores entered — "+l2name+" points left at zero.";
-        if(reportGenerated){ var st=$("reportStatus"); if(st) st.textContent="Your answers changed — tap “Generate my full report now” to refresh this report."; }
+        if(reportGenerated){ var st=$("reportStatus"); if(st) st.textContent="Your answers changed — tap “Show my free breakdown” to refresh this report."; }
       }
 
       /* ============ FULL REPORT GENERATOR ============ */
       var reportGenerated=false, lastReportInp=null, lastReportRes=null;
+      /* Paywall state: the score + full breakdown (report sections 1–2) are
+         free. The analysis sections (3–7), the PDF and the copy button live
+         in #paidSections and are shown only when reportUnlocked is true —
+         after a genuine Stripe return, or via the self-declared
+         "I already paid" safety net. A static page cannot verify a payment
+         with Stripe; the gate keeps the paid content out of casual reach
+         and the safety net protects real payers who lose the return tab. */
+      var reportUnlocked=false;
+      function applyGate(){
+        var p=$("paidSections"), w=$("paywallBox");
+        if(reportUnlocked){ if(p) p.classList.remove("hidden"); if(w) w.classList.add("hidden"); }
+        else { if(p) p.classList.add("hidden"); if(w) w.classList.remove("hidden"); }
+      }
       function canWorkLabel(y){ return y===0?"None":y>=5?"5 years or more":y+" year"+(y>1?"s":""); }
       function buildChecklist(inp){
         var items=[];
@@ -1209,16 +1238,20 @@
           +'<li style="margin:6px 0"><b>Create your Express Entry profile</b> once documents are in hand, and re-check your score in the official IRCC tool.</li>'
           +'<li style="margin:6px 0"><b>Watch category rounds</b> — French-language and occupation rounds have cut off far below general/CEC rounds in 2026.</li></ol>';
         $("fullReport").classList.remove("hidden");
-        /* Generate the actual PDF file right away, so the moment this
-           breakdown appears — including on return from Stripe — the PDF is
-           already prepared and wired into the real Download link and the
-           "Open PDF" link at the bottom of the report, and never depends
-           on a script-triggered download click. */
-        var pdfOk = preparePdf();
-        if(pdfOk){
-          $("reportStatus").textContent="Report ready — your PDF is generated: tap “Open my PDF” at the bottom of this report. In the PDF tab, click the download icon at the top to save the file to your device.";
-        } else {
-          showPdfError("Your breakdown is shown in full on this page, and “Copy report summary” above saves the same breakdown as text. Please try generating the report once more.");
+        /* Show/hide the paid sections per the gate. The PDF is generated
+           ONLY when the report is unlocked, so no PDF exists on the page
+           for unpaid visitors. When unlocked, generate it right away, so
+           the moment the full report appears — including on return from
+           Stripe — the PDF is already prepared and wired into the real
+           Download link and the "Open PDF" link at the bottom. */
+        applyGate();
+        if(reportUnlocked){
+          var pdfOk = preparePdf();
+          if(pdfOk){
+            $("reportStatus").textContent="Report ready — your PDF is generated: tap “Open my PDF” at the bottom of this report. In the PDF tab, click the download icon at the top to save the file to your device.";
+          } else {
+            showPdfError("Your full report is shown in full on this page, and “Copy report summary” above saves the same content as text. Please try generating the report once more.");
+          }
         }
         $("fullReport").scrollIntoView({behavior:"smooth",block:"start"});
       }
@@ -1476,14 +1509,15 @@
          payment happened: this page cannot verify payments, so it must not
          thank people for payments it has not seen. */
       function showBreakdown(paidConfirmed){
+        if(paidConfirmed) reportUnlocked=true;
         buildReport();
         var st=$("reportStatus");
         if(paidConfirmed){
           $("paidBanner").classList.remove("hidden");
-          if(st) st.textContent="Payment received — your full breakdown is ready. Tap “Open my PDF” below — in the PDF tab, click the download icon at the top to save the file to your device.";
+          if(st) st.textContent="Payment received — your full report is ready. Tap “Open my PDF” below — in the PDF tab, click the download icon at the top to save the file to your device.";
         } else {
           $("paidBanner").classList.add("hidden");
-          if(st) st.textContent="Your full breakdown is ready — tap “Open my PDF” below. In the PDF tab, click the download icon at the top to save the file to your device.";
+          if(st && reportUnlocked) st.textContent="Your full report is ready — tap “Open my PDF” below. In the PDF tab, click the download icon at the top to save the file to your device.";
         }
       }
 
@@ -1533,10 +1567,20 @@
         if(!reportGenerated) buildReport();
         var n=$("payNotice"); if(n) n.classList.remove("hidden");
       });
-      /* "I already paid" is a self-declared safety net: it opens the
-         breakdown but NOT the payment banner — the page takes the visitor's
-         word to show the report; it does not claim a payment was received. */
-      $("paidAlreadyBtn").addEventListener("click", function(){ showBreakdown(false); });
+      /* "I already paid" is a self-declared safety net: it unlocks the
+         full report but NOT the payment banner — the page takes the
+         visitor's word to unlock; it does not claim a payment was
+         received. It exists so a real payer who lost the Stripe return
+         tab is never locked out of what they bought. */
+      $("paidAlreadyBtn").addEventListener("click", function(){ reportUnlocked=true; showBreakdown(false); });
+      /* The paywall box carries its own Stripe button — same behaviour as
+         the main Pay button: snapshot the answers and stamp the session. */
+      $("reportCta2").addEventListener("click", function(){
+        snapshotInputs();
+        try{ sessionStorage.setItem("crsPayStarted", String(Date.now())); }catch(e){}
+        if(!reportGenerated) buildReport();
+        var n=$("payNotice"); if(n) n.classList.remove("hidden");
+      });
       /* The Download control is a real anchor whose href + download name
          were set by preparePdf() when this report was generated, so a tap
          is a native browser download — no script-created click involved.
