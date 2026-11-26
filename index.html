@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" href="data:," />
     <title>CRS Calculator — Canada PR Score and Chances</title>
     <!-- Google Analytics 4 (property: CRS Calculator, account: velvook) -->
@@ -21,26 +21,27 @@
       button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
       * { box-sizing: border-box; }
       :root{
-        --bg:#f4f6f8; --surface:#ffffff; --surface2:#eef1f4;
-        --ink:#182230; --muted:#5a6675; --line:#d9dfe6;
-        --red:#d80621; --red-dark:#a8041a; --red-soft:#fdeef0;
-        --orange:#dd7a08; --blue:#1d5fb8; --green:#177245; --green-soft:#e8f4ec;
-        --amber:#b54708; --amber-soft:#fdf3e3;
-        --shadow:0 1px 3px rgba(16,24,40,.08),0 8px 24px rgba(16,24,40,.06);
+        /* Velvook brand theme — deep purple + gold, matching @crsvelvook posts & reels */
+        --bg:#230251; --surface:#2e0a5e; --surface2:#3d1478;
+        --ink:#f5f2ff; --muted:#b9aed6; --line:#55348f;
+        --red:#fbaf00; --red-dark:#ffc44d; --red-soft:#472a63;
+        --orange:#fa9600; --blue:#8fd14f; --green:#aee556; --green-soft:#274a12;
+        --amber:#f5b04c; --amber-soft:#3d2a08;
+        --shadow:0 1px 3px rgba(10,0,30,.45),0 8px 24px rgba(10,0,30,.35);
         --radius:14px;
       }
       @media (prefers-color-scheme: dark){
         :root{
-          --bg:#101318; --surface:#1a1e26; --surface2:#222834;
-          --ink:#edf1f6; --muted:#a3adbb; --line:#2e3644;
-          --red:#f04452; --red-dark:#f04452; --red-soft:#33191d;
-          --orange:#f09a3e; --blue:#6aa5ec; --green:#4cc07c; --green-soft:#17301f;
-          --amber:#f5b04c; --amber-soft:#33270f;
-          --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+          --bg:#230251; --surface:#2e0a5e; --surface2:#3d1478;
+          --ink:#f5f2ff; --muted:#b9aed6; --line:#55348f;
+          --red:#fbaf00; --red-dark:#ffc44d; --red-soft:#472a63;
+          --orange:#fa9600; --blue:#8fd14f; --green:#aee556; --green-soft:#274a12;
+          --amber:#f5b04c; --amber-soft:#3d2a08;
+          --shadow:0 1px 3px rgba(10,0,30,.45),0 8px 24px rgba(10,0,30,.35);
         }
       }
       html{scroll-behavior:smooth}
-      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
+      body{margin:0;background:radial-gradient(1200px 700px at 50% -80px,#3d0a80 0%,#230251 58%) fixed,#230251;color:var(--ink);font-family:"Noto Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
       h1,h2,h3{font-family:"Lato","Noto Sans",sans-serif;line-height:1.15;margin:0}
       a{color:var(--blue)}
       .wrap{max-width:1180px;margin:0 auto;padding:0 18px 64px}
@@ -254,6 +255,28 @@
       footer{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13.5px}
       footer p{margin:6px 0}
       @media (prefers-reduced-motion: reduce){*{transition:none !important;scroll-behavior:auto !important}}
+
+      /* ---------- Velvook brand overrides (gold-on-purple) ---------- */
+      .leaf{background:linear-gradient(135deg,#fbaf00,#fa9600)}
+      .leaf svg{fill:#230251}
+      .cta{color:#230251}
+      .cta:hover{background:#fa9600}
+      .cta-secondary{color:#fbaf00}
+      .cta-secondary:hover{background:#472a63}
+      .curr-toggle button.on{color:#230251}
+      .stepnum{color:#230251}
+      .seg input{accent-color:#fbaf00}
+      .age-row input[type="range"]{accent-color:#fbaf00}
+      .score-big{color:#fbaf00}
+      .score-big small{color:#b9aed6}
+      .report-score .rs{color:#fbaf00}
+      .price{color:#fbaf00}
+      ::selection{background:#fbaf00;color:#230251}
+      @media print{
+        body{background:#fff !important;color:#111 !important}
+        .report,.report p,.report .muted,.r-profile div span:first-child{color:#111 !important}
+        .report-score .rs,.report-score .rs small{color:#111 !important}
+      }
     </style>
   </head>
   <body>
