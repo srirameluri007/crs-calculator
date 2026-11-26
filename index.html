@@ -1473,12 +1473,12 @@
           if(!pw.na) p3.rect(bx+Math.min(bw-2,(pw.cut/scale)*bw), y3, 2, 11, PDF_COL.navy);
           var pos = pw.na? "Not eligible yet" : res.total>=pw.cut? ("Above by "+(res.total-pw.cut)+" pts") : ((pw.cut-res.total)+" pts short");
           p3.textR(pageW-M,y3,"Cut-off "+pw.cut+" - "+pos,9, !pw.na && res.total>=pw.cut, (pw.na? PDF_COL.grey : (res.total>=pw.cut? PDF_COL.green : PDF_COL.red)));
-          y3+=16;
+          y3+=15;
           p3.text(bx,y3,"You: "+res.total+"   |   navy mark = the recent cut-off",7.5,false,PDF_COL.grey);
-          y3+=14;
+          y3+=13;
         });
         p3.text(M,y3,"Cut-offs are from IRCC rounds held under the previous points grid (before Nov 3, 2026) - a guide, not a promise. There is no fixed passing score.",8,false,PDF_COL.grey);
-        y3+=22;
+        y3+=18;
         y3=p3.secTitle(y3,"Your personal plan to raise this score");
         var opts=boostOptions(inp,res);
         if(opts.length){
@@ -1487,7 +1487,7 @@
             p3.text(M+52,y3+1,wrapMax("Step "+(i+1)+": "+o.label, 330, 10, true, 1)[0],10,true,PDF_COL.ink);
             p3.textR(pageW-M,y3+1,"New score "+o.total,9.5,true,PDF_COL.navy);
             p3.text(M+52,y3+15,wrapMax(o.sub, W-52, 8.5, false, 1)[0],8.5,false,PDF_COL.grey);
-            y3+=32;
+            y3+=30;
           });
         } else { p3.text(M,y3,"Your profile is already at or near the practical maximum for the main levers. A provincial nomination (+600) is the only large item left.",9.5,false,PDF_COL.ink); y3+=18; }
         y3+=4;
@@ -1497,7 +1497,7 @@
           p3.text(M+14,y3,wrapMax(it.t, W-14, 9.5, true, 1)[0],9.5,true,PDF_COL.ink);
           var dLines=wrapMax(it.d, W-14, 8.5, false, 2);
           dLines.forEach(function(ln,di){ p3.text(M+14,y3+12+di*11,ln,8.5,false,PDF_COL.grey); });
-          y3+=12+dLines.length*11+4;
+          y3+=12+dLines.length*11+2;
         });
         y3+=2;
         y3=p3.secTitle(y3,"Your next steps");
@@ -1509,9 +1509,12 @@
           "4. Create your Express Entry profile once documents are in hand, and re-check your score in the official IRCC tool.",
           "5. Watch category rounds - French-language and occupation rounds have cut off far below general / CEC rounds in 2026."
         ];
-        steps.forEach(function(s){ wrapMax(s, W, 9, false, 2).forEach(function(ln){ p3.text(M,y3,ln,9,false,PDF_COL.ink); y3+=12; }); y3+=3; });
-        y3+=8;
-        wrapPt("Disclaimer: This report is an estimate generated from the answers you entered and IRCC's published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile - confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).", W, 8, false).forEach(function(ln){ p3.text(M,y3,ln,8,false,PDF_COL.grey); y3+=10.5; });
+        steps.forEach(function(s){ wrapMax(s, W, 9, false, 2).forEach(function(ln){ p3.text(M,y3,ln,9,false,PDF_COL.ink); y3+=11.5; }); y3+=2; });
+        y3+=6;
+        var dLinesAll=wrapPt("Disclaimer: This report is an estimate generated from the answers you entered and IRCC's published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile - confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).", W, 8, false);
+        var dSize=8, dLh=10.5;
+        if(y3+dLinesAll.length*dLh > pageH-48){ dSize=7.5; dLh=9.5; dLinesAll=wrapPt("Disclaimer: This report is an estimate generated from the answers you entered and IRCC's published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile - confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).", W, 7.5, false); }
+        dLinesAll.forEach(function(ln){ p3.text(M,y3,ln,dSize,false,PDF_COL.grey); y3+=dLh; });
 
         /* ---------- ASSEMBLE ---------- */
         var pages=[p1,p2,p3];
