@@ -612,15 +612,14 @@
             <a class="cta-secondary" id="reportCta" href="https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00" target="_blank" rel="noopener">Step 2 · Unlock the full report · $1.99 via Stripe</a>
             <p class="fineprint">One-time payment, no subscription. Pay securely with Stripe. Paying does not take you away from your breakdown — Stripe opens in a new tab and this page stays exactly as you left it.</p>
             <p class="fineprint hidden" id="payNotice" style="color:var(--green);font-weight:700">Stripe is open in a new tab. After paying, return to this tab — your full report unlocks in the report section below, with “Open my PDF” ready. In the PDF tab, click the download icon at the top to save the file to your device.</p>
-            <button type="button" class="btn-ghost" id="paidAlreadyBtn" style="width:100%;margin-top:10px">I already paid — unlock my full report ↓</button>
-            <p class="fineprint">Already paid on Stripe and landed back here without your full report? Tap the button above — it unlocks the full report from the answers in the calculator, no second payment needed.</p>
+            <p class="fineprint">After paying, Stripe brings you back to this page automatically and your full report unlocks — your answers are restored for you, nothing to re-enter.</p>
           </div>
         </div>
       </section>
 
       <!-- ================= FULL REPORT ================= -->
       <section class="report hidden" id="fullReport" aria-labelledby="h-report">
-        <div class="paid-banner hidden" id="paidBanner"><b>Payment received — thank you.</b> Your complete CRS report is unlocked below, built from the answers in the calculator. Your PDF is already generated at the bottom of this report — tap <b>“Open my PDF — then tap the download icon to save it”</b>. In the PDF tab, click the download icon at the top to save the file to your device. If the answers above were reset on the way back, re-enter them and tap “Show my free breakdown”, then “I already paid” — you will not be charged again.</div>
+        <div class="paid-banner hidden" id="paidBanner"><b>Payment received — thank you.</b> Your complete CRS report is unlocked below, built from the answers in the calculator. Your PDF is already generated at the bottom of this report — tap <b>“Open my PDF — then tap the download icon to save it”</b>. In the PDF tab, click the download icon at the top to save the file to your device. Your answers were restored automatically from before payment — nothing to re-enter.</div>
         <div class="report-head">
           <div>
             <h2 id="h-report">Your full CRS report</h2>
@@ -647,7 +646,7 @@
             <li><b>The complete report as a PDF</b> — open it and save it to your device</li>
           </ul>
           <a class="cta-secondary" id="reportCta2" href="https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00" target="_blank" rel="noopener" style="text-decoration:none">Unlock the full report · $1.99 via Stripe</a>
-          <p class="fineprint">One-time payment, no subscription. Stripe opens in a new tab; after paying, come back to this tab — or use “I already paid” above — and the full report unlocks right here.</p>
+          <p class="fineprint">One-time payment, no subscription. Stripe opens in a new tab; after paying, Stripe brings you back to this page and the full report unlocks automatically — your answers are restored for you.</p>
         </div>
 
         <div id="paidSections" class="hidden">
@@ -1136,11 +1135,15 @@
       var reportGenerated=false, lastReportInp=null, lastReportRes=null;
       /* Paywall state: the score + full breakdown (report sections 1–2) are
          free. The analysis sections (3–7), the PDF and the copy button live
-         in #paidSections and are shown only when reportUnlocked is true —
-         after a genuine Stripe return, or via the self-declared
-         "I already paid" safety net. A static page cannot verify a payment
-         with Stripe; the gate keeps the paid content out of casual reach
-         and the safety net protects real payers who lose the return tab. */
+         in #paidSections and are shown only when reportUnlocked is true.
+         reportUnlocked is set ONLY by a genuine Stripe return: the ?paid=1
+         address Stripe redirects to after a completed payment, plus a
+         payment this browser started within the last 24 hours — both kept
+         in localStorage so the returning Stripe tab (a different tab from
+         the one that clicked Pay) can still find them. There is no
+         self-declared unlock button. A static page cannot verify a payment
+         with Stripe's servers; this is the strongest honest check it can
+         make. */
       var reportUnlocked=false;
       function applyGate(){
         var p=$("paidSections"), w=$("paywallBox");
@@ -1300,21 +1303,106 @@
         if(cur) lines.push(cur);
         return lines.length?lines:[""];
       }
-      function buildPdfVisualLines(){
-        var inp=lastReportInp, res=lastReportRes, out=[];
-        function add(text, size, bold, gap, indent){
-          var chars=Math.max(20, Math.floor((516-(indent||0))/((size||10)*0.52)));
-          pdfWrap(text, chars).forEach(function(ln,i){
-            out.push({t:ln, s:size||10, b:!!bold, gap:(i===0?(gap||0):0), indent:indent||0});
-          });
+      /* ============ DESIGNED 3-PAGE PDF ============
+         A designed, colour report with bar charts, exactly 3 pages:
+           Page 1 - cover summary: big score, score bar, verdict, where
+                    your points come from (category bars), your profile.
+           Page 2 - the full verified breakdown: every factor, its points
+                    and a bar against its maximum, plus the rule behind it.
+           Page 3 - chances by pathway (gap bars vs each cut-off), your
+                    personal points plan, document checklist, next steps.
+         Built as raw PDF content streams (filled rectangles + text) with
+         Helvetica / Helvetica-Bold; all text is ASCII-normalised first. */
+      var PDF_COL={
+        navy:[0.13,0.22,0.45], gold:[0.98,0.69,0.00], ink:[0.13,0.14,0.16],
+        grey:[0.38,0.41,0.45], light:[0.93,0.94,0.96], barBg:[0.87,0.88,0.91],
+        green:[0.08,0.52,0.32], red:[0.78,0.22,0.20], teal:[0.05,0.50,0.55],
+        purple:[0.45,0.28,0.62], orange:[0.85,0.50,0.04], white:[1,1,1],
+        pale:[0.84,0.87,0.94]
+      };
+      var GROUP_COL={core:PDF_COL.navy, spouse:PDF_COL.purple, trans:PDF_COL.teal, add:PDF_COL.orange};
+      var GROUP_SHORT={core:"Core / human capital", spouse:"Spouse / partner", trans:"Skill transferability", add:"Additional points"};
+      function buildDesignedPdf(){
+        var inp=lastReportInp, res=lastReportRes;
+        var pageW=612, pageH=792, M=48, W=pageW-2*M;
+        function col(c){ return c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3); }
+        function txtW(t,size,bold){ return String(t).length*size*(bold?0.56:0.515); }
+        function wrapPt(text,widthPt,size,bold){
+          var chars=Math.max(12, Math.floor(widthPt/(size*(bold?0.56:0.515))));
+          return pdfWrap(text, chars);
+        }
+        function wrapMax(text,widthPt,size,bold,maxLines){
+          var ls=wrapPt(text,widthPt,size,bold);
+          if(ls.length>maxLines){ ls=ls.slice(0,maxLines); ls[maxLines-1]=ls[maxLines-1].replace(/[\s,;:.]+$/,"")+"..."; }
+          return ls;
+        }
+        function makePage(){
+          var ops=[];
+          return {
+            ops:ops,
+            rect:function(x,top,w,h,c){ ops.push(col(c)+" rg "+x.toFixed(1)+" "+(pageH-top-h).toFixed(1)+" "+w.toFixed(1)+" "+h.toFixed(1)+" re f"); },
+            text:function(x,top,t,size,bold,c){ ops.push("BT /F"+(bold?2:1)+" "+size+" Tf "+col(c||PDF_COL.ink)+" rg 1 0 0 1 "+x.toFixed(1)+" "+(pageH-top-size).toFixed(1)+" Tm ("+pdfEscape(t)+") Tj ET"); },
+            textR:function(rightX,top,t,size,bold,c){ this.text(rightX-txtW(t,size,bold), top, t, size, bold, c); },
+            bar:function(x,top,w,h,ratio,c){
+              this.rect(x,top,w,h,PDF_COL.barBg);
+              var fw=Math.max(0, Math.min(1, ratio))*w;
+              if(fw>0.5) this.rect(x,top,fw,h,c);
+            },
+            secTitle:function(top,t){
+              this.rect(M,top+1,5,15,PDF_COL.gold);
+              this.text(M+12,top,t,13,true,PDF_COL.navy);
+              return top+26;
+            }
+          };
+        }
+        function footer(p, idx, total){
+          p.rect(M, pageH-38, W, 0.8, PDF_COL.barBg);
+          p.text(M, pageH-30, "CRS Full Report - crs.velvook.com", 8, false, PDF_COL.grey);
+          p.textR(pageW-M, pageH-30, "Page "+idx+" of "+total, 8, false, PDF_COL.grey);
         }
         var now=new Date();
-        add("CRS Full Report - Canada PR Score & Chances", 19, true, 0, 0);
-        add("Estimated CRS score: "+res.total+" / 1,270", 15, true, 6, 0);
-        add("Generated "+now.toLocaleDateString("en-CA",{year:"numeric",month:"long",day:"numeric"})+" from your calculator answers. IRCC grid, Nov 3, 2026. Max score 1,270.", 9.5, false, 2, 0);
-        add("Core "+res.core+"  |  Spouse "+res.spouse+"  |  Transferability "+res.trans+"  |  Additional "+res.add, 10, true, 4, 0);
-        /* 1 Profile */
-        add("1. Your profile, as scored", 14, true, 14, 0);
+        var dateStr=now.toLocaleDateString("en-CA",{year:"numeric",month:"long",day:"numeric"});
+        var v=verdictFor(inp,res);
+
+        /* ---------- PAGE 1 : SUMMARY ---------- */
+        var p1=makePage();
+        p1.rect(0,0,pageW,64,PDF_COL.navy);
+        p1.rect(0,64,pageW,4,PDF_COL.gold);
+        p1.text(M,16,"CRS Full Report",19,true,PDF_COL.white);
+        p1.text(M,42,"Canada PR Score & Chances",10,false,PDF_COL.pale);
+        p1.textR(pageW-M,20,"Generated "+dateStr,9,false,PDF_COL.pale);
+        p1.textR(pageW-M,36,"IRCC grid - Nov 3, 2026",9,false,PDF_COL.pale);
+        var y=88;
+        p1.text(M,y,"ESTIMATED CRS SCORE",9.5,true,PDF_COL.grey); y+=8;
+        p1.text(M,y,String(res.total),40,true,PDF_COL.navy);
+        p1.text(M+txtW(String(res.total),40,true)+8, y+24, "/ 1,270",14,false,PDF_COL.grey);
+        y+=58;
+        p1.bar(M,y,W,11,res.total/1270,PDF_COL.gold); y+=17;
+        p1.text(M,y,"0",8,false,PDF_COL.grey);
+        p1.textR(pageW-M,y,"Maximum 1,270",8,false,PDF_COL.grey);
+        y+=24;
+        /* verdict box */
+        var vLines=wrapPt(v.text, W-28, 9.5, false);
+        var vH=22+vLines.length*13+10;
+        p1.rect(M,y,W,vH,PDF_COL.light);
+        p1.rect(M,y,5,vH,PDF_COL.navy);
+        p1.text(M+16,y+9,v.title,11.5,true,PDF_COL.navy);
+        vLines.forEach(function(ln,i){ p1.text(M+16, y+28+i*13, ln, 9.5, false, PDF_COL.ink); });
+        y+=vH+18;
+        /* category bars */
+        y=p1.secTitle(y,"Where your points come from");
+        var gAgg={}, gOrder=[];
+        res.rows.forEach(function(r){ if(!gAgg[r.g]){ gAgg[r.g]={pts:0,max:0}; gOrder.push(r.g); } gAgg[r.g].pts+=r.pts; gAgg[r.g].max+=r.max; });
+        gOrder.forEach(function(g){
+          var a=gAgg[g];
+          p1.text(M,y,GROUP_SHORT[g]||g,10,true,PDF_COL.ink);
+          p1.textR(pageW-M,y,a.pts+" / "+a.max,10,true,GROUP_COL[g]||PDF_COL.navy);
+          p1.bar(M,y+15,W,8, a.max? a.pts/a.max : 0, GROUP_COL[g]||PDF_COL.navy);
+          y+=36;
+        });
+        y+=2;
+        /* profile */
+        y=p1.secTitle(y,"Your profile, as scored");
         var lang1Name=$("lang1Name").value==="fr"?"French":"English";
         var prof=[
           ["Applying", inp.withSpouse?"With spouse / partner":"Just me"],
@@ -1325,87 +1413,117 @@
           ["Second language", inp.hasSecond?("CLB "+inp.clb2.join(", ")):"None entered"],
           ["Canadian skilled work", canWorkLabel(inp.canWork)],
           ["Occupation (NOC)", inp.noc?(inp.noc.title+" - NOC "+inp.noc.code):"Not selected in the finder"],
-          ["TEER level", inp.noc?("TEER "+inp.noc.teer+(inp.noc.teer<=3?" - skilled, counts for Express Entry":" - not skilled, no work points")):"-"],
-          ["High-wage list (IRCC)", inp.noc?(inp.noc.level>0?("Listed - "+NOC_LEVEL_TXT[inp.noc.level]+" (work +"+NOC_WORK_PTS[inp.noc.level]+" / offer +"+NOC_OFFER_PTS[inp.noc.level]+")"):"Not listed - no high-wage points"):"-"],
+          ["TEER level", inp.noc?("TEER "+inp.noc.teer+(inp.noc.teer<=3?" - skilled, counts":" - not skilled")):"-"],
+          ["High-wage list (IRCC)", inp.noc?(inp.noc.level>0?("Listed - "+NOC_LEVEL_TXT[inp.noc.level]):"Not listed"):"-"],
           ["Foreign skilled work", inp.foreignWork===0?"None":inp.foreignWork>=3?"3 years or more":"1-2 years"],
           ["Provincial nomination", inp.pnp?"Yes - +600 pts":"No"],
           ["Sibling in Canada", inp.sibling?"Yes - +15 pts":"No"]
         ];
         if(inp.withSpouse){ prof.push(["Spouse education", EDU_LABELS[inp.spEdu]]); prof.push(["Spouse Canadian work", canWorkLabel(inp.spCanWork)]); }
-        prof.forEach(function(p){ add(p[0]+": "+p[1], 10, false, 1, 12); });
-        /* 2 Breakdown — the core of the PDF */
-        add("2. Verified breakdown - every point, line by line", 14, true, 14, 0);
-        add("Each line is one IRCC factor: what you earned, the maximum for that factor, and the rule behind it.", 9.5, false, 2, 0);
-        var lastG="";
-        res.rows.forEach(function(r){
-          if(r.g!==lastG){ add(GROUP_TITLES[r.g], 11, true, 10, 0); lastG=r.g; }
-          add(r.label+":  "+r.pts+" / "+r.max+" points", 10.5, true, 6, 0);
-          add(r.why, 9.5, false, 1, 14);
+        prof.forEach(function(pr,i){
+          if(i%2===0) p1.rect(M,y-3,W,16,PDF_COL.light);
+          p1.text(M+6,y,pr[0],9.5,false,PDF_COL.grey);
+          p1.text(M+168,y,wrapMax(pr[1], W-176, 9.5, false, 1)[0],9.5,true,PDF_COL.ink);
+          y+=16;
         });
-        add("ESTIMATED CRS TOTAL: "+res.total+" / 1,270", 13, true, 12, 0);
-        /* 3 Chances */
-        add("3. Your chances, by pathway", 14, true, 14, 0);
-        var v=verdictFor(inp,res);
-        add(v.title, 11, true, 4, 0);
-        add(v.text, 10, false, 2, 0);
-        pathways(inp,res).forEach(function(p){
-          var pos = p.na?("Not eligible yet - "+p.note) : res.total>=p.cut?("Above the cut-off by "+(res.total-p.cut)+" pts") : ((p.cut-res.total)+" pts short - "+p.note);
-          add(p.name+" - recent cut-off "+p.cut+": "+pos, 10, false, 3, 12);
+
+        /* ---------- PAGE 2 : BREAKDOWN ---------- */
+        function renderBreakdown(whyLines){
+          var p=makePage(), yy=44, fits=true;
+          p.text(M,yy,"Verified breakdown",15,true,PDF_COL.navy); yy+=19;
+          p.text(M,yy,"Every point, line by line - what you earned, the maximum, and the rule behind it.",9,false,PDF_COL.grey); yy+=8;
+          p.rect(M,yy,W,2,PDF_COL.gold); yy+=14;
+          var lastG="";
+          res.rows.forEach(function(r){
+            if(r.g!==lastG){
+              var a=gAgg[r.g]||{pts:0,max:0};
+              p.rect(M,yy,W,17,PDF_COL.light);
+              p.text(M+7,yy+3,GROUP_TITLES[r.g],10,true,GROUP_COL[r.g]||PDF_COL.navy);
+              p.textR(pageW-M-7,yy+3,a.pts+" / "+a.max,10,true,GROUP_COL[r.g]||PDF_COL.navy);
+              yy+=24; lastG=r.g;
+            }
+            p.text(M,yy,wrapMax(r.label, 372, 9.5, true, 1)[0],9.5,true,PDF_COL.ink);
+            p.textR(M+392,yy,r.pts+" / "+r.max,9.5,true,PDF_COL.ink);
+            p.bar(M+404,yy+2,pageW-M-(M+404),7, r.max? r.pts/r.max : 0, GROUP_COL[r.g]||PDF_COL.navy);
+            yy+=14;
+            wrapMax(r.why, W, 8.5, false, whyLines).forEach(function(ln){ p.text(M,yy,ln,8.5,false,PDF_COL.grey); yy+=11; });
+            yy+=6;
+            if(yy>pageH-96) fits=false;
+          });
+          p.rect(M,yy+2,W,24,PDF_COL.navy);
+          p.text(M+10,yy+8,"ESTIMATED CRS TOTAL",11,true,PDF_COL.white);
+          p.textR(pageW-M-10,yy+7,res.total+" / 1,270",13,true,PDF_COL.gold);
+          yy+=34;
+          if(yy>pageH-52) fits=false;
+          return {page:p, fits:fits};
+        }
+        var bd=renderBreakdown(2);
+        if(!bd.fits) bd=renderBreakdown(1);
+        var p2=bd.page;
+
+        /* ---------- PAGE 3 : ANALYSIS ---------- */
+        var p3=makePage(), y3=44;
+        y3=p3.secTitle(y3,"Your chances, by pathway");
+        pathways(inp,res).forEach(function(pw){
+          var scale=Math.max(pw.cut, res.total)*1.12;
+          p3.text(M,y3,wrapMax(pw.name, 196, 10, true, 1)[0],10,true,PDF_COL.ink);
+          var bx=M+204, bw=176;
+          p3.bar(bx,y3+1,bw,9, res.total/scale, (pw.na? PDF_COL.grey : (res.total>=pw.cut? PDF_COL.green : PDF_COL.red)));
+          if(!pw.na) p3.rect(bx+Math.min(bw-2,(pw.cut/scale)*bw), y3, 2, 11, PDF_COL.navy);
+          var pos = pw.na? "Not eligible yet" : res.total>=pw.cut? ("Above by "+(res.total-pw.cut)+" pts") : ((pw.cut-res.total)+" pts short");
+          p3.textR(pageW-M,y3,"Cut-off "+pw.cut+" - "+pos,9, !pw.na && res.total>=pw.cut, (pw.na? PDF_COL.grey : (res.total>=pw.cut? PDF_COL.green : PDF_COL.red)));
+          y3+=16;
+          p3.text(bx,y3,"You: "+res.total+"   |   navy mark = the recent cut-off",7.5,false,PDF_COL.grey);
+          y3+=14;
         });
-        add("Cut-offs are from IRCC rounds held under the previous points grid (before Nov 3, 2026) and are a guide, not a promise. There is no fixed passing score.", 9, false, 4, 0);
-        /* 4 Plan */
-        add("4. Your personal plan to raise this score", 14, true, 14, 0);
+        p3.text(M,y3,"Cut-offs are from IRCC rounds held under the previous points grid (before Nov 3, 2026) - a guide, not a promise. There is no fixed passing score.",8,false,PDF_COL.grey);
+        y3+=22;
+        y3=p3.secTitle(y3,"Your personal plan to raise this score");
         var opts=boostOptions(inp,res);
         if(opts.length){
-          opts.forEach(function(o,i){ add("Step "+(i+1)+": +"+o.delta+" pts - "+o.label, 10.5, true, 5, 0); add(o.sub+" -> new score "+o.total+" / 1,270", 9.5, false, 1, 14); });
-        } else add("Your profile is already at or near the practical maximum for the main levers. A provincial nomination (+600) is the only large item left.", 10, false, 2, 0);
-        /* 5 Checklist */
-        add("5. Document checklist for your Express Entry profile", 14, true, 14, 0);
-        buildChecklist(inp).forEach(function(it){ add(it.t, 10.5, true, 6, 0); add(it.d, 9.5, false, 1, 14); });
-        /* 6 Next steps */
-        add("6. Your next steps", 14, true, 14, 0);
+          opts.slice(0,5).forEach(function(o,i){
+            p3.text(M,y3,"+"+o.delta,13,true,PDF_COL.gold);
+            p3.text(M+52,y3+1,wrapMax("Step "+(i+1)+": "+o.label, 330, 10, true, 1)[0],10,true,PDF_COL.ink);
+            p3.textR(pageW-M,y3+1,"New score "+o.total,9.5,true,PDF_COL.navy);
+            p3.text(M+52,y3+15,wrapMax(o.sub, W-52, 8.5, false, 1)[0],8.5,false,PDF_COL.grey);
+            y3+=32;
+          });
+        } else { p3.text(M,y3,"Your profile is already at or near the practical maximum for the main levers. A provincial nomination (+600) is the only large item left.",9.5,false,PDF_COL.ink); y3+=18; }
+        y3+=4;
+        y3=p3.secTitle(y3,"Document checklist");
+        buildChecklist(inp).slice(0,8).forEach(function(it){
+          p3.rect(M,y3+3,7,7,PDF_COL.green);
+          p3.text(M+14,y3,wrapMax(it.t, W-14, 9.5, true, 1)[0],9.5,true,PDF_COL.ink);
+          p3.text(M+14,y3+12,wrapMax(it.d, W-14, 8.5, false, 1)[0],8.5,false,PDF_COL.grey);
+          y3+=27;
+        });
+        y3+=2;
+        y3=p3.secTitle(y3,"Your next steps");
         var top=opts.length?opts[0]:null;
         var steps=[
-          "1. Book / re-take your language test first - it is the highest-value lever for most profiles"+(top?(", and your biggest single gain above is: "+top.label.toLowerCase()+" (+"+top.delta+" pts)"):"")+".",
-          "2. Start your ECA now if your education is from outside Canada - it commonly takes weeks and your profile cannot claim education points without it.",
+          "1. Book / re-take your language test first - the highest-value lever for most profiles"+(top?(", and your biggest single gain above is "+top.label.toLowerCase()+" (+"+top.delta+" pts)"):"")+".",
+          "2. Start your ECA now if your education is from outside Canada - it takes weeks and education points cannot be claimed without it.",
           "3. Collect employer reference letters while the details are fresh - duties must match your NOC code.",
           "4. Create your Express Entry profile once documents are in hand, and re-check your score in the official IRCC tool.",
           "5. Watch category rounds - French-language and occupation rounds have cut off far below general / CEC rounds in 2026."
         ];
-        steps.forEach(function(s){ add(s, 10, false, 3, 0); });
-        /* 7 NOC reference */
-        add("7. NOC codes & the median wage - quick reference", 14, true, 14, 0);
-        add("Your NOC code is the 5-digit code the National Occupational Classification assigns to your occupation. The second digit is its TEER level (0-5): only TEER 0-3 work counts as skilled and earns CRS work points, category-based draws invite specific NOC codes, and your employer reference letters must match the main duties listed under your code. Find yours by matching your real duties - not your job title - on IRCC's Find your NOC page or the official NOC website (NOC 2021).", 10, false, 2, 0);
-        add("The median wage is the middle hourly pay published by Job Bank for your NOC code - half the workers in that occupation earn more, half earn less. It is not your salary. Under the Nov 3, 2026 rules, IRCC compares your occupation's Canada-wide median to the national median across all occupations: at least 1.3x earns a 20-point Canadian-work bonus or 50 job-offer points, 1.5x earns 40 / 70, and 2x earns 70 / 100.", 10, false, 4, 0);
-        add("Disclaimer: This report is an estimate generated from the answers you entered and IRCC's published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile - confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).", 8.5, false, 12, 0);
-        return out;
-      }
-      function createPdfBlob(lines){
-        var pageW=612, pageH=792, margin=48, topY=744, bottomY=48;
-        var pages=[], cur=[], y=topY;
-        function escLine(l){ return "BT /F"+(l.b?2:1)+" "+l.s+" Tf 1 0 0 1 "+(margin+(l.indent||0))+" "+y.toFixed(1)+" Tm ("+pdfEscape(l.t)+") Tj ET"; }
-        lines.forEach(function(l){
-          var h=l.s*1.4+(l.gap||0);
-          if(y-h<bottomY){ pages.push(cur); cur=[]; y=topY; }
-          y-=(l.gap||0);
-          cur.push(escLine(l));
-          y-=l.s*1.4;
-        });
-        if(cur.length||!pages.length) pages.push(cur);
-        /* footer page numbers as separate content appended per page */
-        pages.forEach(function(content, idx){
-          content.push("BT /F1 8 Tf 1 0 0 1 "+margin+" 30 Tm ("+pdfEscape("CRS Full Report - Page "+(idx+1)+" of "+pages.length)+") Tj ET");
-        });
+        steps.forEach(function(s){ wrapMax(s, W, 9, false, 2).forEach(function(ln){ p3.text(M,y3,ln,9,false,PDF_COL.ink); y3+=12; }); y3+=3; });
+        y3+=8;
+        wrapPt("Disclaimer: This report is an estimate generated from the answers you entered and IRCC's published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile - confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).", W, 8, false).forEach(function(ln){ p3.text(M,y3,ln,8,false,PDF_COL.grey); y3+=10.5; });
+
+        /* ---------- ASSEMBLE ---------- */
+        var pages=[p1,p2,p3];
+        pages.forEach(function(pg,i){ footer(pg, i+1, pages.length); });
         var objs=[];
         objs[1]="<< /Type /Catalog /Pages 2 0 R >>";
         var kids=pages.map(function(_,i){ return (5+i*2)+" 0 R"; }).join(" ");
         objs[2]="<< /Type /Pages /Kids ["+kids+"] /Count "+pages.length+" >>";
         objs[3]="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
         objs[4]="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
-        pages.forEach(function(content,i){
+        pages.forEach(function(pg,i){
           var pageNum=5+i*2, contNum=6+i*2;
           objs[pageNum]="<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+pageW+" "+pageH+"] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents "+contNum+" 0 R >>";
-          var stream=content.join("\n");
+          var stream=pg.ops.join("\n");
           objs[contNum]="<< /Length "+stream.length+" >>\nstream\n"+stream+"\nendstream";
         });
         var maxObj=4+pages.length*2;
@@ -1417,6 +1535,7 @@
         pdf+="trailer\n<< /Size "+(maxObj+1)+" /Root 1 0 R >>\nstartxref\n"+xrefPos+"\n%%EOF";
         return new Blob([pdf],{type:"application/pdf"});
       }
+
       /* ============ PDF DELIVERY ============
          Diagnosis (verified Nov 18, 2026 on the live page in a top-level
          Chrome tab): the PDF itself always generated correctly, but two
@@ -1451,7 +1570,7 @@
       function hidePdfError(){ var box=$("pdfError"); if(box) box.classList.add("hidden"); }
       function preparePdf(){
         try{
-          var blob=createPdfBlob(buildPdfVisualLines());
+          var blob=buildDesignedPdf();
           if(!blob || blob.size<800) return false;
           if(lastPdfUrl) URL.revokeObjectURL(lastPdfUrl);
           lastPdfUrl=URL.createObjectURL(blob);
@@ -1470,23 +1589,24 @@
       }
 
       /* ============ PAYMENT RETURN (Stripe) ============
-         The Stripe Payment Link opens in a new tab, so this page normally keeps
-         the visitor's answers. But if Stripe is configured to redirect back here
-         in the same tab (…?paid=1), the page reloads fresh — so before the visitor
-         leaves for Stripe we keep a throwaway, this-session-only copy of their
-         answers and restore it on return, then open the breakdown automatically. */
+         Before the visitor leaves for Stripe we keep a copy of their
+         answers in localStorage (shared across tabs, kept 7 days), so
+         when Stripe redirects back here (…?paid=1) — in the checkout tab,
+         not the tab that clicked Pay — the page can restore the answers
+         and unlock the report automatically. */
       function snapshotInputs(){
         try{
-          var data={sel:{}, rad:{}, noc:selectedNoc};
+          var data={sel:{}, rad:{}, noc:selectedNoc, ts:Date.now()};
           Array.prototype.forEach.call(document.querySelectorAll("#crsForm select, #crsForm input[type='range'], #crsForm input[type='text']"), function(el){ if(el.id) data.sel[el.id]=el.value; });
           ["marital","hwWork","jobOffer","cert","pnp","sibling"].forEach(function(n){ data.rad[n]=radioVal(n); });
-          sessionStorage.setItem("crsPaySnapshot", JSON.stringify(data));
+          localStorage.setItem("crsPaySnapshot", JSON.stringify(data));
         }catch(e){}
       }
       function restoreSnapshot(){
         try{
-          var raw=sessionStorage.getItem("crsPaySnapshot"); if(!raw) return false;
+          var raw=localStorage.getItem("crsPaySnapshot"); if(!raw) return false;
           var d=JSON.parse(raw); if(!d||!d.sel) return false;
+          if(d.ts && (Date.now()-d.ts) > 7*24*60*60*1000){ localStorage.removeItem("crsPaySnapshot"); return false; }
           if(d.sel.lang1Name) $("lang1Name").value=d.sel.lang1Name;
           if(d.sel.testType) $("testType").value=d.sel.testType;
           renderAbilityGrid1(); /* rebuild first-language inputs in the right test mode */
@@ -1563,21 +1683,15 @@
          came back on Stripe's return address. */
       $("reportCta").addEventListener("click", function(){
         snapshotInputs();
-        try{ sessionStorage.setItem("crsPayStarted", String(Date.now())); }catch(e){}
+        try{ localStorage.setItem("crsPayStarted", String(Date.now())); }catch(e){}
         if(!reportGenerated) buildReport();
         var n=$("payNotice"); if(n) n.classList.remove("hidden");
       });
-      /* "I already paid" is a self-declared safety net: it unlocks the
-         full report but NOT the payment banner — the page takes the
-         visitor's word to unlock; it does not claim a payment was
-         received. It exists so a real payer who lost the Stripe return
-         tab is never locked out of what they bought. */
-      $("paidAlreadyBtn").addEventListener("click", function(){ reportUnlocked=true; showBreakdown(false); });
       /* The paywall box carries its own Stripe button — same behaviour as
          the main Pay button: snapshot the answers and stamp the session. */
       $("reportCta2").addEventListener("click", function(){
         snapshotInputs();
-        try{ sessionStorage.setItem("crsPayStarted", String(Date.now())); }catch(e){}
+        try{ localStorage.setItem("crsPayStarted", String(Date.now())); }catch(e){}
         if(!reportGenerated) buildReport();
         var n=$("payNotice"); if(n) n.classList.remove("hidden");
       });
@@ -1620,22 +1734,30 @@
         $("priceNote").textContent="Same complete score check + report, priced for applicants in India. Checkout is via Stripe at $1.99 CAD — your card converts to about ₹199. No subscription.";
       });
       recalc();
-      /* Returning from Stripe after payment. The "Payment received — thank
-         you" banner is shown ONLY when BOTH are true:
+      /* Returning from Stripe after payment. The full report unlocks and
+         the "Payment received — thank you" banner shows ONLY when BOTH
+         are true:
            1. the address carries Stripe's return marker (?paid=1, or
-              payment=success, or a session_id), AND
-           2. this browser session actually started a payment — the Pay
-              button on this page stamped crsPayStarted within the last hour
-              when it was clicked.
-         A ?paid=1 address opened directly, shared with someone, or restored
-         later has no fresh stamp, so it produces no payment message (the
-         visitor's own saved answers are still restored, silently). Either
-         way the marker is then consumed: the payment parameters are removed
-         from the address bar and the session stamp is cleared, so a refresh
-         or a later visit can never repeat the message. A static page cannot
-         verify a Stripe payment with the bank — this is the strongest
-         honest check it can make, and it never thanks anyone on the word
-         of a bare link alone. */
+              payment=success, or a session_id) — Stripe only sends
+              customers to that address after a completed payment, AND
+           2. this browser actually started a payment — the Pay button
+              stamped crsPayStarted in localStorage within the last
+              24 hours when it was clicked.
+         localStorage (not sessionStorage) is used on purpose: Stripe
+         returns the customer in the checkout tab, which is a DIFFERENT
+         tab from the one that clicked Pay, and sessionStorage is
+         per-tab — with sessionStorage the returning tab found nothing
+         and the customer landed on a fresh calculator with default
+         answers. localStorage is shared across tabs on this site, so
+         the snapshot and stamp are found, the answers are restored and
+         the report unlocks automatically.
+         On an ordinary visit (no return marker), a saved snapshot is
+         restored silently so a returning visitor keeps their answers;
+         it never unlocks anything by itself. A genuine return consumes
+         both keys and cleans the address bar, so a refresh or a later
+         visit can never repeat the unlock. A static page cannot verify
+         a payment with Stripe's servers — this is the strongest honest
+         check it can make. */
       var paidReturn=false;
       try{
         var qs=new URLSearchParams(window.location.search);
@@ -1643,14 +1765,14 @@
       }catch(e){}
       if(paidReturn){
         var payStartedAt=0;
-        try{ payStartedAt=parseInt(sessionStorage.getItem("crsPayStarted")||"0",10)||0; }catch(e){}
-        var genuineReturn = payStartedAt>0 && (Date.now()-payStartedAt) < 60*60*1000;
+        try{ payStartedAt=parseInt(localStorage.getItem("crsPayStarted")||"0",10)||0; }catch(e){}
+        var genuineReturn = payStartedAt>0 && (Date.now()-payStartedAt) < 24*60*60*1000;
         restoreSnapshot();
         if(genuineReturn){
           showBreakdown(true);
-          try{ sessionStorage.removeItem("crsPaySnapshot"); }catch(e){}
+          try{ localStorage.removeItem("crsPaySnapshot"); }catch(e){}
         }
-        try{ sessionStorage.removeItem("crsPayStarted"); }catch(e){}
+        try{ localStorage.removeItem("crsPayStarted"); }catch(e){}
         try{
           var cleanQs=new URLSearchParams(window.location.search);
           cleanQs.delete("paid");
@@ -1659,6 +1781,8 @@
           var qsStr=cleanQs.toString();
           window.history.replaceState(null,"",window.location.pathname+(qsStr?"?"+qsStr:"")+window.location.hash);
         }catch(e){}
+      } else {
+        restoreSnapshot();
       }
     })();
     </script>
