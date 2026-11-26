@@ -1428,10 +1428,10 @@
         });
 
         /* ---------- PAGE 2 : BREAKDOWN ---------- */
-        function renderBreakdown(whyLines){
+        function renderBreakdown(whyLines, extraGap){
           var p=makePage(), yy=44, fits=true;
           p.text(M,yy,"Verified breakdown",15,true,PDF_COL.navy); yy+=19;
-          p.text(M,yy,"Every point, line by line - what you earned, the maximum, and the rule behind it.",9,false,PDF_COL.grey); yy+=8;
+          p.text(M,yy,"Every point, line by line - what you earned, the maximum, and the rule behind it.",9,false,PDF_COL.grey); yy+=14;
           p.rect(M,yy,W,2,PDF_COL.gold); yy+=14;
           var lastG="";
           res.rows.forEach(function(r){
@@ -1447,7 +1447,7 @@
             p.bar(M+404,yy+2,pageW-M-(M+404),7, r.max? r.pts/r.max : 0, GROUP_COL[r.g]||PDF_COL.navy);
             yy+=14;
             wrapMax(r.why, W, 8.5, false, whyLines).forEach(function(ln){ p.text(M,yy,ln,8.5,false,PDF_COL.grey); yy+=11; });
-            yy+=6;
+            yy+=6+(extraGap||0);
             if(yy>pageH-96) fits=false;
           });
           p.rect(M,yy+2,W,24,PDF_COL.navy);
@@ -1455,10 +1455,11 @@
           p.textR(pageW-M-10,yy+7,res.total+" / 1,270",13,true,PDF_COL.gold);
           yy+=34;
           if(yy>pageH-52) fits=false;
-          return {page:p, fits:fits};
+          return {page:p, fits:fits, endY:yy};
         }
-        var bd=renderBreakdown(2);
-        if(!bd.fits) bd=renderBreakdown(1);
+        var bd=renderBreakdown(2,0);
+        if(!bd.fits) bd=renderBreakdown(1,0);
+        else if(bd.endY<580){ var bdWide=renderBreakdown(2,7); if(bdWide.fits) bd=bdWide; }
         var p2=bd.page;
 
         /* ---------- PAGE 3 : ANALYSIS ---------- */
@@ -1494,8 +1495,9 @@
         buildChecklist(inp).slice(0,8).forEach(function(it){
           p3.rect(M,y3+3,7,7,PDF_COL.green);
           p3.text(M+14,y3,wrapMax(it.t, W-14, 9.5, true, 1)[0],9.5,true,PDF_COL.ink);
-          p3.text(M+14,y3+12,wrapMax(it.d, W-14, 8.5, false, 1)[0],8.5,false,PDF_COL.grey);
-          y3+=27;
+          var dLines=wrapMax(it.d, W-14, 8.5, false, 2);
+          dLines.forEach(function(ln,di){ p3.text(M+14,y3+12+di*11,ln,8.5,false,PDF_COL.grey); });
+          y3+=12+dLines.length*11+4;
         });
         y3+=2;
         y3=p3.secTitle(y3,"Your next steps");
@@ -1754,8 +1756,8 @@
          On an ordinary visit (no return marker), a saved snapshot is
          restored silently so a returning visitor keeps their answers;
          it never unlocks anything by itself. A genuine return consumes
-         both keys and cleans the address bar, so a refresh or a later
-         visit can never repeat the unlock. A static page cannot verify
+         the payment stamp and cleans the address bar, so a refresh or a
+         later visit can never repeat the unlock. A static page cannot verify
          a payment with Stripe's servers — this is the strongest honest
          check it can make. */
       var paidReturn=false;
@@ -1770,7 +1772,10 @@
         restoreSnapshot();
         if(genuineReturn){
           showBreakdown(true);
-          try{ localStorage.removeItem("crsPaySnapshot"); }catch(e){}
+          /* The snapshot is KEPT (it expires after 7 days) so the payer's
+             answers still restore on later ordinary visits; only the
+             payment stamp is consumed below, so the unlock itself can
+             never repeat. */
         }
         try{ localStorage.removeItem("crsPayStarted"); }catch(e){}
         try{
