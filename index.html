@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light" />
     <link rel="icon" href="data:," />
     <title>CRS Calculator — Canada PR Score and Chances</title>
     <!-- Google Analytics 4 (property: CRS Calculator, account: velvook) -->
@@ -21,27 +21,27 @@
       button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
       * { box-sizing: border-box; }
       :root{
-        /* Velvook brand theme — deep purple + gold, matching @crsvelvook posts & reels */
-        --bg:#230251; --surface:#2e0a5e; --surface2:#3d1478;
-        --ink:#f5f2ff; --muted:#b9aed6; --line:#55348f;
-        --red:#fbaf00; --red-dark:#ffc44d; --red-soft:#472a63;
-        --orange:#fa9600; --blue:#8fd14f; --green:#aee556; --green-soft:#274a12;
-        --amber:#f5b04c; --amber-soft:#3d2a08;
-        --shadow:0 1px 3px rgba(10,0,30,.45),0 8px 24px rgba(10,0,30,.35);
+        /* Velvook brand theme v2 — light page, purple + gold accents (score card stays deep purple) */
+        --bg:#f6f3fc; --surface:#ffffff; --surface2:#efe9fa;
+        --ink:#22103f; --muted:#6f6198; --line:#ddd2f2;
+        --red:#230251; --red-dark:#230251; --red-soft:#efe6fd;
+        --orange:#fa9600; --blue:#2f7d1e; --green:#2f7d1e; --green-soft:#e6f4dc;
+        --amber:#b54708; --amber-soft:#fdf3e3;
+        --shadow:0 1px 3px rgba(35,2,81,.08),0 8px 24px rgba(35,2,81,.07);
         --radius:14px;
       }
       @media (prefers-color-scheme: dark){
         :root{
-          --bg:#230251; --surface:#2e0a5e; --surface2:#3d1478;
-          --ink:#f5f2ff; --muted:#b9aed6; --line:#55348f;
-          --red:#fbaf00; --red-dark:#ffc44d; --red-soft:#472a63;
-          --orange:#fa9600; --blue:#8fd14f; --green:#aee556; --green-soft:#274a12;
-          --amber:#f5b04c; --amber-soft:#3d2a08;
-          --shadow:0 1px 3px rgba(10,0,30,.45),0 8px 24px rgba(10,0,30,.35);
+          --bg:#f6f3fc; --surface:#ffffff; --surface2:#efe9fa;
+          --ink:#22103f; --muted:#6f6198; --line:#ddd2f2;
+          --red:#230251; --red-dark:#230251; --red-soft:#efe6fd;
+          --orange:#fa9600; --blue:#2f7d1e; --green:#2f7d1e; --green-soft:#e6f4dc;
+          --amber:#b54708; --amber-soft:#fdf3e3;
+          --shadow:0 1px 3px rgba(35,2,81,.08),0 8px 24px rgba(35,2,81,.07);
         }
       }
       html{scroll-behavior:smooth}
-      body{margin:0;background:radial-gradient(1200px 700px at 50% -80px,#3d0a80 0%,#230251 58%) fixed,#230251;color:var(--ink);font-family:"Noto Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
       h1,h2,h3{font-family:"Lato","Noto Sans",sans-serif;line-height:1.15;margin:0}
       a{color:var(--blue)}
       .wrap{max-width:1180px;margin:0 auto;padding:0 18px 64px}
@@ -256,22 +256,71 @@
       footer p{margin:6px 0}
       @media (prefers-reduced-motion: reduce){*{transition:none !important;scroll-behavior:auto !important}}
 
-      /* ---------- Velvook brand overrides (gold-on-purple) ---------- */
+      /* ---------- Velvook brand overrides v2 (light page, purple score card) ---------- */
       .leaf{background:linear-gradient(135deg,#fbaf00,#fa9600)}
       .leaf svg{fill:#230251}
-      .cta{color:#230251}
-      .cta:hover{background:#fa9600}
-      .cta-secondary{color:#fbaf00}
-      .cta-secondary:hover{background:#472a63}
-      .curr-toggle button.on{color:#230251}
-      .stepnum{color:#230251}
-      .seg input{accent-color:#fbaf00}
-      .age-row input[type="range"]{accent-color:#fbaf00}
-      .score-big{color:#fbaf00}
-      .score-big small{color:#b9aed6}
-      .report-score .rs{color:#fbaf00}
-      .price{color:#fbaf00}
+      .hero h1 .accent{color:#c77400}
+      .cta{color:#fbaf00}
+      .cta:hover{background:#3d0a80}
+      .cta-secondary{color:#230251}
+      .cta-secondary:hover{background:#efe6fd}
+      .curr-toggle button.on{color:#fbaf00}
+      .stepnum{color:#fbaf00}
+      .seg input{accent-color:#230251}
+      .age-row input[type="range"]{accent-color:#230251}
+      .report-score .rs{color:#c77400}
+      .price{color:#c77400}
+      .draw .cut{color:#c77400}
+      .bd-row .bar i{background:linear-gradient(90deg,#fbaf00,#fa9600)}
       ::selection{background:#fbaf00;color:#230251}
+      /* score card: the deep-purple brand anchor */
+      .score-card{background:linear-gradient(165deg,#2e0a5e,#230251);border:none;color:#f5f2ff}
+      .score-card .score-label{color:#b9aed6}
+      .score-card .score-big{color:#fbaf00}
+      .score-card .score-big small{color:#b9aed6}
+      .score-card .stackbar{background:rgba(255,255,255,.14)}
+      .score-card .seg-core{background:#fbaf00}
+      .score-card .seg-spouse{background:#fa9600}
+      .score-card .seg-trans{background:#aee556}
+      .score-card .seg-add{background:#75bb49}
+      .score-card .legend{color:#f5f2ff}
+      .score-card .verdict{color:#22103f}
+      .score-card .path{border-top-color:rgba(255,255,255,.16)}
+      .score-card .path .na{color:#b9aed6}
+      .score-card .path .gap{color:#ffc44d}
+      .score-card .path .ok{color:#aee556}
+      .score-card .boost{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.22);color:#f5f2ff}
+      .score-card .boost:hover{border-color:#fbaf00}
+      .score-card .boost .bt small{color:#b9aed6}
+      .score-card .boost .plus{color:#aee556}
+      .score-card .boost-reset{color:#fbaf00}
+      .score-card .scenario-note{color:#f5b04c}
+      /* ---------- side rails (wide screens only) ---------- */
+      .rail{position:fixed;top:108px;width:248px;display:none;z-index:5}
+      @media (min-width:1760px){
+        .rail{display:block}
+        .rail-left{left:calc(50% - 862px)}
+        .rail-right{right:calc(50% - 862px)}
+      }
+      .rail .rcard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 17px;margin-bottom:14px}
+      .rail h3{font-family:"Lato",sans-serif;font-size:13px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#230251;margin:0 0 6px}
+      .rail h3::after{content:"";display:block;width:34px;height:3px;background:#fbaf00;border-radius:2px;margin-top:6px}
+      .rail .rdraw{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13.5px;padding:8px 0;border-top:1px solid var(--line)}
+      .rail .rdraw:first-of-type{border-top:none}
+      .rail .rdraw span{color:var(--muted);font-size:12.5px;display:block}
+      .rail .rdraw b{font-family:"Lato",sans-serif;font-weight:900;font-size:19px;color:#c77400;font-variant-numeric:tabular-nums}
+      .rail .tip{font-size:13.5px;line-height:1.5;padding:9px 0;border-top:1px solid var(--line)}
+      .rail .tip:first-of-type{border-top:none}
+      .rail .tip b{color:#230251}
+      .rail .follow{background:linear-gradient(160deg,#2e0a5e,#230251);border:none;color:#f5f2ff}
+      .rail .follow h3{color:#fbaf00}
+      .rail .follow p{font-size:13.5px;line-height:1.5;margin:8px 0 0;color:#e6defa}
+      .rail .follow .dp{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#fbaf00,#fa9600);color:#230251;font-family:"Lato",sans-serif;font-weight:900;font-size:17px;display:grid;place-items:center;margin-bottom:10px}
+      .rail .follow a.btn{display:block;text-align:center;background:#fbaf00;color:#230251;font-weight:700;border-radius:9px;padding:10px;margin-top:12px;text-decoration:none;font-size:14.5px}
+      .rail .sharelinks a{display:inline-block;margin:6px 5px 0 0;border:1.5px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;color:#230251;text-decoration:none}
+      .rail .trust{font-size:13.5px;line-height:1.55;color:var(--ink)}
+      .rail .trust div{padding:7px 0;border-top:1px solid var(--line)}
+      .rail .trust div:first-of-type{border-top:none}
       @media print{
         body{background:#fff !important;color:#111 !important}
         .report,.report p,.report .muted,.r-profile div span:first-child{color:#111 !important}
@@ -280,6 +329,46 @@
     </style>
   </head>
   <body>
+    <!-- ======= side rails (wide screens) ======= -->
+    <aside class="rail rail-left" aria-label="Latest cut-offs and CRS tips">
+      <div class="rcard">
+        <h3>Recent cut-offs</h3>
+        <div class="rdraw"><div><span id="railN1">STEM occupations</span><span id="railD1">Nov 26, 2026</span></div><b id="railC1">547</b></div>
+        <div class="rdraw"><div><span id="railN2">French-language</span><span id="railD2">Nov 25, 2026</span></div><b id="railC2">401</b></div>
+        <div class="rdraw"><div><span id="railN3">Provincial Nominee</span><span id="railD3">Nov 23, 2026</span></div><b id="railC3">673</b></div>
+        <p style="font-size:12.5px;color:var(--muted);margin:8px 0 0">Full draw history is in the draws section below — updated every morning.</p>
+      </div>
+      <div class="rcard">
+        <h3>Points most people miss</h3>
+        <div class="tip"><b>French CLB 7:</b> up to +50 points — plus French-only draws that just cut off at 401.</div>
+        <div class="tip"><b>A PNP nomination is +600.</b> Bigger than a Master's, perfect IELTS and 3 years of work — combined.</div>
+        <div class="tip"><b>Your salary doesn't set your points.</b> Your occupation's median wage does — check your tier in Step 4.</div>
+      </div>
+    </aside>
+    <aside class="rail rail-right" aria-label="Follow and share">
+      <div class="rcard follow">
+        <div class="dp">CRS</div>
+        <h3>@crsvelvook</h3>
+        <p>Draw alerts within the hour, cut-off breakdowns and score tips — on Instagram, TikTok and YouTube Shorts.</p>
+        <a class="btn" href="https://www.instagram.com/crsvelvook" target="_blank" rel="noopener">Follow for draw alerts</a>
+      </div>
+      <div class="rcard">
+        <h3>Share this calculator</h3>
+        <p style="font-size:13.5px;color:var(--muted);margin:4px 0 2px">Know someone guessing their CRS score? Send them the real grid.</p>
+        <div class="sharelinks">
+          <a href="https://wa.me/?text=Check%20your%20Canada%20PR%20(CRS)%20score%20free%20on%20the%20new%20Nov%202026%20rules%3A%20https%3A%2F%2Fcrs.velvook.com" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcrs.velvook.com" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+      <div class="rcard">
+        <h3>Why trust this score?</h3>
+        <div class="trust">
+          <div>Built on IRCC's official grid — updated for the Nov 3, 2026 rules (max 1,270).</div>
+          <div>Every point explained line by line. No black box.</div>
+          <div>Draws refreshed daily. Estimate only — not immigration advice.</div>
+        </div>
+      </div>
+    </aside>
     <div class="wrap">
 
       <!-- ================= HERO ================= -->
