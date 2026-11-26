@@ -321,6 +321,26 @@
       .rail .trust{font-size:13.5px;line-height:1.55;color:var(--ink)}
       .rail .trust div{padding:7px 0;border-top:1px solid var(--line)}
       .rail .trust div:first-of-type{border-top:none}
+      /* ---------- how-it-works strip + free-vs-paid clarity ---------- */
+      .howit{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+      @media (max-width:720px){.howit{grid-template-columns:1fr}}
+      .hstep{display:flex;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 15px;box-shadow:var(--shadow)}
+      .hnum{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#230251;color:#fbaf00;font-family:"Lato",sans-serif;font-weight:900;display:grid;place-items:center}
+      .hstep b{display:block;font-size:15px}
+      .hstep span{display:block;font-size:13.5px;color:var(--muted);line-height:1.45}
+      .vs-wrap{margin-top:24px}
+      .vs-h{font-size:17px;font-weight:900;margin:0 0 6px}
+      .vs-table{width:100%;border-collapse:collapse;font-size:14px}
+      .vs-table th,.vs-table td{padding:9px 10px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+      .vs-table thead th{border-top:none;font-family:"Lato",sans-serif}
+      .vs-table th.c,.vs-table td.c{text-align:center;white-space:nowrap}
+      .vs-table .yes{color:#2f7d1e;font-weight:900}
+      .vs-table .no{color:var(--muted)}
+      .vs-table th.full{color:#c77400}
+      .sample-fig{margin:20px 0 0}
+      .sample-fig img{width:100%;height:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:block}
+      .sample-fig figcaption{font-size:13.5px;color:var(--muted);margin-top:9px}
+      .sample-fig figcaption b{color:var(--ink)}
       @media print{
         body{background:#fff !important;color:#111 !important}
         .report,.report p,.report .muted,.r-profile div span:first-child{color:#111 !important}
@@ -387,6 +407,11 @@
           <span class="chip">Max score: <b>1,270</b></span>
           <span class="chip">Latest draw: <b>Nov 26, 2026 · cut-off 547</b></span>
           <span class="chip">Latest round: <b>STEM occupations · Nov 26, 2026</b></span>
+        </div>
+        <div class="howit" aria-label="How it works">
+          <div class="hstep"><span class="hnum">1</span><div><b>Answer 6 short steps</b><span>Age, education, language, work — about 2 minutes.</span></div></div>
+          <div class="hstep"><span class="hnum">2</span><div><b>See your score — FREE</b><span>Your total plus every point explained, line by line. No card, no signup.</span></div></div>
+          <div class="hstep"><span class="hnum">3</span><div><b>Want the plan? $1.99</b><span>Chances in every pathway, every way to gain points, and a 3-page PDF. One-time payment.</span></div></div>
         </div>
       </header>
 
@@ -735,6 +760,25 @@
             <p class="fineprint">After paying, Stripe brings you back to this page automatically and your full report unlocks — your answers are restored for you, nothing to re-enter.</p>
           </div>
         </div>
+        <div class="vs-wrap">
+          <h3 class="vs-h">Free vs the full report — exactly what you get</h3>
+          <table class="vs-table">
+            <thead><tr><th></th><th class="c">FREE</th><th class="c full">FULL REPORT · $1.99</th></tr></thead>
+            <tbody>
+              <tr><td>Your CRS score on the new Nov 2026 rules</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+              <tr><td>Full point-by-point breakdown — every point explained</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+              <tr><td>Latest Express Entry draw cut-offs</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+              <tr><td>Your chances in every pathway — and your gap to each cut-off</td><td class="c no">—</td><td class="c yes">✓</td></tr>
+              <tr><td>Personal plan: every way to gain points, ranked, with your new score for each</td><td class="c no">—</td><td class="c yes">✓</td></tr>
+              <tr><td>Document checklist for your profile</td><td class="c no">—</td><td class="c yes">✓</td></tr>
+              <tr><td>The complete report as a designed 3-page PDF — save it, keep it</td><td class="c no">—</td><td class="c yes">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="sample-fig">
+          <img src="sample-report.jpg" alt="Sample of the 3-page CRS full report: score and category breakdown, chances by pathway, personal points plan and document checklist" loading="lazy">
+          <figcaption><b>This is the real $1.99 report</b> — all 3 pages, generated from a test profile (score 380). Yours is built from your own answers, on this page, the moment you unlock it. Nothing is emailed and nothing is made up: every number comes from the answers you enter above.</figcaption>
+        </figure>
       </section>
 
       <!-- ================= FULL REPORT ================= -->
