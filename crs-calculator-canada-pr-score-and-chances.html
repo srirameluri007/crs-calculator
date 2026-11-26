@@ -1,0 +1,1622 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>CRS Calculator — Canada PR Score and Chances</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
+      * { box-sizing: border-box; }
+      :root{
+        --bg:#f4f6f8; --surface:#ffffff; --surface2:#eef1f4;
+        --ink:#182230; --muted:#5a6675; --line:#d9dfe6;
+        --red:#d80621; --red-dark:#a8041a; --red-soft:#fdeef0;
+        --orange:#dd7a08; --blue:#1d5fb8; --green:#177245; --green-soft:#e8f4ec;
+        --amber:#b54708; --amber-soft:#fdf3e3;
+        --shadow:0 1px 3px rgba(16,24,40,.08),0 8px 24px rgba(16,24,40,.06);
+        --radius:14px;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#101318; --surface:#1a1e26; --surface2:#222834;
+          --ink:#edf1f6; --muted:#a3adbb; --line:#2e3644;
+          --red:#f04452; --red-dark:#f04452; --red-soft:#33191d;
+          --orange:#f09a3e; --blue:#6aa5ec; --green:#4cc07c; --green-soft:#17301f;
+          --amber:#f5b04c; --amber-soft:#33270f;
+          --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+        }
+      }
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
+      h1,h2,h3{font-family:"Lato","Noto Sans",sans-serif;line-height:1.15;margin:0}
+      a{color:var(--blue)}
+      .wrap{max-width:1180px;margin:0 auto;padding:0 18px 64px}
+
+      /* ---------- hero ---------- */
+      .hero{padding:34px 0 8px}
+      .hero-top{display:flex;gap:16px;align-items:flex-start}
+      .leaf{flex:0 0 auto;width:52px;height:52px;border-radius:12px;background:var(--red);display:grid;place-items:center}
+      .leaf svg{width:34px;height:34px;fill:#fff}
+      .hero h1{font-size:clamp(28px,4.5vw,42px);font-weight:900;letter-spacing:-.01em}
+      .hero h1 .accent{color:var(--red)}
+      .hero p.lede{margin:10px 0 0;color:var(--muted);max-width:640px;font-size:17px}
+      .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+      .chip{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--ink)}
+      .chip b{color:var(--red)}
+      .chip.warn{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
+
+      /* ---------- layout ---------- */
+      .layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;margin-top:22px;align-items:start}
+      @media (max-width:920px){.layout{grid-template-columns:1fr}}
+
+      /* ---------- form cards ---------- */
+      .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px}
+      .card h2{font-size:19px;font-weight:900;display:flex;align-items:center;gap:10px}
+      .stepnum{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-size:14px;display:grid;place-items:center;font-family:"Lato",sans-serif}
+      .card .hint{color:var(--muted);font-size:14px;margin:6px 0 0}
+      .field{margin-top:16px}
+      .field>label,.field .flabel{display:block;font-weight:700;font-size:14.5px;margin-bottom:6px}
+      .field .sub{font-weight:400;color:var(--muted);font-size:13px}
+      select,input[type="number"]{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:inherit;font-size:15px}
+      select:focus,input:focus{outline:2px solid var(--red);outline-offset:1px}
+      .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+      @media (max-width:560px){.grid2{grid-template-columns:1fr}}
+      .ability-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+      @media (max-width:560px){.ability-grid{grid-template-columns:repeat(2,1fr)}}
+      .ability-grid .ab label{font-size:13px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+      .seg{display:flex;flex-wrap:wrap;gap:8px}
+      .seg label{display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:9px 15px 9px 12px;border:1.5px solid var(--line);border-radius:999px;font-weight:600;font-size:14.5px;cursor:pointer;background:var(--surface)}
+      .seg label:has(input:checked){border-color:var(--red);background:var(--red-soft);color:var(--red-dark)}
+      .seg label:focus-within{outline:2px solid var(--red);outline-offset:2px}
+      .seg input{width:19px;height:19px;flex:0 0 auto;margin:0;accent-color:var(--red);cursor:pointer}
+      .age-row{display:flex;align-items:center;gap:14px}
+      .age-row input[type="range"]{flex:1;accent-color:var(--red);height:36px}
+      .age-val{flex:0 0 auto;min-width:86px;text-align:center;background:var(--surface2);border-radius:9px;padding:8px 6px;font-weight:700}
+      .age-val small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+      .clb-note{background:var(--surface2);border-radius:9px;padding:10px 12px;font-size:13.5px;color:var(--muted);margin-top:12px}
+      .clb-note b{color:var(--ink)}
+      .wage-box{background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:16px 16px 12px;margin-top:18px}
+      .wage-box h3{font-size:15.5px;font-weight:900;margin:0 0 6px}
+      .wage-box p{margin:0 0 8px;font-size:14px;color:var(--muted)}
+      .wage-box p b,.wage-box li b{color:var(--ink)}
+      .wage-box ul{margin:6px 0 10px;padding-left:19px;font-size:14px;color:var(--muted)}
+      .wage-box li{margin:5px 0}
+      .wage-table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+      .wage-table th,.wage-table td{padding:7px 8px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+      .wage-table th{font-weight:700;color:var(--ink);border-top:none}
+      .wage-table td:last-child,.wage-table th:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+      .wage-table.plain td:last-child,.wage-table.plain th:last-child{text-align:left;white-space:normal;font-variant-numeric:normal}
+      .wage-example{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13.5px;color:var(--muted);margin:10px 0}
+      .wage-example b{color:var(--ink)}
+      input[type="text"]{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:inherit;font-size:15px}
+      input[type="text"]:focus{outline:2px solid var(--red);outline-offset:1px}
+      .noc-results{margin-top:8px;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--surface)}
+      .noc-results button{display:flex;width:100%;text-align:left;gap:10px;align-items:baseline;background:var(--surface);border:none;border-top:1px solid var(--line);padding:11px 13px;cursor:pointer;font:inherit;color:var(--ink)}
+      .noc-results button:first-child{border-top:none}
+      .noc-results button:hover{background:var(--surface2)}
+      .noc-results .nt{font-weight:700;font-size:14.5px}
+      .noc-results .nm{margin-left:auto;text-align:right;font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+      .noc-results .tag{display:inline-block;background:var(--green-soft);color:var(--green);font-weight:700;border-radius:6px;padding:1px 7px;font-size:12px;margin-left:6px;white-space:nowrap}
+      .noc-selected{margin-top:12px;background:var(--green-soft);border:1px solid var(--green);border-radius:11px;padding:14px 16px}
+      .noc-selected.warnbox{background:var(--amber-soft);border-color:var(--amber)}
+      .noc-selected h4{margin:0 0 4px;font-size:15.5px;font-family:"Lato",sans-serif;font-weight:900}
+      .noc-selected p{margin:5px 0;font-size:14px}
+      .noc-selected .duties{color:var(--muted)}
+      .noc-clear{background:none;border:none;color:var(--red);font:inherit;font-weight:700;cursor:pointer;padding:6px 2px;min-height:32px}
+      .hidden{display:none !important}
+      details.more{margin-top:12px}
+      details.more summary{cursor:pointer;font-weight:700;color:var(--red);padding:6px 0;min-height:36px}
+
+      /* ---------- score panel ---------- */
+      .score-panel{position:sticky;top:14px}
+      @media (max-width:920px){.score-panel{position:static}}
+      .score-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+      .score-label{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+      .score-big{font-family:"Lato",sans-serif;font-weight:900;font-size:64px;line-height:1;margin:4px 0 0}
+      .score-big small{font-size:20px;color:var(--muted);font-weight:700}
+      .stackbar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--surface2);margin:16px 0 8px}
+      .stackbar div{height:100%;transition:width .45s ease}
+      .seg-core{background:var(--red)} .seg-spouse{background:var(--orange)} .seg-trans{background:var(--blue)} .seg-add{background:var(--green)}
+      .legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;font-size:13.5px}
+      .legend span{display:flex;align-items:center;gap:7px}
+      .legend b{margin-left:auto;font-variant-numeric:tabular-nums}
+      .dot{width:10px;height:10px;border-radius:3px;flex:0 0 auto}
+      .verdict{margin-top:18px;border-radius:11px;padding:14px 16px}
+      .verdict h3{font-size:18px;margin-bottom:4px}
+      .verdict p{margin:0;font-size:14.5px}
+      .verdict.good{background:var(--green-soft);color:var(--ink)} .verdict.good h3{color:var(--green)}
+      .verdict.mid{background:var(--amber-soft)} .verdict.mid h3{color:var(--amber)}
+      .verdict.low{background:var(--red-soft)} .verdict.low h3{color:var(--red-dark)}
+      .paths{margin-top:16px}
+      .paths h3{font-size:15px;margin-bottom:8px}
+      .path{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+      .path:first-of-type{border-top:none}
+      .path .pv{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+      .path .ok{color:var(--green);font-weight:700}
+      .path .gap{color:var(--red-dark);font-weight:700}
+      .path .na{color:var(--muted)}
+      .boosts{margin-top:6px}
+      .boost{display:flex;width:100%;text-align:left;gap:10px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-top:8px;cursor:pointer;font:inherit;color:var(--ink)}
+      .boost:hover{border-color:var(--red)}
+      .boost .plus{flex:0 0 auto;font-family:"Lato",sans-serif;font-weight:900;color:var(--green);font-size:17px}
+      .boost .bt{font-size:14px;font-weight:600;line-height:1.35}
+      .boost .bt small{display:block;font-weight:400;color:var(--muted)}
+      .boost-reset{margin-top:10px;background:none;border:none;color:var(--red);font:inherit;font-weight:700;cursor:pointer;padding:8px 4px;min-height:36px}
+      .scenario-note{font-size:13px;color:var(--amber);font-weight:600;margin-top:8px}
+
+      /* ---------- breakdown ---------- */
+      .section-head{margin:34px 0 6px}
+      .section-head h2{font-size:26px;font-weight:900}
+      .section-head p{color:var(--muted);margin:6px 0 0;max-width:700px}
+      .bd-group{font-family:"Lato",sans-serif;font-weight:900;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:20px 0 4px}
+      .bd-row{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:13px 0;border-top:1px solid var(--line)}
+      .bd-row .bt{font-weight:700;font-size:15.5px}
+      .bd-row .bp{font-family:"Lato",sans-serif;font-weight:900;font-size:19px;font-variant-numeric:tabular-nums;text-align:right}
+      .bd-row .bp small{color:var(--muted);font-size:13px;font-weight:700}
+      .bd-row .bx{grid-column:1/-1;color:var(--muted);font-size:14px}
+      .bd-row .bar{grid-column:1/-1;height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:2px}
+      .bd-row .bar i{display:block;height:100%;background:var(--red);border-radius:4px;transition:width .45s ease}
+      .bd-total{display:flex;justify-content:space-between;align-items:baseline;border-top:2.5px solid var(--ink);margin-top:14px;padding-top:12px}
+      .bd-total .t{font-family:"Lato",sans-serif;font-weight:900;font-size:19px}
+      .bd-total .v{font-family:"Lato",sans-serif;font-weight:900;font-size:30px}
+
+      /* ---------- draws ---------- */
+      .draws{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:16px}
+      .draw{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)}
+      .draw .dt{font-size:13px;color:var(--muted);font-weight:600}
+      .draw .dn{font-weight:700;font-size:15.5px;margin:2px 0 8px;line-height:1.3}
+      .draw .row{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+      .draw .row b{color:var(--ink);font-variant-numeric:tabular-nums}
+      .draw .cut{font-family:"Lato",sans-serif;font-weight:900;font-size:24px;color:var(--red)}
+
+      /* ---------- premium ---------- */
+      .premium{background:var(--surface);border:2px solid var(--red);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);margin-top:36px}
+      .premium h2{font-size:24px;font-weight:900}
+      .premium .cols{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;margin-top:10px}
+      @media (max-width:720px){.premium .cols{grid-template-columns:1fr}}
+      .premium ul{margin:10px 0 0;padding-left:20px}
+      .premium li{margin:6px 0}
+      .price-box{background:var(--surface2);border-radius:12px;padding:18px;text-align:center}
+      .price{font-family:"Lato",sans-serif;font-weight:900;font-size:44px;line-height:1}
+      .price small{font-size:16px;color:var(--muted)}
+      .curr-toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-bottom:12px}
+      .curr-toggle button{border:none;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;padding:8px 18px;cursor:pointer;min-height:40px}
+      .curr-toggle button.on{background:var(--red);color:#fff}
+      .cta{display:inline-block;background:var(--red);color:#fff;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:10px;margin-top:14px;font-size:16px}
+      .cta:hover{background:var(--red-dark)}
+      .fineprint{font-size:13px;color:var(--muted);margin-top:12px}
+
+      /* ---------- full report ---------- */
+      .cta-secondary{display:inline-block;background:var(--surface);color:var(--red);border:1.5px solid var(--red);font-weight:700;text-decoration:none;padding:11px 20px;border-radius:10px;margin-top:10px;font-size:15px;width:100%}
+      .cta-secondary:hover{background:var(--red-soft)}
+      .pay-steps{margin:12px 0 2px;padding-left:20px;text-align:left;font-size:14px}
+      .pay-steps li{margin:5px 0}
+      .paid-banner{background:var(--green-soft);border:1px solid var(--green);border-radius:11px;padding:14px 16px;margin-bottom:18px;font-size:15px}
+      .paid-banner b{color:var(--green)}
+      .report{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px}
+      .report-head{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-start;border-bottom:2.5px solid var(--ink);padding-bottom:16px}
+      .report-head h2{font-size:24px;font-weight:900}
+      .report-head .rmeta{color:var(--muted);font-size:13.5px;margin-top:4px}
+      .report-score{text-align:right}
+      .report-score .rs{font-family:"Lato",sans-serif;font-weight:900;font-size:44px;line-height:1}
+      .report-score .rs small{font-size:15px;color:var(--muted)}
+      .report h3{font-size:18px;font-weight:900;margin:24px 0 8px}
+      .report h3:first-of-type{margin-top:18px}
+      .report p{margin:6px 0;color:var(--ink)}
+      .report .muted{color:var(--muted);font-size:14px}
+      .r-table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
+      .r-table th,.r-table td{padding:8px 8px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+      .r-table th{border-top:none;font-weight:700}
+      .r-table td.num,.r-table th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
+      .r-profile{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;margin-top:10px}
+      @media (max-width:560px){.r-profile{grid-template-columns:1fr}}
+      .r-profile div{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:7px 0;font-size:14px}
+      .r-profile div span:first-child{color:var(--muted)}
+      .r-profile div span:last-child{font-weight:700;text-align:right}
+      .checklist{list-style:none;margin:8px 0 0;padding:0}
+      .checklist li{display:flex;gap:11px;padding:10px 0;border-top:1px solid var(--line);font-size:14.5px}
+      .checklist li:first-child{border-top:none}
+      .checklist .tick{flex:0 0 auto;width:22px;height:22px;border-radius:6px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-weight:900;font-size:13px;margin-top:1px}
+      .checklist b{display:block}
+      .checklist span.d{color:var(--muted);font-size:13.5px}
+      .plan-item{display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:14.5px}
+      .plan-item:first-of-type{border-top:none}
+      .plan-item .pdelta{flex:0 0 auto;font-family:"Lato",sans-serif;font-weight:900;color:var(--green);font-size:17px;min-width:56px}
+      .plan-item small{display:block;color:var(--muted)}
+      .report-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+      .report-actions .cta{margin-top:0}
+      .btn-ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);font:inherit;font-weight:700;padding:12px 20px;border-radius:10px;cursor:pointer}
+      .btn-ghost:hover{border-color:var(--red);color:var(--red)}
+      @media print{
+        body{background:#fff}
+        .layout,.draws,.premium,.faq,footer,.section-head,.hero .chips{display:none !important}
+        .report{box-shadow:none;border:none;padding:0}
+        .report-actions{display:none !important}
+      }
+
+      /* ---------- faq / footer ---------- */
+      .faq details{border-top:1px solid var(--line);padding:4px 0}
+      .faq summary{cursor:pointer;font-weight:700;padding:10px 0;min-height:40px}
+      .faq p{color:var(--muted);margin:0 0 12px}
+      footer{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:13.5px}
+      footer p{margin:6px 0}
+      @media (prefers-reduced-motion: reduce){*{transition:none !important;scroll-behavior:auto !important}}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <!-- ================= HERO ================= -->
+      <header class="hero">
+        <div class="hero-top">
+          <div class="leaf" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 1.8l1.7 3.6 2.4-1.5-1 3 3.2-.6-1.9 2.9 3.3.9-3 2 2 2.2-3.6-.4 1.1 2.6-3-1.2.4 3.7h-3.2l.4-3.7-3 1.2 1.1-2.6-3.6.4 2-2.2-3-2 3.3-.9-1.9-2.9 3.2.6-1-3 2.4 1.5z"/></svg>
+          </div>
+          <div>
+            <h1>CRS Calculator — <span class="accent">Canada PR Score &amp; Chances</span></h1>
+            <p class="lede">Work out your Express Entry Comprehensive Ranking System score the same way IRCC does — every point explained in plain language — then see honestly how your score stacks up against the latest invitation rounds.</p>
+          </div>
+        </div>
+        <div class="chips">
+          <span class="chip">Scoring rules: <b>IRCC grid, Nov 3, 2026</b></span>
+          <span class="chip">Max score: <b>1,270</b></span>
+          <span class="chip">Latest draw: <b>Oct 28, 2026 · cut-off 477</b></span>
+          <span class="chip warn">Draws paused while IRCC re-scores profiles under the new rules</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <!-- ================= FORM ================= -->
+        <div>
+          <form id="crsForm" autocomplete="off">
+
+            <section class="card" aria-labelledby="h-about">
+              <h2 id="h-about"><span class="stepnum">1</span> About you</h2>
+              <p class="hint">Your marital situation changes which points column IRCC uses — answer it the way you will actually apply.</p>
+              <div class="field">
+                <span class="flabel" id="lbl-marital">Are you applying with a spouse or common-law partner?</span>
+                <div class="seg" role="radiogroup" aria-labelledby="lbl-marital">
+                  <label><input type="radio" name="marital" value="single" checked />No — just me</label>
+                  <label><input type="radio" name="marital" value="spouse" />Yes — spouse is coming with me</label>
+                </div>
+                <p class="hint">Pick “just me” also if your spouse is already a Canadian citizen or PR, or is not accompanying you — IRCC scores you as single in those cases.</p>
+              </div>
+              <div class="field">
+                <label for="ageRange">Your age <span class="sub">— age points peak at 20–29 and fall to zero at 45</span></label>
+                <div class="age-row">
+                  <input type="range" id="ageRange" min="17" max="50" value="29" />
+                  <div class="age-val"><span id="ageVal">29</span><small>years old</small></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card" aria-labelledby="h-edu">
+              <h2 id="h-edu"><span class="stepnum">2</span> Education</h2>
+              <p class="hint">Use your highest completed credential. Foreign credentials need an Educational Credential Assessment (ECA) to count.</p>
+              <div class="field">
+                <label for="education">Highest level of education</label>
+                <select id="education">
+                  <option value="0">Less than high school</option>
+                  <option value="1">High school diploma</option>
+                  <option value="2">One-year post-secondary program</option>
+                  <option value="3">Two-year post-secondary program</option>
+                  <option value="4" selected>Bachelor’s degree / program of 3+ years</option>
+                  <option value="5">Two or more credentials (one of them 3+ years)</option>
+                  <option value="6">Master’s degree / professional degree</option>
+                  <option value="7">Doctoral degree (PhD)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="canStudy">Did you study in Canada? <span class="sub">— bonus points for a Canadian credential</span></label>
+                <select id="canStudy">
+                  <option value="0" selected>No Canadian credential</option>
+                  <option value="15">Yes — Canadian credential of 1–2 years</option>
+                  <option value="30">Yes — Canadian credential of 3+ years (or master’s / PhD)</option>
+                </select>
+              </div>
+            </section>
+
+            <section class="card" aria-labelledby="h-lang">
+              <h2 id="h-lang"><span class="stepnum">3</span> Language — first official language</h2>
+              <p class="hint">Language is the single biggest lever in the CRS. Enter your test scores and we convert them to CLB levels exactly as IRCC does.</p>
+              <div class="grid2">
+                <div class="field">
+                  <label for="lang1Name">First language</label>
+                  <select id="lang1Name">
+                    <option value="en" selected>English</option>
+                    <option value="fr">French</option>
+                  </select>
+                </div>
+                <div class="field" id="testTypeField">
+                  <label for="testType">Test you took (or plan to take)</label>
+                  <select id="testType">
+                    <option value="ielts" selected>IELTS General Training</option>
+                    <option value="celpip">CELPIP General</option>
+                    <option value="clb">I know my CLB levels</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <span class="flabel" id="abLabel">Your scores, per ability</span>
+                <div class="ability-grid" id="abilityGrid1"></div>
+                <div class="clb-note" id="clbNote1"></div>
+              </div>
+              <details class="more">
+                <summary>+ Add a second official language</summary>
+                <div class="field">
+                  <span class="flabel" id="abLabel2">Second language scores, per ability <span class="sub">(CLB / NCLC level)</span></span>
+                  <div class="ability-grid" id="abilityGrid2"></div>
+                  <div class="clb-note" id="clbNote2"></div>
+                </div>
+              </details>
+            </section>
+
+            <section class="card" aria-labelledby="h-work">
+              <h2 id="h-work"><span class="stepnum">4</span> Work experience</h2>
+              <p class="hint">Count only skilled work (TEER 0, 1, 2 or 3). Since Nov 3, 2026, work or a job offer in a <b>high-wage occupation</b> earns extra points — IRCC counts whichever of the two is worth more, not both.</p>
+              <div class="grid2">
+                <div class="field">
+                  <label for="canWork">Canadian skilled work experience</label>
+                  <select id="canWork">
+                    <option value="0" selected>None</option>
+                    <option value="1">1 year</option>
+                    <option value="2">2 years</option>
+                    <option value="3">3 years</option>
+                    <option value="4">4 years</option>
+                    <option value="5">5 years or more</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="foreignWork">Foreign skilled work experience <span class="sub">(outside Canada)</span></label>
+                  <select id="foreignWork">
+                    <option value="0" selected>None</option>
+                    <option value="1">1–2 years</option>
+                    <option value="3">3 years or more</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field" style="margin-top:18px">
+                <label for="nocSearch">Find your occupation — we detect your NOC code &amp; high-wage tier</label>
+                <input type="text" id="nocSearch" placeholder="Start typing: cook, truck driver, software developer, nurse…" autocomplete="off" />
+                <div class="noc-results hidden" id="nocResults" role="listbox" aria-label="Matching occupations"></div>
+                <div class="noc-selected hidden" id="nocSelected"></div>
+                <p class="hint">Searches 228 NOC 2021 occupations, including all 186 occupations on IRCC’s high-wage list (Nov 3, 2026). Picking yours fills in the two high-wage answers below automatically. It’s a helper, not a guarantee — IRCC decides your code from your duties, not your job title.</p>
+              </div>
+              <div class="wage-box" aria-labelledby="h-noc">
+                <h3 id="h-noc">What is a NOC code?</h3>
+                <p>Every job in Canada belongs to one occupation in the <b>National Occupational Classification (NOC)</b> — the government’s official list of jobs. Each occupation has a <b>5-digit NOC code</b>. IRCC uses your code to decide whether your work counts as “skilled”, which invitation rounds you fit, and — under the new rules — which median-wage tier your occupation sits in.</p>
+                <p><b>How to read the code:</b> the <b>first digit</b> is the broad field of work (for example, 2 = natural and applied sciences, 6 = sales and service, 7 = trades and transport). The <b>second digit</b> is the occupation’s <b>TEER level</b> — the Training, Education, Experience and Responsibilities the job usually requires:</p>
+                <table class="wage-table plain" aria-label="TEER categories explained">
+                  <thead>
+                    <tr><th>TEER</th><th>What the job usually requires</th><th>Examples</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><b>0</b></td><td>Management responsibilities</td><td>Restaurant manager, IT manager</td></tr>
+                    <tr><td><b>1</b></td><td>A university degree</td><td>Software engineer (21231), registered nurse (31301), accountant</td></tr>
+                    <tr><td><b>2</b></td><td>A college diploma (2–3 years) or apprenticeship (2–5 years)</td><td>Chef (62200), electrician (72200), medical laboratory technologist (32120)</td></tr>
+                    <tr><td><b>3</b></td><td>A shorter college program, apprenticeship under 2 years, or 6+ months of on-the-job training</td><td>Cook (63200), transport truck driver (73300), dental assistant, baker</td></tr>
+                    <tr><td><b>4</b></td><td>High school and/or job-specific training</td><td>Retail salesperson (64100), cashier</td></tr>
+                    <tr><td><b>5</b></td><td>Short work demonstration, no formal education</td><td>Labourer, landscaper helper</td></tr>
+                  </tbody>
+                </table>
+                <p><b>Why your NOC code matters for this calculator:</b></p>
+                <ul>
+                  <li><b>Only TEER 0, 1, 2 or 3 work counts as “skilled”</b> and earns CRS work-experience points. TEER 4 and 5 work earns none — no matter how many years you did it.</li>
+                  <li><b>Your NOC decides your median wage.</b> Job Bank publishes a median wage for every NOC code — that is the number compared against the national median in the high-wage tiers explained below.</li>
+                  <li><b>Category-based draws target specific NOCs</b> (healthcare, trades, transport, STEM and others), so your code can open lower cut-off rounds.</li>
+                  <li><b>IRCC checks duties, not titles.</b> Your employer reference letter must show you performed the lead statement and most of the main duties listed under your NOC code.</li>
+                </ul>
+                <p><b>How to find yours (5 minutes):</b></p>
+                <ul>
+                  <li><b>1.</b> Write down what you actually <b>do</b> day to day — your duties, not your job title. The same title (“supervisor”, “technician”) maps to different codes in different industries.</li>
+                  <li><b>2.</b> Search your title on IRCC’s <a href="https://ircc.canada.ca/english/immigrate/skilled/noc.asp" target="_blank" rel="noopener">Find your NOC page</a>, then open the matching occupation on the <a href="https://noc.esdc.gc.ca/" target="_blank" rel="noopener">official NOC website</a> (choose NOC 2021).</li>
+                  <li><b>3.</b> Compare the <b>lead statement</b> and <b>main duties</b> with your real job. The right code is the one whose duties match most of your work — even if the title sounds less impressive.</li>
+                </ul>
+                <p><b>Common mistake:</b> picking a higher-TEER code than your duties support, because it looks better. If IRCC decides your duties don’t match the code, that work experience can be refused entirely — the honest code is always the safer one.</p>
+              </div>
+              <div class="wage-box" aria-labelledby="h-wage">
+                <h3 id="h-wage">What is a “median wage occupation”?</h3>
+                <p>Every job in Canada has a <b>median wage</b> — the middle hourly pay for that occupation. Half the people in that job earn more than the median, and half earn less. It is <b>not</b> the average, and it is <b>not your personal salary</b>.</p>
+                <p>Canada also has <b>one national median wage</b> across all occupations. For the new CRS rules, IRCC compares <b>your occupation’s median wage</b> to that <b>national median</b>:</p>
+                <table class="wage-table" aria-label="High-wage occupation tiers and CRS points">
+                  <thead>
+                    <tr><th>If your occupation’s median wage is…</th><th>Canadian work bonus</th><th>Job offer points</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><b>At least 1.3×</b> the national median</td><td>20 pts</td><td>50 pts</td></tr>
+                    <tr><td><b>At least 1.5×</b> the national median</td><td>40 pts</td><td>70 pts</td></tr>
+                    <tr><td><b>At least 2×</b> the national median</td><td>70 pts</td><td>100 pts</td></tr>
+                    <tr><td>Below 1.3× the national median</td><td>0 extra</td><td>0 pts</td></tr>
+                  </tbody>
+                </table>
+                <div class="wage-example"><b>Simple example:</b> If the national median were $30/hour (example only, to show the maths), an occupation with a median of $39/hour would be 1.3×, $45/hour would be 1.5×, and $60/hour would be 2×.</div>
+                <p><b>Where the numbers come from:</b> the Government of Canada’s Job Bank publishes a median hourly wage for <b>every NOC code</b> — one figure for Canada as a whole, plus separate figures for each province and region, updated as new labour data comes in. The same occupation can sit in a different tier in a low-wage region than nationally, which is why the check below uses the <b>Canada-wide</b> figure for your NOC code. This is also why two people with the same salary can land in different tiers: what counts is the published median for their occupation, not what either of them personally earns.</p>
+                <p><b>How to check yours in 2 minutes:</b></p>
+                <ul>
+                  <li><b>1. Find your NOC code</b> — the 5-digit code for your job title and duties.</li>
+                  <li><b>2. Look up its median wage for Canada</b> on the Government of Canada <a href="https://www.jobbank.gc.ca/trend-analysis/search-wages" target="_blank" rel="noopener">Job Bank — Wages</a> page. Use the Canada-wide median, not just your city or province.</li>
+                  <li><b>3. Compare it</b> to the national median shown there. That ratio decides your tier above.</li>
+                </ul>
+                <p><b>Important:</b> You can earn a high salary yourself and still <i>not</i> count if your occupation’s median is low — and the opposite can also be true. IRCC is judging the <b>occupation</b>, not your pay slip. If you are not sure of your tier, choose “No / not sure” below and don’t claim points you cannot prove.</p>
+              </div>
+              <div class="field">
+                <span class="flabel" id="lbl-hw">Is your Canadian work (12+ months) in a high-wage occupation? <span class="sub">— based on the occupation’s median wage vs. the national median</span></span>
+                <div class="seg" role="radiogroup" aria-labelledby="lbl-hw">
+                  <label><input type="radio" name="hwWork" value="0" checked />No / not sure</label>
+                  <label><input type="radio" name="hwWork" value="20" />Yes — 1.3× median</label>
+                  <label><input type="radio" name="hwWork" value="40" />Yes — 1.5× median</label>
+                  <label><input type="radio" name="hwWork" value="70" />Yes — 2× median</label>
+                </div>
+              </div>
+              <div class="field">
+                <span class="flabel" id="lbl-offer">Do you have a job offer in a high-wage occupation? <span class="sub">— no LMIA needed since Nov 3, 2026</span></span>
+                <div class="seg" role="radiogroup" aria-labelledby="lbl-offer">
+                  <label><input type="radio" name="jobOffer" value="0" checked />No offer</label>
+                  <label><input type="radio" name="jobOffer" value="50" />1.3× median — 50 pts</label>
+                  <label><input type="radio" name="jobOffer" value="70" />1.5× median — 70 pts</label>
+                  <label><input type="radio" name="jobOffer" value="100" />2× median — 100 pts</label>
+                </div>
+              </div>
+              <div class="field">
+                <span class="flabel" id="lbl-cert">Do you hold a Canadian certificate of qualification in a trade?</span>
+                <div class="seg" role="radiogroup" aria-labelledby="lbl-cert">
+                  <label><input type="radio" name="cert" value="0" checked />No</label>
+                  <label><input type="radio" name="cert" value="1" />Yes</label>
+                </div>
+              </div>
+            </section>
+
+            <section class="card hidden" id="spouseCard" aria-labelledby="h-spouse">
+              <h2 id="h-spouse"><span class="stepnum">5</span> Your spouse / partner</h2>
+              <p class="hint">A spouse can add up to 40 points — strong language scores matter most.</p>
+              <div class="field">
+                <label for="spEducation">Spouse’s highest education</label>
+                <select id="spEducation">
+                  <option value="0">Less than high school</option>
+                  <option value="1">High school diploma</option>
+                  <option value="2">One-year post-secondary program</option>
+                  <option value="3">Two-year post-secondary program</option>
+                  <option value="4" selected>Bachelor’s degree / program of 3+ years</option>
+                  <option value="5">Two or more credentials (one of them 3+ years)</option>
+                  <option value="6">Master’s degree / professional degree</option>
+                  <option value="7">Doctoral degree (PhD)</option>
+                </select>
+              </div>
+              <div class="field">
+                <span class="flabel">Spouse’s first-language level <span class="sub">(CLB per ability — use their lowest ability if unsure)</span></span>
+                <div class="ability-grid" id="abilityGridSpouse"></div>
+              </div>
+              <div class="field">
+                <label for="spCanWork">Spouse’s Canadian skilled work experience</label>
+                <select id="spCanWork">
+                  <option value="0" selected>None</option>
+                  <option value="1">1 year</option>
+                  <option value="2">2 years</option>
+                  <option value="3">3 years</option>
+                  <option value="4">4 years</option>
+                  <option value="5">5 years or more</option>
+                </select>
+              </div>
+            </section>
+
+            <section class="card" aria-labelledby="h-extra">
+              <h2 id="h-extra"><span class="stepnum">6</span> Extra points</h2>
+              <div class="field">
+                <span class="flabel" id="lbl-pnp">Provincial Nominee Program (PNP) nomination from a province?</span>
+                <div class="seg" role="radiogroup" aria-labelledby="lbl-pnp">
+                  <label><input type="radio" name="pnp" value="0" checked />No</label>
+                  <label><input type="radio" name="pnp" value="600" />Yes — worth 600 points</label>
+                </div>
+              </div>
+              <div class="field">
+                <span class="flabel" id="lbl-sib">Do you have a sibling (18+) who is a Canadian citizen or PR living in Canada?</span>
+                <div class="seg" role="radiogroup" aria-labelledby="lbl-sib">
+                  <label><input type="radio" name="sibling" value="0" checked />No</label>
+                  <label><input type="radio" name="sibling" value="15" />Yes — 15 points</label>
+                </div>
+              </div>
+              <p class="hint">French-language bonus points (25 or 50) are added automatically when your French scores reach NCLC 7 in all four abilities — no separate question needed.</p>
+            </section>
+          </form>
+
+          <!-- ================= BREAKDOWN ================= -->
+          <div class="section-head">
+            <h2>Your score, point by point</h2>
+            <p>Every line below is one IRCC factor — what you earned, the maximum for that factor, and why. This updates live as you change any answer above.</p>
+          </div>
+          <div class="card">
+            <div id="breakdown"></div>
+            <div class="bd-total"><span class="t">Estimated CRS total</span><span class="v" id="bdTotal">0</span></div>
+          </div>
+        </div>
+
+        <!-- ================= SCORE PANEL ================= -->
+        <aside class="score-panel">
+          <div class="score-card" aria-live="polite">
+            <div class="score-label">Your estimated CRS score</div>
+            <div class="score-big"><span id="scoreTotal">0</span> <small>/ 1,270</small></div>
+            <div class="stackbar" aria-hidden="true">
+              <div class="seg-core" id="barCore" style="width:0%"></div>
+              <div class="seg-spouse" id="barSpouse" style="width:0%"></div>
+              <div class="seg-trans" id="barTrans" style="width:0%"></div>
+              <div class="seg-add" id="barAdd" style="width:0%"></div>
+            </div>
+            <div class="legend">
+              <span><i class="dot seg-core"></i>Core factors<b id="lgCore">0</b></span>
+              <span><i class="dot seg-spouse"></i>Spouse<b id="lgSpouse">0</b></span>
+              <span><i class="dot seg-trans"></i>Transferability<b id="lgTrans">0</b></span>
+              <span><i class="dot seg-add"></i>Additional<b id="lgAdd">0</b></span>
+            </div>
+
+            <div class="verdict mid" id="verdictBox">
+              <h3 id="verdictTitle">Your PR chances</h3>
+              <p id="verdictText"></p>
+            </div>
+
+            <div class="paths">
+              <h3>Your score vs. the latest rounds</h3>
+              <div id="pathList"></div>
+              <p class="fineprint">Cut-offs are from IRCC rounds held under the previous points grid (before Nov 3, 2026), so treat them as a guide, not a promise. There is no fixed “passing score” — IRCC invites the top-ranked profiles in each round.</p>
+            </div>
+
+            <div class="paths boosts">
+              <h3>Fastest ways to raise this score</h3>
+              <div id="boostList"></div>
+              <div class="scenario-note hidden" id="scenarioNote">Showing a “what-if” scenario — your answers above haven’t changed.</div>
+              <button type="button" class="boost-reset hidden" id="boostReset">← Back to my real score</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- ================= DRAWS ================= -->
+      <div class="section-head">
+        <h2>Latest Express Entry draws</h2>
+        <p>The most recent IRCC rounds of invitations, checked November 13–17, 2026. PNP cut-offs look high because they include the 600 nomination points. Rounds are paused while IRCC re-scores every profile under the Nov 3, 2026 rules.</p>
+      </div>
+      <div class="draws" id="drawGrid"></div>
+
+      <!-- ================= PREMIUM ================= -->
+      <section class="premium" aria-labelledby="h-premium">
+        <h2 id="h-premium">Your complete CRS score check — with the full chances report</h2>
+        <div class="cols">
+          <div>
+            <p style="margin:6px 0 0">The calculator above gives you a quick headline estimate. Tap the button and this page generates your <b>full report</b> instantly — a complete personal document you can download, keep and act on:</p>
+            <ul>
+              <li><b>Full breakdown</b> — every factor, your points, and the exact IRCC rule behind each one (as a real PDF file you open and save)</li>
+              <li><b>Chances by pathway</b> — CEC, French-language, PNP and category-based rounds, with your gap to each recent cut-off</li>
+              <li><b>Your personal points plan</b> — the 3 changes that would add the most points to <i>your</i> profile, in order</li>
+              <li><b>Document checklist</b> — ECA, language tests, work letters: what you’ll need to prove every point you claimed</li>
+            </ul>
+            <p class="fineprint">Prepared from the same IRCC grid this calculator uses (Nov 3, 2026). An estimate and planning document — not immigration advice and not a guarantee of an invitation.</p>
+          </div>
+          <div class="price-box">
+            <div class="curr-toggle" role="group" aria-label="Choose currency">
+              <button type="button" id="curCad" class="on">Canada · CAD</button>
+              <button type="button" id="curInr">India · INR</button>
+            </div>
+            <div class="price" id="priceVal">$1.99 <small>one-time</small></div>
+            <p class="fineprint" id="priceNote" style="margin-top:6px">Complete score check + report, for one profile. No subscription.</p>
+            <ol class="pay-steps">
+              <li><b>Step 1 — Generate your breakdown</b> on this page (button below). It appears right here — nothing is emailed.</li>
+              <li><b>Step 2 — Pay $1.99</b> on Stripe. Stripe opens in a <b>new tab</b>; this tab keeps your answers and your breakdown.</li>
+              <li><b>Step 3 — Come back to this tab</b> and tap <b>“Open my PDF”</b> in the report below. Your PDF opens in a new tab — in the PDF tab, click the download icon at the top to save the file to your device. If Stripe sends you back here after paying, your breakdown appears automatically with the same “Open my PDF” button ready.</li>
+            </ol>
+            <button type="button" class="cta" id="generateReportBtn" style="border:none;cursor:pointer;width:100%;font:inherit">Step 1 · Generate my full breakdown now ↓</button>
+            <p class="fineprint">Your full report is generated instantly on this page from the answers you entered above — full breakdown, chances by pathway, personal points plan and document checklist. Open it as a PDF and save it from the PDF viewer. No waiting, no email needed.</p>
+            <a class="cta-secondary" id="reportCta" href="https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00" target="_blank" rel="noopener">Step 2 · Pay $1.99 via Stripe</a>
+            <p class="fineprint">One-time payment, no subscription. Pay securely with Stripe. Paying does not take you away from your breakdown — Stripe opens in a new tab and this page stays exactly as you left it.</p>
+            <p class="fineprint hidden" id="payNotice" style="color:var(--green);font-weight:700">Stripe is open in a new tab. Your full breakdown has been generated on this page — after paying, return to this tab and tap “Open my PDF” in the report below. In the PDF tab, click the download icon at the top to save the file to your device.</p>
+            <button type="button" class="btn-ghost" id="paidAlreadyBtn" style="width:100%;margin-top:10px">I already paid — show my breakdown ↓</button>
+            <p class="fineprint">Already paid on Stripe and landed back here without your report? Tap the button above — it rebuilds your full breakdown from the answers in the calculator, no second payment needed.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FULL REPORT ================= -->
+      <section class="report hidden" id="fullReport" aria-labelledby="h-report">
+        <div class="paid-banner hidden" id="paidBanner"><b>Payment received — thank you.</b> Your complete CRS breakdown is below, built from the answers in the calculator. Your PDF is already generated at the bottom of this report — tap <b>“Open my PDF — then tap the download icon to save it”</b>. In the PDF tab, click the download icon at the top to save the file to your device. If the answers above were reset on the way back, re-enter them and tap “Generate my full breakdown” again — you will not be charged again.</div>
+        <div class="report-head">
+          <div>
+            <h2 id="h-report">Your full CRS report</h2>
+            <p class="rmeta" id="reportMeta">Generated from your calculator answers · IRCC grid, Nov 3, 2026</p>
+          </div>
+          <div class="report-score"><div class="rs"><span id="reportScore">0</span> <small>/ 1,270</small></div><p class="muted" style="margin:2px 0 0">Estimated CRS score</p></div>
+        </div>
+
+        <h3>1 · Your profile, as scored</h3>
+        <div class="r-profile" id="reportProfile"></div>
+
+        <h3>2 · Verified breakdown — every point, line by line</h3>
+        <p class="muted">Each line is one IRCC factor: what you earned, the maximum for that factor, and the rule behind it.</p>
+        <div id="reportBreakdown"></div>
+
+        <h3>3 · Your chances, by pathway</h3>
+        <div id="reportVerdict"></div>
+        <div id="reportChances"></div>
+
+        <h3>4 · Your personal plan to raise this score</h3>
+        <p class="muted">The changes that would add the most points to <i>your</i> profile, biggest first — with the score each one would give you.</p>
+        <div id="reportPlan"></div>
+
+        <h3>5 · Document checklist for your Express Entry profile</h3>
+        <p class="muted">What you will need to prove the points in this report. Start with the items that take longest — ECA and language tests.</p>
+        <ul class="checklist" id="reportChecklist"></ul>
+
+        <h3>6 · Your next steps</h3>
+        <div id="reportNext"></div>
+
+        <h3>7 · NOC codes &amp; the median wage — quick reference</h3>
+        <p><b>Your NOC code</b> is the 5-digit code the National Occupational Classification assigns to your occupation. The second digit is its TEER level (0–5): only TEER 0–3 work counts as skilled and earns CRS work points, category-based draws invite specific NOC codes, and your employer reference letters must match the main duties listed under your code. Find yours by matching your real duties — not your job title — on IRCC’s “Find your NOC” page or the official NOC website (NOC 2021).</p>
+        <p><b>The median wage</b> is the middle hourly pay published by Job Bank for your NOC code — half the workers in that occupation earn more, half earn less. It is not your salary. Under the Nov 3, 2026 rules, IRCC compares your occupation’s Canada-wide median to the national median across all occupations: at least 1.3× earns a 20-point Canadian-work bonus or 50 job-offer points, 1.5× earns 40 / 70, and 2× earns 70 / 100. Check your occupation’s figure on the Government of Canada Job Bank wages page using your NOC code.</p>
+
+        <p class="fineprint" style="margin-top:20px">This report is an estimate generated from the answers you entered and IRCC’s published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile — confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).</p>
+
+        <div class="report-actions">
+          <a class="cta hidden" id="openPdfBtn" href="#" target="_blank" rel="noopener" style="text-decoration:none">Open my PDF — then tap the download icon to save it</a>
+          <a class="btn-ghost" id="downloadReportBtn" href="#" download="CRS-Full-Report.pdf" style="text-decoration:none;display:inline-flex;align-items:center">Or try a direct download</a>
+          <button type="button" class="btn-ghost" id="copyReportBtn">Copy report summary</button>
+          <span class="fineprint" id="reportStatus" style="align-self:center"></span>
+        </div>
+        <p style="margin:10px 0 0;font-size:15px"><b>How to save your PDF:</b> Tap <b>“Open my PDF”</b> above — your complete report opens as a PDF in a new tab. In the PDF tab, click the download icon at the top to save the file to your device.</p>
+        <p class="fineprint">Your PDF contains this complete report — profile, full point-by-point breakdown, chances by pathway, personal points plan, document checklist and next steps. The direct download link is a secondary option: if nothing saves, use Open PDF above. If you change any answer above, generate the report again before opening the PDF so it matches.</p>
+        <div class="hidden" id="pdfError" role="alert" style="margin-top:16px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:11px;padding:14px 16px;font-size:15px"></div>
+        <div class="hidden" id="pdfReadyCard" style="margin-top:16px;background:var(--green-soft);border:1px solid var(--green);border-radius:11px;padding:14px 16px;font-size:15px">
+          <p style="margin:0 0 6px"><b>Your PDF file is ready:</b> <span id="pdfReadyName">CRS-Full-Report.pdf</span><span id="pdfReadyMeta"></span> — the complete breakdown, generated from your answers.</p>
+          <p style="margin:0 0 6px"><a id="pdfReadyOpen" href="#" target="_blank" rel="noopener" style="font-weight:700">Open my PDF — then tap the download icon to save it</a></p>
+          <p style="margin:0">In the PDF tab, click the download icon at the top to save the file to your device. If nothing saves with a direct download, use Open PDF above.</p>
+        </div>
+      </section>
+
+      <!-- ================= FAQ ================= -->
+      <div class="section-head">
+        <h2>Questions people ask</h2>
+      </div>
+      <div class="card faq">
+        <details>
+          <summary>What CRS score do I actually need for PR?</summary>
+          <p>There is no fixed pass mark. IRCC invites the highest-ranked profiles in each round, so the cut-off moves: recent Canadian Experience Class rounds closed at 518–521, French-language rounds at 407–435, and the last Transport occupations round at 477. A provincial nomination adds 600 points and effectively guarantees an invitation in a PNP round.</p>
+        </details>
+        <details>
+          <summary>What changed on November 3, 2026?</summary>
+          <p>IRCC added a Labour Market Integration factor worth up to 150 points. Canadian work in a high-wage occupation now earns a bonus of 20, 40 or 70 points on top of the usual work-experience points, and a job offer in a high-wage occupation earns 50, 70 or 100 points again — with no LMIA required. You get points for Canadian work or a job offer, whichever is worth more, not both. The maximum CRS score rose from 1,200 to 1,270.</p>
+        </details>
+        <details>
+          <summary>What is a NOC code, and how do I find mine?</summary>
+          <p>A NOC code is the 5-digit number Canada’s National Occupational Classification gives your occupation. The first digit is the broad field of work; the second digit is the TEER level (0–5) — how much training, education, experience and responsibility the job usually requires. Only work in TEER 0, 1, 2 or 3 counts as skilled and earns CRS points, category-based draws target specific NOC codes, and your code is what links your job to its published median wage. To find yours, match your actual day-to-day duties — not your job title — against the lead statement and main duties on IRCC’s “Find your NOC” page or the official NOC website (NOC 2021). Picking a code your duties don’t support can get that work experience refused.</p>
+        </details>
+        <details>
+          <summary>What is a median wage occupation — and is it my salary?</summary>
+          <p>No — it is not your salary. Every occupation (by NOC code) has a published median wage in Canada: the middle hourly pay, where half the workers in that occupation earn more and half earn less. IRCC compares that occupation median to the national median wage across all occupations. If the occupation’s median is at least 1.3×, 1.5× or 2× the national median, it counts as a high-wage occupation for the new Labour Market Integration points (20/40/70 points for Canadian work, or 50/70/100 for a job offer). You can check your occupation’s Canada-wide median on the Government of Canada Job Bank wages page using your NOC code.</p>
+        </details>
+        <details>
+          <summary>Why is language worth so much?</summary>
+          <p>Your first language alone is worth up to 136 core points, and it also unlocks skill-transferability points: reaching CLB 9 in all four abilities can add up to 50 transferability points with a strong degree and 50 more with foreign work experience. For many candidates, one IELTS re-take is worth more than a year of waiting.</p>
+        </details>
+        <details>
+          <summary>Is this the official IRCC calculator?</summary>
+          <p>No. This is an independent tool that applies IRCC’s published CRS criteria so you can understand every point. Your official score is the one calculated inside your Express Entry profile, and only IRCC can issue an invitation. Always confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).</p>
+        </details>
+        <details>
+          <summary>Do job offers still need an LMIA?</summary>
+          <p>For CRS points, no — since November 3, 2026, only offers in high-wage occupations earn points (50–100), and no LMIA is required. Between March 25, 2025 and November 2, 2026, job offers earned no CRS points at all.</p>
+        </details>
+      </div>
+
+      <footer>
+        <p><b>Disclaimer:</b> This calculator is an unofficial estimate based on IRCC’s published Comprehensive Ranking System criteria as of November 3, 2026. It is not affiliated with the Government of Canada or IRCC, is not immigration advice, and cannot guarantee an invitation or permanent residence. Immigration rules change — verify your score in the official IRCC tool before acting.</p>
+        <p>Sources: IRCC CRS criteria and rounds of invitations (via <a href="https://www.studyimmigration.com/blog/crs-score-calculator-explained/" target="_blank" rel="noopener">StudyImmigration’s CRS grid summary, checked Nov 13, 2026</a>), <a href="https://crscalculatorcanada.com/methodology/" target="_blank" rel="noopener">PointTally CRS methodology</a>, <a href="https://chkimmigration.ca/updates.php" target="_blank" rel="noopener">CHK Immigration draw tracker</a>, <a href="https://crsmeter.com/express-entry-draws/" target="_blank" rel="noopener">CRS Meter draw history</a>. Draw data checked November 17, 2026. The occupation finder’s high-wage tiers use IRCC’s 186-occupation list (Nov 3, 2026), cross-checked between two published copies: <a href="https://www.nextmovepath.com/tools/crs-calculator/high-wage-occupations/" target="_blank" rel="noopener">NextMovePath</a> and <a href="https://maplevisa.ca/express-entry/high-wage-occupations/" target="_blank" rel="noopener">MapleVisa</a> (both checked Nov 18, 2026).</p>
+      </footer>
+    </div>
+
+    <script>
+    (function(){
+      "use strict";
+      var $ = function(id){ return document.getElementById(id); };
+
+      /* ============ NOC 2021 OCCUPATION FINDER ============
+         NOC_DB entries: [code, official title, high-wage level (0 = not listed, 1 = 2x, 2 = 1.5x, 3 = 1.3x), alternate titles, duties summary].
+         The 186 high-wage codes/levels are IRCC's Nov 3, 2026 list, cross-checked between two independent published copies.
+         TEER is the second digit of the NOC 2021 code. */
+      var NOC_DB=[["00010", "Legislators", 3, "", ""],["00011", "Senior government managers and officials", 1, "", ""],["00012", "Senior managers - financial, communications and other business services", 1, "", ""],["00013", "Senior managers - health, education, social and community services and membership organizations", 1, "", ""],["00014", "Senior managers - trade, broadcasting and other services", 2, "", ""],["00015", "Senior managers - construction, transportation, production and utilities", 2, "", ""],["10010", "Financial managers", 1, "finance manager, financial manager", "Plan, organize and control the financial and accounting operations of a company or department."],["10011", "Human resources managers", 1, "", ""],["10012", "Purchasing managers", 1, "", ""],["10019", "Other administrative services managers", 2, "", ""],["10020", "Insurance, real estate and financial brokerage managers", 1, "", ""],["10021", "Banking, credit and other investment managers", 1, "", ""],["10022", "Advertising, marketing and public relations managers", 2, "", ""],["10029", "Other business services managers", 2, "", ""],["10030", "Telecommunication carriers managers", 2, "", ""],["11100", "Financial auditors and accountants", 3, "accountant, CPA, auditor, chartered accountant", "Examine financial records, prepare financial statements and tax returns, and advise on accounting and auditing matters."],["11101", "Financial and investment analysts", 3, "financial analyst, investment analyst", "Analyse financial and investment information to advise clients and employers on investment decisions."],["11102", "Financial advisors", 3, "financial advisor, financial planner", "Advise individual clients on investments, insurance, retirement and other financial planning matters."],["11103", "Securities agents, investment dealers and brokers", 2, "", ""],["11109", "Other financial officers", 3, "", ""],["11200", "Human resources professionals", 3, "HR specialist, human resources officer, recruiter", "Plan and manage recruitment, training, compensation and labour relations programs for an organization."],["11201", "Professional occupations in business management consulting", 2, "", ""],["11202", "Professional occupations in advertising, marketing and public relations", 0, "marketing specialist, advertising specialist, digital marketer", "Plan and carry out advertising, marketing and public relations campaigns, and analyse their results."],["12200", "Accounting technicians and bookkeepers", 0, "bookkeeper, accounting technician", "Maintain financial records, post journal entries, reconcile accounts and prepare trial balances and financial statements."],["12201", "Insurance adjusters and claims examiners", 3, "", ""],["12203", "Assessors, business valuators and appraisers", 3, "", ""],["13100", "Administrative officers", 0, "administrative officer, office manager, admin officer", "Coordinate office administrative procedures, manage budgets and inventories, and supervise office support staff."],["13110", "Administrative assistants", 0, "administrative assistant, office assistant, secretary", "Prepare correspondence and reports, schedule meetings, answer phones and email, and maintain office files and records."],["14100", "General office support workers", 0, "office clerk, general office worker, data entry clerk", "File and process documents, enter data, answer routine inquiries, and perform general clerical tasks."],["14200", "Accounting and related clerks", 0, "accounting clerk, payroll clerk, finance clerk", "Calculate, prepare and process bills, invoices, accounts payable and receivable, and payroll using bookkeeping systems."],["20010", "Engineering managers", 1, "engineering manager", "Plan, organize and control the activities of an engineering department, service or company."],["20011", "Architecture and science managers", 1, "", ""],["20012", "Computer and information systems managers", 1, "IT manager, information systems manager", "Plan, organize and control the activities of a department that develops and maintains computer and information systems."],["21100", "Physicists and astronomers", 2, "", ""],["21101", "Chemists", 3, "", ""],["21102", "Geoscientists and oceanographers", 2, "", ""],["21103", "Meteorologists and climatologists", 2, "", ""],["21109", "Other professional occupations in physical sciences", 2, "", ""],["21110", "Biologists and related scientists", 3, "", ""],["21111", "Forestry professionals", 2, "", ""],["21112", "Agricultural representatives, consultants and specialists", 3, "", ""],["21120", "Public and environmental health and safety professionals", 2, "", ""],["21200", "Architects", 3, "", ""],["21201", "Landscape architects", 3, "", ""],["21202", "Urban and land use planners", 2, "", ""],["21203", "Land surveyors", 3, "", ""],["21210", "Mathematicians, statisticians and actuaries", 2, "", ""],["21211", "Data scientists", 2, "data scientist, data analyst, machine learning specialist", "Use statistical methods and machine learning to analyse data and build models that guide decisions."],["21220", "Cybersecurity specialists", 2, "", ""],["21221", "Business systems specialists", 2, "", ""],["21222", "Information systems specialists", 2, "IT specialist, systems analyst, information systems analyst", "Analyse systems requirements, and design, develop and implement information systems and software solutions."],["21223", "Database analysts and data administrators", 2, "", ""],["21230", "Computer systems developers and programmers", 2, "", ""],["21231", "Software engineers and designers", 2, "software engineer, software designer", "Design, develop and test software applications and systems; analyse user needs and plan software solutions."],["21232", "Software developers and programmers", 2, "software developer, programmer, application developer, full stack developer", "Write, modify, integrate and test computer code for software applications, websites and mobile apps."],["21234", "Web developers and programmers", 3, "web developer, front end developer, website developer", "Develop and maintain websites and internet applications using programming languages, design tools and content systems."],["21300", "Civil engineers", 2, "civil engineer", "Design, plan and oversee construction of infrastructure such as roads, bridges, buildings and water systems."],["21301", "Mechanical engineers", 2, "mechanical engineer", "Design and oversee machines, mechanical systems and industrial processes."],["21310", "Electrical and electronics engineers", 2, "electrical engineer", "Design and oversee electrical and electronic systems, circuits and equipment."],["21311", "Computer engineers (except software engineers and designers)", 2, "", ""],["21320", "Chemical engineers", 2, "", ""],["21321", "Industrial and manufacturing engineers", 2, "", ""],["21322", "Metallurgical and materials engineers", 2, "", ""],["21330", "Mining engineers", 1, "", ""],["21331", "Geological engineers", 2, "", ""],["21332", "Petroleum engineers", 1, "", ""],["21390", "Aerospace engineers", 2, "", ""],["21399", "Other professional engineers", 2, "", ""],["22212", "Drafting technologists and technicians", 0, "drafting technologist, CAD technician, drafter", "Prepare engineering drawings and technical designs using computer-aided design (CAD) software."],["22214", "Technical occupations in geomatics and meteorology", 3, "", ""],["22220", "Computer network and web technicians", 0, "network technician, IT technician, computer support technician", "Install, maintain and troubleshoot computer networks, hardware and software, and provide technical support to users."],["22231", "Engineering inspectors and regulatory officers", 2, "", ""],["22232", "Occupational health and safety specialists", 3, "", ""],["22233", "Construction inspectors", 3, "construction inspector, building inspector", "Inspect construction and plumbing installations to check they meet building codes and specifications."],["22310", "Electrical and electronics engineering technologists and technicians", 3, "electronics technologist, electrical technologist", "Design, develop and test electrical and electronic equipment and systems, and support engineers."],["22312", "Industrial instrument technicians and mechanics", 2, "", ""],["22313", "Aircraft instrument, electrical and avionics mechanics, technicians and inspectors", 3, "", ""],["30010", "Managers in health care", 2, "", ""],["31100", "Specialists in clinical and laboratory medicine", 1, "", ""],["31101", "Specialists in surgery", 1, "", ""],["31102", "General practitioners and family physicians", 1, "family doctor, physician, GP, medical doctor", "Diagnose and treat illnesses and injuries, prescribe medication, and provide ongoing primary health care."],["31103", "Veterinarians", 1, "", ""],["31110", "Dentists", 2, "dentist", "Diagnose, treat and prevent diseases and disorders of teeth, gums and mouth."],["31112", "Audiologists and speech-language pathologists", 2, "", ""],["31120", "Pharmacists", 2, "", ""],["31121", "Dietitians and nutritionists", 3, "", ""],["31200", "Psychologists", 2, "", ""],["31202", "Physiotherapists", 2, "physiotherapist, physical therapist", "Assess patients and plan treatments to restore movement, strength and physical function."],["31203", "Occupational therapists", 2, "", ""],["31300", "Nursing coordinators and supervisors", 2, "", ""],["31301", "Registered nurses and registered psychiatric nurses", 2, "registered nurse, RN, nurse", "Provide direct nursing care to patients, administer medications and treatments, and coordinate patient care plans."],["31302", "Nurse practitioners", 1, "nurse practitioner, NP", "Provide advanced nursing care, diagnose and treat illnesses, and order and interpret diagnostic tests."],["31303", "Physician assistants, midwives and allied health professionals", 1, "", ""],["32101", "Licensed practical nurses", 0, "licensed practical nurse, LPN, practical nurse", "Provide nursing care under the direction of physicians or registered nurses, monitor patients and administer medication."],["32102", "Paramedical occupations", 3, "paramedic, EMT, emergency medical technician", "Provide emergency pre-hospital medical care and transport patients to medical facilities."],["32103", "Respiratory therapists, clinical perfusionists and cardiopulmonary technologists", 3, "", ""],["32111", "Dental hygienists and dental therapists", 2, "", ""],["32120", "Medical laboratory technologists", 3, "medical lab technologist, lab technologist", "Perform laboratory tests and analyses on blood, tissue and other samples to help diagnose and treat diseases."],["32121", "Medical radiation technologists", 3, "radiation technologist, X-ray technologist, MRT", "Operate radiographic and imaging equipment to produce images used in diagnosis."],["32122", "Medical sonographers", 3, "", ""],["32124", "Pharmacy technicians", 0, "pharmacy technician", "Prepare and dispense prescription medications under a pharmacist's supervision and maintain pharmacy records."],["33100", "Dental assistants and dental laboratory assistants", 0, "dental assistant", "Assist dentists during examinations and treatments, prepare instruments, and take and process X-rays."],["33102", "Nurse aides, orderlies and patient service associates", 0, "personal support worker, PSW, health care aide, nurse aide, patient care aide", "Help patients with personal care such as bathing, dressing and eating; take vital signs and support nursing staff."],["33103", "Pharmacy technical assistants and pharmacy assistants", 0, "pharmacy assistant", "Help pharmacists prepare medications, compound products, and serve pharmacy customers."],["40010", "Government managers - health and social policy development and program administration", 1, "", ""],["40011", "Government managers - economic analysis, policy development and program administration", 1, "", ""],["40012", "Government managers - education policy development and program administration", 1, "", ""],["40019", "Other managers in public administration", 1, "", ""],["40020", "Administrators - post-secondary education and vocational training", 2, "", ""],["40021", "School principals and administrators of elementary and secondary education", 2, "", ""],["40030", "Managers in social, community and correctional services", 2, "", ""],["40040", "Commissioned police officers and related occupations in public protection services", 1, "", ""],["40041", "Fire chiefs and senior firefighting officers", 1, "", ""],["40042", "Commissioned officers of the Canadian Armed Forces", 2, "", ""],["41100", "Judges", 1, "", ""],["41101", "Lawyers and Quebec notaries", 1, "", ""],["41200", "University professors and lecturers", 1, "professor, university lecturer, university teacher", "Teach university subjects, conduct research, and publish scholarly articles and books."],["41210", "College and other vocational instructors", 2, "college instructor, college teacher", "Teach applied arts, technical and vocational subjects at colleges and similar institutions."],["41220", "Secondary school teachers", 2, "", ""],["41221", "Elementary school and kindergarten teachers", 2, "", ""],["41300", "Social workers", 3, "social worker", "Help individuals, families and communities improve well-being through counselling, support and access to services."],["41310", "Police investigators and other investigative occupations", 2, "", ""],["41311", "Probation and parole officers", 2, "", ""],["41320", "Educational counsellors", 2, "", ""],["41400", "Natural and applied science policy researchers, consultants and program officers", 3, "", ""],["41401", "Economists and economic policy researchers and analysts", 2, "", ""],["41402", "Business development officers and market researchers and analysts", 2, "", ""],["41403", "Social policy researchers, consultants and program officers", 3, "", ""],["41404", "Health policy researchers, consultants and program officers", 2, "", ""],["41405", "Education policy researchers, consultants and program officers", 3, "", ""],["41407", "Program officers unique to government", 2, "", ""],["41409", "Other professional occupations in social science", 3, "", ""],["42100", "Police officers (except commissioned)", 2, "", ""],["42101", "Firefighters", 2, "", ""],["42201", "Social and community service workers", 0, "social service worker, community service worker", "Help clients access social support services, and run community and social service programs."],["42202", "Early childhood educators and assistants", 0, "early childhood educator, ECE, daycare teacher, childcare worker", "Plan and lead activities for young children, support their development, and observe and report on behaviour and progress."],["43100", "Elementary and secondary school teacher assistants", 0, "teacher assistant, educational assistant, EA", "Support teachers and help students with lessons, activities and personal needs in schools."],["43201", "Correctional service officers", 3, "", ""],["43203", "Border services, customs, and immigration officers", 3, "", ""],["44100", "Home child care providers", 0, "nanny, babysitter, home child care provider", "Care for children in a home setting, prepare meals, and plan daily activities."],["44101", "Home support workers, housekeepers and related occupations", 0, "home support worker, caregiver, home caregiver, elderly caregiver", "Provide personal care and companionship to clients in their homes, help with daily activities, and do light housekeeping."],["50010", "Library, archive, museum and art gallery managers", 2, "", ""],["50011", "Managers - publishing, motion pictures, broadcasting and performing arts", 2, "", ""],["50012", "Recreation, sports and fitness program and service directors", 3, "", ""],["51100", "Librarians", 2, "", ""],["51101", "Conservators and curators", 3, "", ""],["51102", "Archivists", 3, "", ""],["51111", "Authors and writers (except technical)", 3, "", ""],["51112", "Technical writers", 3, "technical writer", "Research and write manuals, guides and other technical documents that explain products and processes."],["51120", "Producers, directors, choreographers and related occupations", 3, "", ""],["52112", "Broadcast technicians", 3, "", ""],["52120", "Graphic designers and illustrators", 0, "graphic designer, graphic artist", "Design visual concepts and layouts for print, web, packaging and advertising materials."],["60010", "Corporate sales managers", 1, "", ""],["60020", "Retail and wholesale trade managers", 3, "", ""],["60031", "Accommodation service managers", 3, "", ""],["60040", "Managers in customer and personal services", 3, "", ""],["62010", "Retail store supervisors", 0, "retail supervisor, store supervisor", "Supervise and coordinate retail sales staff, assign duties, and handle returns and customer issues."],["62020", "Food service supervisors", 0, "food service supervisor, restaurant supervisor, shift supervisor", "Supervise and coordinate food service staff, schedule shifts, and check food quality and service standards."],["62100", "Technical sales specialists - wholesale trade", 0, "technical sales representative, sales engineer", "Sell technical goods and services to businesses and provide product expertise and after-sales support."],["62200", "Chefs", 0, "chef, executive chef, head chef, sous-chef", "Plan menus, create recipes, and supervise cooks and kitchen staff in preparing meals."],["63100", "Insurance agents and brokers", 0, "insurance agent, insurance broker", "Sell insurance policies to individuals and businesses and advise clients on coverage."],["63102", "Financial sales representatives", 0, "financial sales representative, mortgage sales representative", "Sell loans, mortgages and other financial products and services to individuals and businesses."],["63200", "Cooks", 0, "cook, line cook, grill cook, dietary cook, kitchen cook", "Prepare and cook meals and dishes, plan menus, and maintain inventory and records of food and supplies."],["63202", "Bakers", 0, "baker, pastry maker", "Prepare dough and batters, bake breads, pastries and desserts, and decorate and display baked goods."],["63210", "Hairstylists and barbers", 0, "hairstylist, barber, hairdresser", "Cut, style, colour and treat hair, and advise clients on hair care."],["64100", "Retail salespersons and visual merchandisers", 0, "retail salesperson, sales associate, shop assistant, retail worker", "Sell goods and services to customers, help with product selection, and handle payments and displays."],["64314", "Hotel front desk clerks", 0, "front desk clerk, hotel receptionist", "Register hotel guests, assign rooms, answer questions, and process check-ins, check-outs and payments."],["65200", "Food and beverage servers", 0, "server, waiter, waitress", "Take food and drink orders, serve customers at tables, and process payments in restaurants and bars."],["65201", "Food counter attendants, kitchen helpers and related support occupations", 0, "food counter attendant, kitchen helper, fast food worker, dishwasher", "Take customer orders, prepare simple food items, serve food and drinks, and clean kitchen and dining areas."],["65310", "Light duty cleaners", 0, "cleaner, janitor, housekeeper, cleaning staff", "Clean rooms, hallways and washrooms in buildings such as offices, hotels and hospitals."],["70010", "Construction managers", 2, "construction manager, project manager construction, site manager", "Plan, organize and oversee construction projects, including budgets, schedules and subcontractors."],["70012", "Facility operation and maintenance managers", 2, "", ""],["70020", "Managers in transportation", 2, "", ""],["70021", "Postal and courier services managers", 2, "", ""],["72010", "Contractors and supervisors, machining, metal forming, shaping and erecting trades and related occupations", 3, "", ""],["72011", "Contractors and supervisors, electrical trades and telecommunications occupations", 2, "", ""],["72012", "Contractors and supervisors, pipefitting trades", 2, "", ""],["72013", "Contractors and supervisors, carpentry trades", 3, "", ""],["72014", "Contractors and supervisors, other construction trades, installers, repairers and servicers", 3, "", ""],["72020", "Contractors and supervisors, mechanic trades", 3, "", ""],["72021", "Contractors and supervisors, heavy equipment operator crews", 3, "", ""],["72023", "Supervisors, railway transport operations", 2, "", ""],["72102", "Sheet metal workers", 3, "", ""],["72103", "Boilermakers", 2, "", ""],["72105", "Ironworkers", 3, "ironworker", "Erect and install steel and iron frameworks for buildings, bridges and other structures."],["72106", "Welders and related machine operators", 0, "welder, welding technician", "Operate welding equipment to join metal parts, read blueprints, and inspect welded surfaces and structures."],["72200", "Electricians (except industrial and power system)", 0, "electrician, journeyman electrician", "Install, maintain and repair electrical wiring, systems and fixtures in buildings and other structures."],["72201", "Industrial electricians", 3, "", ""],["72202", "Power system electricians", 2, "", ""],["72203", "Electrical power line and cable workers", 2, "", ""],["72300", "Plumbers", 0, "plumber", "Install, repair and maintain pipes, fixtures and other plumbing systems for water and drainage."],["72301", "Steamfitters, pipefitters and sprinkler system installers", 2, "", ""],["72302", "Gas fitters", 3, "", ""],["72310", "Carpenters", 0, "carpenter, framing carpenter", "Build, install and repair wooden structures and fixtures by reading blueprints and measuring, cutting and joining materials."],["72320", "Bricklayers", 3, "bricklayer, mason", "Lay bricks, stone and concrete blocks to build and repair walls, foundations and other structures."],["72321", "Insulators", 3, "", ""],["72401", "Heavy-duty equipment mechanics", 3, "heavy duty mechanic, heavy equipment mechanic", "Repair and maintain heavy mobile equipment such as bulldozers, cranes and heavy trucks."],["72402", "Heating, refrigeration and air conditioning mechanics", 0, "HVAC technician, refrigeration mechanic", "Install, maintain and repair heating, ventilation, air conditioning and refrigeration systems."],["72403", "Railway carmen/women", 3, "", ""],["72404", "Aircraft mechanics and aircraft inspectors", 3, "aircraft mechanic", "Inspect, maintain and repair aircraft structures, systems and engines."],["72406", "Elevator constructors and mechanics", 2, "", ""],["72410", "Automotive service technicians, truck and bus mechanics and mechanical repairers", 0, "auto mechanic, automotive technician, car mechanic", "Diagnose, repair and service mechanical and electrical systems in cars and light trucks."],["72500", "Crane operators", 3, "", ""],["72600", "Air pilots, flight engineers and flying instructors", 2, "pilot, airline pilot, commercial pilot", "Fly aircraft to transport passengers and cargo, and check aircraft systems before and during flights."],["72601", "Air traffic controllers and related occupations", 2, "", ""],["72602", "Deck officers, water transport", 3, "", ""],["72603", "Engineer officers, water transport", 3, "", ""],["72604", "Railway traffic controllers and marine traffic regulators", 2, "", ""],["73300", "Transport truck drivers", 0, "truck driver, long haul truck driver, AZ driver, transport driver", "Drive heavy trucks to transport goods over long distances, inspect vehicles, and maintain logbooks and cargo records."],["73310", "Railway and yard locomotive engineers", 2, "", ""],["73311", "Railway conductors and brakemen/women", 3, "", ""],["75101", "Material handlers", 0, "material handler, warehouse worker, forklift operator, picker packer", "Move, load and unload materials by hand or with equipment such as forklifts, and pack and label goods in warehouses."],["75110", "Construction trades helpers and labourers", 0, "construction labourer, construction helper, general labourer", "Help skilled tradespeople on construction sites, move materials and equipment, and clean and prepare work areas."],["80010", "Managers in natural resources production and fishing", 1, "", ""],["82010", "Supervisors, logging and forestry", 3, "", ""],["82020", "Supervisors, mining and quarrying", 2, "", ""],["82021", "Contractors and supervisors, oil and gas drilling and services", 2, "", ""],["83100", "Underground production and development miners", 3, "", ""],["83101", "Oil and gas well drillers, servicers, testers and related workers", 2, "", ""],["83120", "Fishing masters and officers", 3, "", ""],["90010", "Manufacturing managers", 2, "", ""],["90011", "Utilities managers", 1, "", ""],["92010", "Supervisors, mineral and metal processing", 3, "", ""],["92011", "Supervisors, petroleum, gas and chemical processing and utilities", 2, "", ""],["92100", "Power engineers and power systems operators", 2, "", ""],["93100", "Central control and process operators, mineral and metal processing", 2, "", ""],["93101", "Central control and process operators, petroleum, gas and chemical processing", 2, "", ""],["93102", "Pulping, papermaking and coating control operators", 3, "", ""]];
+      var selectedNoc=null; /* {code, title, teer, level} */
+      var NOC_LEVEL_TXT={1:"2× the national median",2:"1.5× the national median",3:"1.3× the national median"};
+      var NOC_WORK_PTS={0:0,1:70,2:40,3:20}, NOC_OFFER_PTS={0:0,1:100,2:70,3:50};
+      function nocSearch(q){
+        q=(q||"").trim().toLowerCase(); if(q.length<2) return [];
+        var isCode=/^\d+$/.test(q), scored=[];
+        NOC_DB.forEach(function(e){
+          var title=e[1].toLowerCase(), alt=e[3].toLowerCase(), s=-1;
+          if(isCode){ if(e[0].indexOf(q)===0) s=100-e[0].indexOf(q); }
+          else if(title.indexOf(q)===0) s=60;
+          else if(title.indexOf(q)>=0) s=40;
+          else if(alt && alt.split(", ").some(function(a){return a.indexOf(q)===0;})) s=50;
+          else if(alt.indexOf(q)>=0) s=30;
+          else if(title.split(/[\s,]+/).some(function(w){return w.indexOf(q)===0;})) s=35;
+          if(s>=0) scored.push({e:e,s:s});
+        });
+        scored.sort(function(a,b){return b.s-a.s || a.e[1].localeCompare(b.e[1]);});
+        return scored.slice(0,8).map(function(x){return x.e;});
+      }
+      function renderNocResults(){
+        var box=$("nocResults"), q=$("nocSearch").value;
+        if(q.trim().length<2){ box.classList.add("hidden"); box.innerHTML=""; return; }
+        var res=nocSearch(q);
+        if(!res.length){ box.innerHTML='<p style="padding:11px 13px;margin:0;font-size:14px;color:var(--muted)">No match in the finder’s 228 occupations. Try a broader word (e.g. “nurse”, “driver”, “technician”) or your 5-digit code — or use the official NOC website linked below.</p>'; box.classList.remove("hidden"); return; }
+        box.innerHTML=res.map(function(e,i){
+          var teer=parseInt(e[0].charAt(1),10);
+          var tag=e[2]>0?'<span class="tag">High-wage · '+NOC_LEVEL_TXT[e[2]].split(" ")[0]+'</span>':"";
+          return '<button type="button" data-noc="'+i+'"><span class="nt">'+e[1]+tag+'</span><span class="nm">NOC '+e[0]+' · TEER '+teer+'</span></button>';
+        }).join("");
+        box.classList.remove("hidden");
+        Array.prototype.forEach.call(box.querySelectorAll("[data-noc]"),function(btn){
+          btn.addEventListener("click",function(){ selectNoc(res[parseInt(btn.getAttribute("data-noc"),10)]); });
+        });
+      }
+      function setRadio(name, val){
+        var el=document.querySelector('input[name="'+name+'"][value="'+val+'"]');
+        if(el){ el.checked=true; }
+      }
+      function selectNoc(e){
+        var teer=parseInt(e[0].charAt(1),10);
+        selectedNoc={code:e[0], title:e[1], teer:teer, level:e[2]};
+        $("nocSearch").value=e[1];
+        $("nocResults").classList.add("hidden");
+        /* auto-set the Labour Market Integration tier fields */
+        setRadio("hwWork", NOC_WORK_PTS[e[2]]);
+        setRadio("jobOffer", NOC_OFFER_PTS[e[2]]);
+        var skilled=teer<=3;
+        var tierHtml = e[2]>0
+          ? '<p><b>On IRCC’s high-wage list</b> — level: '+NOC_LEVEL_TXT[e[2]]+'. That means a <b>'+NOC_WORK_PTS[e[2]]+'-point</b> bonus for 12+ months of Canadian work in it, or <b>'+NOC_OFFER_PTS[e[2]]+' points</b> for a job offer (whichever is worth more). We’ve set the two high-wage answers below to match — change them if they don’t fit your situation.</p>'
+          : '<p><b>Not on IRCC’s 186 high-wage occupations list</b>, so Canadian work or a job offer in it earns no high-wage points. We’ve set the two high-wage answers below to “No”.</p>';
+        var dutiesHtml = e[4]
+          ? '<p class="duties"><b>Main duties (summary):</b> '+e[4]+'</p>'
+          : '<p class="duties">Check the full main duties for this code on the official NOC website (linked below).</p>';
+        $("nocSelected").innerHTML='<h4>'+e[1]+' — NOC '+e[0]+' · TEER '+teer+'</h4>'
+          +'<p>'+(skilled?'<b>Counts as skilled work</b> (TEER 0–3), so this work can earn CRS work-experience points.':'<b>Does not count as skilled work</b> for Express Entry (TEER '+teer+') — this work earns no CRS work-experience points, however long you did it.')+'</p>'
+          +tierHtml+dutiesHtml
+          +'<p><b>Important:</b> IRCC decides your code from your actual duties, not your job title. Confirm the lead statement and main duties for NOC '+e[0]+' match your real job before you rely on this — a code your duties don’t support can get the work experience refused.</p>'
+          +'<button type="button" class="noc-clear" id="nocClear">Clear selection</button>';
+        $("nocSelected").className="noc-selected"+(skilled?"":" warnbox");
+        $("nocClear").addEventListener("click",function(){
+          selectedNoc=null; $("nocSearch").value=""; $("nocSelected").classList.add("hidden"); $("nocSelected").innerHTML=""; scenario=null; recalc();
+        });
+        scenario=null; recalc();
+      }
+
+      /* ============ IRCC CRS TABLES (grid of Nov 3, 2026) ============ */
+      var AGE_SINGLE = {17:0,18:99,19:105,20:110,21:110,22:110,23:110,24:110,25:110,26:110,27:110,28:110,29:110,30:105,31:99,32:94,33:88,34:83,35:77,36:72,37:66,38:61,39:55,40:50,41:39,42:28,43:17,44:6};
+      var AGE_SPOUSE  = {17:0,18:90,19:95,20:100,21:100,22:100,23:100,24:100,25:100,26:100,27:100,28:100,29:100,30:95,31:90,32:85,33:80,34:75,35:70,36:65,37:60,38:55,39:50,40:45,41:35,42:25,43:15,44:5};
+      var EDU_SINGLE = [0,30,90,98,120,128,135,150];
+      var EDU_SPOUSE = [0,28,84,91,112,119,126,140];
+      var EDU_LABELS = ["less than high school","a high school diploma","a one-year post-secondary program","a two-year post-secondary program","a bachelor’s degree (3+ year program)","two or more credentials","a master’s / professional degree","a doctoral degree"];
+      var LANG1_SINGLE = function(clb){ if(clb<4)return 0; if(clb<=5)return 6; if(clb===6)return 9; if(clb===7)return 17; if(clb===8)return 23; if(clb===9)return 31; return 34; };
+      var LANG1_SPOUSE = function(clb){ if(clb<4)return 0; if(clb<=5)return 6; if(clb===6)return 8; if(clb===7)return 16; if(clb===8)return 22; if(clb===9)return 29; return 32; };
+      var LANG2_PTS = function(clb){ if(clb<5)return 0; if(clb<=6)return 1; if(clb<=8)return 3; return 6; };
+      var CANWORK_SINGLE = [0,40,53,64,72,80];
+      var CANWORK_SPOUSE = [0,35,46,56,63,70];
+      var SP_EDU = [0,2,6,7,8,9,10,10];
+      var SP_WORK = [0,5,7,8,9,10];
+      var SP_LANG = function(clb){ if(clb<5)return 0; if(clb<=6)return 1; if(clb<=8)return 3; return 5; };
+
+      /* IELTS General -> CLB, per ability (IRCC equivalency chart) */
+      function ieltsToClb(ability, band){
+        var t;
+        if(ability==="L") t=[[8.5,10],[8,9],[7.5,8],[6,7],[5.5,6],[5,5],[4.5,4]];
+        else if(ability==="R") t=[[8,10],[7,9],[6.5,8],[6,7],[5,6],[4,5],[3.5,4]];
+        else t=[[7.5,10],[7,9],[6.5,8],[6,7],[5.5,6],[5,5],[4,4]]; /* W & S */
+        for(var i=0;i<t.length;i++){ if(band>=t[i][0]) return t[i][1]; }
+        return 3;
+      }
+      function celpipToClb(score){ if(score>=10)return 10; if(score>=4)return score; return 3; }
+
+      /* ============ BUILD ABILITY INPUTS ============ */
+      var ABILITIES = [["L","Listening"],["R","Reading"],["W","Writing"],["S","Speaking"]];
+      function bandOptions(sel){
+        var out='<option value="0">No test / below</option>';
+        for(var b=3;b<=9;b+=0.5){ out+='<option value="'+b+'"'+(b===7?' selected':'')+'>Band '+b.toFixed(1)+'</option>'; }
+        return out;
+      }
+      function celpipOptions(){
+        var out='<option value="0">No test / below 4</option>';
+        for(var s=4;s<=12;s++){ out+='<option value="'+s+'"'+(s===8?' selected':'')+'>Level '+s+'</option>'; }
+        return out;
+      }
+      function clbOptions(def){
+        var vals=[[0,"Below CLB 4"],[4,"CLB 4"],[5,"CLB 5"],[6,"CLB 6"],[7,"CLB 7"],[8,"CLB 8"],[9,"CLB 9"],[10,"CLB 10+"]];
+        var out="";
+        vals.forEach(function(v){ out+='<option value="'+v[0]+'"'+(v[0]===def?' selected':'')+'>'+v[1]+'</option>'; });
+        return out;
+      }
+      function renderAbilityGrid1(){
+        var mode = $("testType").value, isFr = $("lang1Name").value==="fr", html="";
+        if(isFr) mode="clb";
+        ABILITIES.forEach(function(a){
+          var opts = mode==="ielts"?bandOptions():mode==="celpip"?celpipOptions():clbOptions(8);
+          html+='<div class="ab"><label for="ab1_'+a[0]+'">'+a[1]+'</label><select id="ab1_'+a[0]+'" data-ab="'+a[0]+'">'+opts+'</select></div>';
+        });
+        $("abilityGrid1").innerHTML=html;
+        ABILITIES.forEach(function(a){ $("ab1_"+a[0]).addEventListener("change",function(){ scenario=null; recalc(); }); });
+      }
+      function renderClbGrid(elId, prefix, def){
+        var html="";
+        ABILITIES.forEach(function(a){
+          html+='<div class="ab"><label for="'+prefix+a[0]+'">'+a[1]+'</label><select id="'+prefix+a[0]+'">'+clbOptions(def)+'</select></div>';
+        });
+        $(elId).innerHTML=html;
+        ABILITIES.forEach(function(a){ $(prefix+a[0]).addEventListener("change",function(){ scenario=null; recalc(); }); });
+      }
+
+      /* ============ READ INPUTS ============ */
+      function radioVal(name){ var el=document.querySelector('input[name="'+name+'"]:checked'); return el?el.value:"0"; }
+      function getClb1(){
+        var mode=$("testType").value, isFr=$("lang1Name").value==="fr";
+        if(isFr) mode="clb";
+        return ABILITIES.map(function(a){
+          var v=parseFloat($("ab1_"+a[0]).value);
+          if(mode==="ielts") return ieltsToClb(a[0],v);
+          if(mode==="celpip") return celpipToClb(v);
+          return v>=10?10:v;
+        });
+      }
+      function getClbFrom(prefix){
+        return ABILITIES.map(function(a){ var v=parseInt($(prefix+a[0]).value,10); return isNaN(v)?0:v; });
+      }
+      function readInputs(){
+        var withSpouse = radioVal("marital")==="spouse";
+        var clb1=getClb1(), clb2=getClbFrom("ab2_");
+        var hasSecond = clb2.some(function(c){return c>0;});
+        var lang1IsFr = $("lang1Name").value==="fr";
+        var french = lang1IsFr?clb1:(hasSecond?clb2:[0,0,0,0]);
+        var english = lang1IsFr?(hasSecond?clb2:[0,0,0,0]):clb1;
+        return {
+          withSpouse: withSpouse,
+          age: parseInt($("ageRange").value,10),
+          edu: parseInt($("education").value,10),
+          canStudy: parseInt($("canStudy").value,10),
+          clb1: clb1, clb2: clb2, hasSecond: hasSecond,
+          french: french, english: english,
+          canWork: parseInt($("canWork").value,10),
+          foreignWork: parseInt($("foreignWork").value,10),
+          hwWork: parseInt(radioVal("hwWork"),10),
+          jobOffer: parseInt(radioVal("jobOffer"),10),
+          noc: selectedNoc,
+          cert: radioVal("cert")==="1",
+          pnp: parseInt(radioVal("pnp"),10),
+          sibling: parseInt(radioVal("sibling"),10),
+          spEdu: parseInt($("spEducation").value,10),
+          spClb: getClbFrom("abS_"),
+          spCanWork: parseInt($("spCanWork").value,10)
+        };
+      }
+
+      /* ============ CRS ENGINE ============ */
+      function compute(inp){
+        var rows=[]; /* {group, label, pts, max, why} */
+        var S = inp.withSpouse;
+        /* --- Core: Age --- */
+        var agePts = inp.age>=45?0:((S?AGE_SPOUSE:AGE_SINGLE)[Math.max(17,inp.age)]||0);
+        var ageMax = S?100:110;
+        var ageWhy = inp.age>=20&&inp.age<=29 ? "Age "+inp.age+" is inside the 20–29 peak window — the maximum age score." :
+          inp.age<20 ? "Age points rise until age 20, then stay at maximum through 29." :
+          inp.age>=45 ? "IRCC awards no age points at 45 or older — other factors have to carry the profile." :
+          "Age points fall every year after 29 (you are at "+inp.age+"). Applying sooner protects these points.";
+        rows.push({g:"core",label:"Age",pts:agePts,max:ageMax,why:ageWhy});
+        /* --- Core: Education --- */
+        var eduPts=(S?EDU_SPOUSE:EDU_SINGLE)[inp.edu], eduMax=S?140:150;
+        rows.push({g:"core",label:"Education — "+EDU_LABELS[inp.edu],pts:eduPts,max:eduMax,why:"Your highest credential, as assessed (ECA required for foreign credentials). A master’s is worth "+(S?126:135)+", a PhD "+eduMax+"."});
+        /* --- Core: First language --- */
+        var fn = S?LANG1_SPOUSE:LANG1_SINGLE;
+        var lang1Pts = inp.clb1.reduce(function(t,c){return t+fn(c);},0), lang1Max=S?128:136;
+        var minClb1=Math.min.apply(null,inp.clb1);
+        rows.push({g:"core",label:"First official language ("+($("lang1Name").value==="fr"?"French":"English")+")",pts:lang1Pts,max:lang1Max,why:"Per ability you scored CLB "+inp.clb1.join(", ")+". CLB 9 in every ability is the big unlock — it also powers transferability points below."});
+        /* --- Core: Second language --- */
+        var lang2Raw = inp.hasSecond?inp.clb2.reduce(function(t,c){return t+LANG2_PTS(c);},0):0;
+        var lang2Pts = Math.min(lang2Raw, S?22:24);
+        rows.push({g:"core",label:"Second official language",pts:lang2Pts,max:S?22:24,why:inp.hasSecond?"Points per ability at your second-language CLB levels, capped at "+(S?22:24)+".":"No second-language test entered. Even CLB 5–6 in the other language adds points — and French at NCLC 7+ adds a bonus below."});
+        /* --- Core: Labour Market Integration --- */
+        var cwPts=(S?CANWORK_SPOUSE:CANWORK_SINGLE)[inp.canWork];
+        var hwBonus = inp.canWork>=1?inp.hwWork:0;
+        var workOption = cwPts+hwBonus, lmiPts=Math.max(workOption, inp.jobOffer);
+        var lmiMax=S?140:150;
+        var lmiWhy;
+        if(inp.jobOffer>workOption&&inp.jobOffer>0) lmiWhy="Your high-wage job offer ("+inp.jobOffer+" pts) is worth more than your Canadian work option ("+workOption+" pts), so IRCC counts the offer. The two cannot be combined.";
+        else if(inp.canWork===0&&inp.jobOffer===0) lmiWhy="No Canadian work experience and no high-wage job offer yet. One year of Canadian skilled work is worth "+(S?35:40)+" points here, plus more through transferability.";
+        else if(hwBonus>0) lmiWhy="Canadian work points ("+cwPts+") plus a high-wage occupation bonus ("+hwBonus+") under the Nov 3, 2026 Labour Market Integration factor.";
+        else lmiWhy=cwPts+" points for "+inp.canWork+(inp.canWork>=5?"+":"")+" year(s) of Canadian skilled work. Work in a high-wage occupation would add 20–70 more.";
+        if(inp.noc){
+          if(inp.noc.level>0) lmiWhy+=" Detected occupation: "+inp.noc.title+" (NOC "+inp.noc.code+") is on IRCC’s high-wage list at "+NOC_LEVEL_TXT[inp.noc.level]+".";
+          else lmiWhy+=" Detected occupation: "+inp.noc.title+" (NOC "+inp.noc.code+") is not on IRCC’s high-wage list, so no high-wage points apply to it.";
+        }
+        rows.push({g:"core",label:"Canadian work / high-wage job offer (Labour Market Integration)",pts:lmiPts,max:lmiMax,why:lmiWhy});
+        var core = rows.reduce(function(t,r){return t+r.pts;},0);
+
+        /* --- Spouse --- */
+        var spouseTotal=0;
+        if(S){
+          var spEduPts=SP_EDU[inp.spEdu];
+          rows.push({g:"spouse",label:"Spouse — education",pts:spEduPts,max:10,why:"Your spouse’s highest credential ("+EDU_LABELS[inp.spEdu]+")."});
+          var spLangRaw=inp.spClb.reduce(function(t,c){return t+SP_LANG(c);},0);
+          var spLangPts=Math.min(spLangRaw,20);
+          rows.push({g:"spouse",label:"Spouse — first language",pts:spLangPts,max:20,why:"Per ability at CLB "+inp.spClb.join(", ")+". CLB 9+ in each ability earns the full 5 points per ability."});
+          var spWorkPts=SP_WORK[inp.spCanWork];
+          rows.push({g:"spouse",label:"Spouse — Canadian work experience",pts:spWorkPts,max:10,why:"Your spouse’s skilled work in Canada."});
+          spouseTotal=spEduPts+spLangPts+spWorkPts;
+        }
+
+        /* --- Skill transferability --- */
+        var eduTier = inp.edu>=5?2:(inp.edu>=2?1:0); /* 2 = two+/master/PhD, 1 = any post-secondary 1yr+ */
+        var allGte7 = minClb1>=7, allGte9 = minClb1>=9;
+        var eduLang=0;
+        if(eduTier>0){ if(allGte9) eduLang=eduTier===2?50:25; else if(allGte7) eduLang=eduTier===2?25:13; }
+        var eduCan=0;
+        if(eduTier>0){ if(inp.canWork>=2) eduCan=eduTier===2?50:25; else if(inp.canWork===1) eduCan=eduTier===2?25:13; }
+        var eduGroup=Math.min(50, eduLang+eduCan);
+        rows.push({g:"trans",label:"Transferability — education × language & Canadian work",pts:eduGroup,max:50,why:"Strong education pays twice when paired with CLB "+(allGte9?"9+ in all abilities":allGte7?"7+ in all abilities":"below 7 in at least one ability — CLB 7+ in all four is needed here")+" and Canadian work. This pairing group is capped at 50."});
+        var fwLang=0, fwCan=0, fw=inp.foreignWork;
+        if(fw>0){ var hi=fw>=3; if(allGte9) fwLang=hi?50:25; else if(allGte7) fwLang=hi?25:13; if(inp.canWork>=2) fwCan=hi?50:25; else if(inp.canWork===1) fwCan=hi?25:13; }
+        var fwGroup=Math.min(50, fwLang+fwCan);
+        rows.push({g:"trans",label:"Transferability — foreign work × language & Canadian work",pts:fwGroup,max:50,why:fw===0?"No foreign skilled work entered. Three or more years abroad, paired with CLB 9, is worth up to 50 points here.":"Your "+(fw>=3?"3+ years":"1–2 years")+" of foreign work, paired with your language level and Canadian work. This pairing group is capped at 50."});
+        var certPts=0;
+        if(inp.cert){ var allGte5=minClb1>=5; if(allGte7) certPts=50; else if(allGte5) certPts=25; }
+        if(inp.cert) rows.push({g:"trans",label:"Transferability — certificate of qualification (trade)",pts:certPts,max:50,why:"A Canadian trade certificate paired with your first-language level (CLB 7+ in all abilities earns 50)."});
+        var transTotal=Math.min(100, eduGroup+fwGroup+certPts);
+
+        /* --- Additional --- */
+        var addRows=[];
+        addRows.push({g:"add",label:"Provincial nomination (PNP)",pts:inp.pnp,max:600,why:inp.pnp?"A nomination adds 600 points and, on its own, reaches the additional-points cap — an invitation in a PNP round is effectively assured.":"No nomination. A PNP nomination is the single largest item in the CRS: +600 points."});
+        var frMin=Math.min.apply(null,inp.french), enMin=Math.min.apply(null,inp.english);
+        var frBonus=0;
+        if(frMin>=7) frBonus = enMin>=5?50:25;
+        addRows.push({g:"add",label:"French-language bonus",pts:frBonus,max:50,why:frMin>=7?("French at NCLC 7+ in all four abilities. "+(enMin>=5?"English at CLB 5+ lifts the bonus to the full 50.":"With English at CLB 5+ in all abilities this bonus would rise from 25 to 50.")):"Reach NCLC 7 in all four French abilities to earn 25 points — or 50 if your English is CLB 5+ in all four."});
+        addRows.push({g:"add",label:"Canadian education credential",pts:inp.canStudy,max:30,why:inp.canStudy?"Bonus for studying in Canada — separate from your education points above.":"Studying in Canada adds 15 points (1–2 year credential) or 30 points (3+ years / master’s / PhD), on top of education points."});
+        addRows.push({g:"add",label:"Sibling in Canada",pts:inp.sibling,max:15,why:inp.sibling?"A sibling who is a Canadian citizen or PR, 18+, living in Canada.":"A sibling (18+, citizen or PR, living in Canada) is worth 15 points."});
+        var addRaw=addRows.reduce(function(t,r){return t+r.pts;},0);
+        var addTotal=Math.min(600,addRaw);
+        addRows.forEach(function(r){rows.push(r);});
+
+        var total=core+spouseTotal+transTotal+addTotal;
+        return {rows:rows, core:core, spouse:spouseTotal, trans:transTotal, add:addTotal, total:total,
+                frMin:frMin, enMin:enMin, minClb1:minClb1, cwYears:inp.canWork};
+      }
+
+      /* ============ CHANCES ============ */
+      var DRAWS=[
+        {date:"Oct 28, 2026", name:"Transport occupations", cut:477, itas:150},
+        {date:"Oct 27, 2026", name:"French-language proficiency", cut:407, itas:5000},
+        {date:"Oct 26, 2026", name:"Provincial Nominee Program", cut:761, itas:792},
+        {date:"Oct 16, 2026", name:"French-language proficiency", cut:435, itas:5000},
+        {date:"Oct 15, 2026", name:"Canadian Experience Class", cut:519, itas:2500},
+        {date:"Oct 13, 2026", name:"Provincial Nominee Program", cut:772, itas:752},
+        {date:"Sep 29, 2026", name:"Canadian Experience Class", cut:518, itas:2000},
+        {date:"Sep 1, 2026", name:"Canadian Experience Class", cut:521, itas:2000}
+      ];
+      function pathways(inp, res){
+        var list=[];
+        if(inp.pnp) list.push({name:"Provincial Nominee round", cut:761, note:"nomination in hand"});
+        else list.push({name:"Provincial Nominee round", cut:761, note:"needs a nomination first", na:true});
+        if(inp.canWork>=1) list.push({name:"Canadian Experience Class", cut:519, note:"latest CEC round, Oct 15"});
+        else list.push({name:"Canadian Experience Class", cut:519, note:"needs 1 yr Canadian work", na:true});
+        if(res.frMin>=7) list.push({name:"French-language category", cut:407, note:"latest French round, Oct 27"});
+        else list.push({name:"French-language category", cut:407, note:"needs French NCLC 7+", na:true});
+        list.push({name:"Category rounds (e.g. Transport)", cut:477, note:"if your occupation is targeted"});
+        return list;
+      }
+      function verdictFor(inp, res){
+        var t=res.total;
+        if(inp.pnp) return {cls:"good", title:"Excellent — nomination in hand", text:"With 600 PNP points your score sits above every recent PNP cut-off (761–772). Candidates in this position are invited in the next PNP round, subject to IRCC resuming rounds after the current pause."};
+        if(res.frMin>=7 && t>=435) return {cls:"good", title:"Strong — French pathway is open to you", text:"Your French (NCLC 7+) qualifies you for French-language rounds, which recently cut off at 407–435 — below your score. That is currently one of the most reliable routes to an invitation."};
+        if(t>=520) return {cls:"good", title:"Excellent chances", text:"Your score is at or above the latest Canadian Experience Class cut-off (519) and above every recent category-round cut-off. If you have a year of Canadian work, you are competitive in CEC rounds right now."};
+        if(t>=480) return {cls:"good", title:"Strong chances", text:"You are above the latest Transport occupations cut-off (477) and within reach of CEC rounds (518–521). A small gain — one language band, one more year of Canadian work — would put you over the CEC line too."};
+        if(t>=450) return {cls:"mid", title:"Competitive, not yet safe", text:"You would have cleared some 2026 category rounds, but you are below recent CEC cut-offs (518–521). The boost options below show the fastest realistic ways to close a gap of roughly "+(519-t)+" points to the CEC line."};
+        if(t>=407) return {cls:"mid", title:"Building — a clear gap to close", text:"Your score is in the range of recent French-language cut-offs (407–435), but without NCLC 7 French you can’t access those rounds. Realistically you need "+(480-t)+"+ more points to enter the competitive zone for category rounds — language gains and Canadian experience are the usual route."};
+        return {cls:"low", title:"Early stage — plan your points", text:"Most 2026 invitation rounds cut off between 407 and 521 (PNP rounds aside). At "+t+", focus on the highest-value moves first: language scores toward CLB 9, skilled Canadian experience, and — for many candidates — French or a provincial nomination."};
+      }
+
+      /* ============ BOOST SCENARIOS ============ */
+      var scenario=null; /* override inputs object */
+      function boostOptions(inp, base){
+        var opts=[];
+        function tryOpt(label, sub, mutate){
+          var copy=JSON.parse(JSON.stringify(inp)); mutate(copy);
+          var r=compute(copy); var d=r.total-base.total;
+          if(d>0) opts.push({label:label, sub:sub, delta:d, total:r.total, apply:copy});
+        }
+        if(Math.min.apply(null,inp.clb1)<9) tryOpt("Reach CLB 9 in every ability","First language at CLB 9 unlocks core + transferability points",function(c){ c.clb1=[9,9,9,9]; if(c===inp){} syncLangOverride(c); });
+        if(Math.min.apply(null,inp.clb1)<10) tryOpt("Reach CLB 10 in every ability","Maximum first-language points",function(c){ c.clb1=[10,10,10,10]; syncLangOverride(c); });
+        if(Math.min.apply(null,inp.french)<7) tryOpt("Add French at NCLC 7 in all abilities","French bonus + second-language points + French-category draws",function(c){ if($("lang1Name").value==="fr"){ c.clb1=[7,7,7,7]; c.french=c.clb1; } else { c.clb2=[7,7,7,7]; c.hasSecond=true; c.french=c.clb2; } });
+        if(inp.canWork<5) tryOpt("Add one more year of Canadian skilled work","More work points + stronger transferability pairings",function(c){ c.canWork=Math.min(5,inp.canWork+1); });
+        if(inp.edu<6) tryOpt("Complete a master’s degree","Higher education points + top transferability tier",function(c){ c.edu=6; });
+        if(!inp.pnp) tryOpt("Win a provincial nomination (PNP)","+600 points — the largest single item in the CRS",function(c){ c.pnp=600; });
+        if(inp.jobOffer<100) tryOpt("Get a high-wage job offer (2× median wage)","Worth 100 points under Labour Market Integration",function(c){ c.jobOffer=100; });
+        opts.sort(function(a,b){return b.delta-a.delta;});
+        return opts.slice(0,4);
+      }
+      function syncLangOverride(c){ /* keep french/english mirrors consistent for bonus calc */
+        var lang1IsFr=$("lang1Name").value==="fr";
+        if(lang1IsFr){ c.french=c.clb1; } else { c.english=c.clb1; }
+      }
+
+      /* ============ RENDER ============ */
+      var GROUP_TITLES={core:"A · Core / human capital factors", spouse:"B · Spouse / partner factors", trans:"C · Skill transferability (capped at 100)", add:"D · Additional points (capped at 600)"};
+      function render(res, inp){
+        $("scoreTotal").textContent=res.total;
+        $("bdTotal").textContent=res.total;
+        $("lgCore").textContent=res.core; $("lgSpouse").textContent=res.spouse;
+        $("lgTrans").textContent=res.trans; $("lgAdd").textContent=res.add;
+        $("barCore").style.width=(res.core/1270*100)+"%";
+        $("barSpouse").style.width=(res.spouse/1270*100)+"%";
+        $("barTrans").style.width=(res.trans/1270*100)+"%";
+        $("barAdd").style.width=(res.add/1270*100)+"%";
+        /* breakdown */
+        var html="", lastGroup="";
+        res.rows.forEach(function(r){
+          if(r.g!==lastGroup){ html+='<div class="bd-group">'+GROUP_TITLES[r.g]+'</div>'; lastGroup=r.g; }
+          var pct=r.max>0?Math.round(r.pts/r.max*100):0;
+          html+='<div class="bd-row"><span class="bt">'+r.label+'</span><span class="bp">'+r.pts+' <small>/ '+r.max+'</small></span><span class="bx">'+r.why+'</span><span class="bar"><i style="width:'+pct+'%"></i></span></div>';
+        });
+        $("breakdown").innerHTML=html;
+        /* verdict + paths (always based on the displayed score) */
+        var v=verdictFor(inp,res);
+        var vb=$("verdictBox"); vb.className="verdict "+v.cls;
+        $("verdictTitle").textContent=v.title; $("verdictText").textContent=v.text;
+        var pl=pathways(inp,res), ph="";
+        pl.forEach(function(p){
+          var right;
+          if(p.na) right='<span class="na">not eligible yet</span>';
+          else if(res.total>=p.cut) right='<span class="ok">✓ above '+p.cut+'</span>';
+          else right='<span class="gap">'+(p.cut-res.total)+' pts short of '+p.cut+'</span>';
+          ph+='<div class="path"><span>'+p.name+'<br><small style="color:var(--muted)">'+p.note+'</small></span><span class="pv">'+right+'</span></div>';
+        });
+        $("pathList").innerHTML=ph;
+        /* report CTA is a fixed Stripe Payment Link — do not overwrite it with the score */
+      }
+      function renderBoosts(inp, base){
+        var opts=boostOptions(inp, base), html="";
+        if(!opts.length) html='<p class="hint">Your profile is already at or near the practical maximum for the main levers — a PNP nomination is the only large item left.</p>';
+        opts.forEach(function(o,i){
+          html+='<button type="button" class="boost" data-boost="'+i+'"><span class="plus">+'+o.delta+'</span><span class="bt">'+o.label+'<small>'+o.sub+' → new score '+o.total+'</small></span></button>';
+        });
+        $("boostList").innerHTML=html;
+        Array.prototype.forEach.call(document.querySelectorAll("[data-boost]"),function(btn){
+          btn.addEventListener("click",function(){
+            var o=opts[parseInt(btn.getAttribute("data-boost"),10)];
+            scenario=o.apply;
+            $("scenarioNote").classList.remove("hidden");
+            $("boostReset").classList.remove("hidden");
+            recalc();
+            window.scrollTo({top:0,behavior:"smooth"});
+          });
+        });
+      }
+      function recalc(){
+        var inp=readInputs();
+        $("spouseCard").classList.toggle("hidden", !inp.withSpouse);
+        var shown = scenario?compute(scenario):compute(inp);
+        var base = compute(inp);
+        render(shown, scenario||inp);
+        if(!scenario) renderBoosts(inp, base);
+        /* CLB conversion notes */
+        var mode=$("testType").value, isFr=$("lang1Name").value==="fr";
+        $("testTypeField").style.visibility=isFr?"hidden":"visible";
+        $("clbNote1").innerHTML = isFr
+          ? "Your NCLC levels: <b>"+inp.clb1.join(" · ")+"</b> (Listening · Reading · Writing · Speaking)."
+          : mode==="clb"
+            ? "Your CLB levels: <b>"+inp.clb1.join(" · ")+"</b> (Listening · Reading · Writing · Speaking)."
+            : "That converts to <b>CLB "+inp.clb1.join(" · ")+"</b> (Listening · Reading · Writing · Speaking) on IRCC’s equivalency chart.";
+        var l2name = isFr?"English":"French";
+        $("clbNote2").innerHTML = inp.hasSecond
+          ? "Second language ("+l2name+") CLB: <b>"+inp.clb2.join(" · ")+"</b>."
+          : "No second-language scores entered — "+l2name+" points left at zero.";
+        if(reportGenerated){ var st=$("reportStatus"); if(st) st.textContent="Your answers changed — tap “Generate my full report now” to refresh this report."; }
+      }
+
+      /* ============ FULL REPORT GENERATOR ============ */
+      var reportGenerated=false, lastReportInp=null, lastReportRes=null;
+      function canWorkLabel(y){ return y===0?"None":y>=5?"5 years or more":y+" year"+(y>1?"s":""); }
+      function buildChecklist(inp){
+        var items=[];
+        items.push({t:"Passport (valid)", d:"For you"+(inp.withSpouse?" and your spouse":"")+" — must be valid when you apply for PR."});
+        items.push({t:"Language test results", d:"IELTS General / CELPIP (English) and/or TEF / TCF Canada (French), less than 2 years old at application. Your report uses CLB "+inp.clb1.join(" · ")+" in your first language."});
+        if(inp.noc) items.push({t:"NOC "+inp.noc.code+" duties proof", d:"Your employer reference letter(s) must show you performed the lead statement and most of the main duties of NOC "+inp.noc.code+" ("+inp.noc.title+"). IRCC decides your code from your duties, not your job title — if the duties don’t match, the work experience can be refused."});
+        if(inp.edu>=2) items.push({t:"Educational Credential Assessment (ECA)", d:"Required for foreign credentials — from WES, IQAS, ICES or another IRCC-designated body. Plus diplomas and transcripts for your "+EDU_LABELS[inp.edu]+". Start this early: it is usually the slowest document."});
+        else items.push({t:"Education documents", d:"Diplomas / certificates and transcripts for your highest credential ("+EDU_LABELS[inp.edu]+")."});
+        if(inp.canStudy) items.push({t:"Canadian credential proof", d:"Your Canadian diploma/certificate and official transcripts — these support your +"+inp.canStudy+" Canadian-study points."});
+        if(inp.canWork>=1) items.push({t:"Canadian work proof", d:"Employer reference letter on letterhead (duties matching your NOC, hours, salary, dates), plus T4s, Notices of Assessment and recent pay stubs for "+canWorkLabel(inp.canWork)+" of Canadian skilled work."});
+        if(inp.foreignWork>=1) items.push({t:"Foreign work reference letters", d:"One letter per employer, on letterhead: job title, duties matching your NOC, hours per week, salary and exact dates. Letters are the main proof — pay slips and contracts help as backup."});
+        if(inp.jobOffer>0) items.push({t:"Job offer documents", d:"Written offer in the high-wage occupation you claimed ("+inp.jobOffer+" pts), showing duties, salary and start date, plus employer details IRCC can verify."});
+        if(inp.cert) items.push({t:"Certificate of qualification (trade)", d:"Your Canadian provincial/territorial trade certificate — it supports your transferability points."});
+        if(inp.pnp) items.push({t:"Provincial nomination certificate", d:"The nomination from the province behind your +600 points — keep the original nomination letter and certificate."});
+        if(inp.sibling) items.push({t:"Sibling proof (15 pts)", d:"Your sibling’s Canadian citizenship/PR proof and Canadian address proof, plus birth certificates for both of you showing a common parent."});
+        if(inp.withSpouse){
+          items.push({t:"Marriage / common-law proof", d:"Marriage certificate, or Statutory Declaration of Common-law Union with joint documents if common-law."});
+          items.push({t:"Spouse documents", d:"Spouse’s ECA (if claiming spouse education points), language test results, and Canadian work proof if any — worth up to 40 points in your report."});
+        }
+        items.push({t:"Proof of settlement funds", d:"Bank letters/statements showing the required funds for your family size — unless you are CEC-eligible or authorised to work in Canada with a valid job offer."});
+        items.push({t:"Police certificates & medical exam", d:"Police certificates for every country you lived in 6+ months since age 18, and an upfront medical with an IRCC panel physician — both are requested/required at the application stage, after an invitation."});
+        items.push({t:"Digital photo", d:"IRCC-specification photo for each person in the application."});
+        return items;
+      }
+      function buildReport(){
+        var inp = scenario?JSON.parse(JSON.stringify(scenario)):readInputs();
+        var res = compute(inp);
+        lastReportInp=inp; lastReportRes=res; reportGenerated=true;
+        var now=new Date();
+        $("reportMeta").textContent="Generated "+now.toLocaleDateString("en-CA",{year:"numeric",month:"long",day:"numeric"})+" from your calculator answers · IRCC grid, Nov 3, 2026 · Max score 1,270";
+        $("reportScore").textContent=res.total;
+        /* profile */
+        var lang1Name=$("lang1Name").value==="fr"?"French":"English";
+        var prof=[
+          ["Applying", inp.withSpouse?"With spouse / partner":"Just me"],
+          ["Age", inp.age+" years"],
+          ["Highest education", EDU_LABELS[inp.edu].charAt(0).toUpperCase()+EDU_LABELS[inp.edu].slice(1)],
+          ["Canadian credential", inp.canStudy?("Yes — +"+inp.canStudy+" pts"):"No"],
+          ["First language ("+lang1Name+")", "CLB "+inp.clb1.join(" · ")],
+          ["Second language", inp.hasSecond?("CLB "+inp.clb2.join(" · ")):"None entered"],
+          ["Canadian skilled work", canWorkLabel(inp.canWork)],
+          ["Occupation (NOC)", inp.noc?(inp.noc.title+" — NOC "+inp.noc.code):"Not selected in the finder"],
+          ["TEER level", inp.noc?("TEER "+inp.noc.teer+(inp.noc.teer<=3?" — skilled, counts for Express Entry":" — not skilled, no work points")):"—"],
+          ["High-wage list (IRCC)", inp.noc?(inp.noc.level>0?("Listed — "+NOC_LEVEL_TXT[inp.noc.level]+" (work +"+NOC_WORK_PTS[inp.noc.level]+" / offer +"+NOC_OFFER_PTS[inp.noc.level]+")"):"Not listed — no high-wage points"):"—"],
+          ["Foreign skilled work", inp.foreignWork===0?"None":inp.foreignWork>=3?"3 years or more":"1–2 years"],
+          ["Canadian work / job offer", "See Labour Market Integration line in breakdown"],
+          ["Provincial nomination", inp.pnp?"Yes — +600 pts":"No"],
+          ["Sibling in Canada", inp.sibling?"Yes — +15 pts":"No"]
+        ];
+        if(inp.withSpouse) prof.push(["Spouse education", EDU_LABELS[inp.spEdu]],["Spouse Canadian work", canWorkLabel(inp.spCanWork)]);
+        $("reportProfile").innerHTML=prof.map(function(p){return "<div><span>"+p[0]+"</span><span>"+p[1]+"</span></div>";}).join("");
+        /* breakdown table grouped */
+        var bh="", lastG="";
+        res.rows.forEach(function(r){
+          if(r.g!==lastG){ bh+='<div class="bd-group">'+GROUP_TITLES[r.g]+'</div>'; lastG=r.g; }
+          bh+='<div class="bd-row"><span class="bt">'+r.label+'</span><span class="bp">'+r.pts+' <small>/ '+r.max+'</small></span><span class="bx">'+r.why+'</span></div>';
+        });
+        bh+='<div class="bd-total"><span class="t">Estimated CRS total</span><span class="v">'+res.total+'</span></div>';
+        $("reportBreakdown").innerHTML=bh;
+        /* chances */
+        var v=verdictFor(inp,res);
+        $("reportVerdict").innerHTML='<div class="verdict '+v.cls+'" style="margin-top:4px"><h3>'+v.title+'</h3><p>'+v.text+'</p></div>';
+        var pl=pathways(inp,res), ch='<table class="r-table"><thead><tr><th>Pathway</th><th>Recent cut-off</th><th class="num">Your position</th></tr></thead><tbody>';
+        pl.forEach(function(p){
+          var pos = p.na?"Not eligible yet — "+p.note : res.total>=p.cut?("✓ Above the cut-off by "+(res.total-p.cut)+" pts"):(p.cut-res.total)+" pts short — "+p.note;
+          ch+="<tr><td><b>"+p.name+"</b></td><td>"+p.cut+"</td><td class='num'>"+pos+"</td></tr>";
+        });
+        ch+="</tbody></table><p class='muted'>Cut-offs are from IRCC rounds held under the previous points grid (before Nov 3, 2026) and are a guide, not a promise. There is no fixed passing score.</p>";
+        $("reportChances").innerHTML=ch;
+        /* plan */
+        var opts=boostOptions(inp,res);
+        if(opts.length){
+          $("reportPlan").innerHTML=opts.map(function(o,i){
+            return '<div class="plan-item"><span class="pdelta">+'+o.delta+'</span><span><b>Step '+(i+1)+': '+o.label+'</b><small>'+o.sub+' → new score '+o.total+' / 1,270</small></span></div>';
+          }).join("");
+        } else {
+          $("reportPlan").innerHTML='<p>Your profile is already at or near the practical maximum for the main levers. A provincial nomination (+600) is the only large item left.</p>';
+        }
+        /* checklist */
+        $("reportChecklist").innerHTML=buildChecklist(inp).map(function(it){
+          return '<li><span class="tick" aria-hidden="true">✓</span><span><b>'+it.t+'</b><span class="d">'+it.d+'</span></span></li>';
+        }).join("");
+        /* next steps */
+        var top = opts.length?opts[0]:null;
+        $("reportNext").innerHTML='<ol style="margin:6px 0 0;padding-left:20px">'
+          +'<li style="margin:6px 0"><b>Book / re-take your language test first</b> — it is the highest-value lever for most profiles'+(top?(", and your biggest single gain above is: "+top.label.toLowerCase()+" (+"+top.delta+" pts)"):"")+'.</li>'
+          +'<li style="margin:6px 0"><b>Start your ECA now</b> if your education is from outside Canada — it commonly takes weeks and your profile cannot claim education points without it.</li>'
+          +'<li style="margin:6px 0"><b>Collect employer reference letters</b> while the details are fresh — duties must match your NOC code.</li>'
+          +'<li style="margin:6px 0"><b>Create your Express Entry profile</b> once documents are in hand, and re-check your score in the official IRCC tool.</li>'
+          +'<li style="margin:6px 0"><b>Watch category rounds</b> — French-language and occupation rounds have cut off far below general/CEC rounds in 2026.</li></ol>';
+        $("fullReport").classList.remove("hidden");
+        /* Generate the actual PDF file right away, so the moment this
+           breakdown appears — including on return from Stripe — the PDF is
+           already prepared and wired into the real Download link and the
+           "Open PDF" link at the bottom of the report, and never depends
+           on a script-triggered download click. */
+        var pdfOk = preparePdf();
+        if(pdfOk){
+          $("reportStatus").textContent="Report ready — your PDF is generated: tap “Open my PDF” at the bottom of this report. In the PDF tab, click the download icon at the top to save the file to your device.";
+        } else {
+          showPdfError("Your breakdown is shown in full on this page, and “Copy report summary” above saves the same breakdown as text. Please try generating the report once more.");
+        }
+        $("fullReport").scrollIntoView({behavior:"smooth",block:"start"});
+      }
+      function reportPlainText(){
+        if(!lastReportRes||!lastReportInp) return "";
+        var inp=lastReportInp, res=lastReportRes, lines=[];
+        lines.push("CRS FULL REPORT — Estimated score: "+res.total+" / 1,270");
+        lines.push("Core "+res.core+" · Spouse "+res.spouse+" · Transferability "+res.trans+" · Additional "+res.add);
+        if(inp.noc) lines.push("Occupation: "+inp.noc.title+" (NOC "+inp.noc.code+", TEER "+inp.noc.teer+") — "+(inp.noc.level>0?("on IRCC's high-wage list at "+NOC_LEVEL_TXT[inp.noc.level]):"not on IRCC's high-wage list"));
+        lines.push("");
+        lines.push("BREAKDOWN:");
+        res.rows.forEach(function(r){ lines.push("- "+r.label+": "+r.pts+" / "+r.max+" — "+r.why); });
+        lines.push("");
+        var v=verdictFor(inp,res); lines.push("CHANCES: "+v.title+" — "+v.text);
+        lines.push("");
+        lines.push("PLAN TO RAISE YOUR SCORE:");
+        boostOptions(inp,res).forEach(function(o,i){ lines.push((i+1)+". +"+o.delta+" — "+o.label+" → "+o.total); });
+        lines.push("");
+        lines.push("DOCUMENT CHECKLIST:");
+        buildChecklist(inp).forEach(function(it){ lines.push("- "+it.t+": "+it.d); });
+        lines.push("");
+        lines.push("Estimate only — IRCC grid, Nov 3, 2026. Not immigration advice.");
+        return lines.join("\n");
+      }
+      /* ============ REAL PDF GENERATOR ============
+         Builds a genuine multi-page PDF file (not an HTML file to print)
+         directly from the scored data, so the downloaded PDF always
+         contains the complete point-by-point breakdown. */
+      function pdfNormalize(s){
+        return String(s==null?"":s)
+          .replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"')
+          .replace(/[\u2013\u2014]/g,"-").replace(/\u00D7/g,"x")
+          .replace(/\u00B7/g,"-").replace(/\u2713/g,"").replace(/\u2192/g,"->")
+          .replace(/[^\x20-\x7E]/g,"").replace(/\s+/g," ").trim();
+      }
+      function pdfEscape(s){ return pdfNormalize(s).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)"); }
+      function pdfWrap(text, maxChars){
+        var words=pdfNormalize(text).split(" "), lines=[], cur="";
+        words.forEach(function(w){
+          if(!w) return;
+          if(w.length>maxChars){ if(cur) lines.push(cur); while(w.length>maxChars){ lines.push(w.slice(0,maxChars)); w=w.slice(maxChars); } cur=w; return; }
+          if(!cur) cur=w;
+          else if((cur+" "+w).length<=maxChars) cur+=" "+w;
+          else { lines.push(cur); cur=w; }
+        });
+        if(cur) lines.push(cur);
+        return lines.length?lines:[""];
+      }
+      function buildPdfVisualLines(){
+        var inp=lastReportInp, res=lastReportRes, out=[];
+        function add(text, size, bold, gap, indent){
+          var chars=Math.max(20, Math.floor((516-(indent||0))/((size||10)*0.52)));
+          pdfWrap(text, chars).forEach(function(ln,i){
+            out.push({t:ln, s:size||10, b:!!bold, gap:(i===0?(gap||0):0), indent:indent||0});
+          });
+        }
+        var now=new Date();
+        add("CRS Full Report - Canada PR Score & Chances", 19, true, 0, 0);
+        add("Estimated CRS score: "+res.total+" / 1,270", 15, true, 6, 0);
+        add("Generated "+now.toLocaleDateString("en-CA",{year:"numeric",month:"long",day:"numeric"})+" from your calculator answers. IRCC grid, Nov 3, 2026. Max score 1,270.", 9.5, false, 2, 0);
+        add("Core "+res.core+"  |  Spouse "+res.spouse+"  |  Transferability "+res.trans+"  |  Additional "+res.add, 10, true, 4, 0);
+        /* 1 Profile */
+        add("1. Your profile, as scored", 14, true, 14, 0);
+        var lang1Name=$("lang1Name").value==="fr"?"French":"English";
+        var prof=[
+          ["Applying", inp.withSpouse?"With spouse / partner":"Just me"],
+          ["Age", inp.age+" years"],
+          ["Highest education", EDU_LABELS[inp.edu]],
+          ["Canadian credential", inp.canStudy?("Yes - +"+inp.canStudy+" pts"):"No"],
+          ["First language ("+lang1Name+")", "CLB "+inp.clb1.join(", ")],
+          ["Second language", inp.hasSecond?("CLB "+inp.clb2.join(", ")):"None entered"],
+          ["Canadian skilled work", canWorkLabel(inp.canWork)],
+          ["Occupation (NOC)", inp.noc?(inp.noc.title+" - NOC "+inp.noc.code):"Not selected in the finder"],
+          ["TEER level", inp.noc?("TEER "+inp.noc.teer+(inp.noc.teer<=3?" - skilled, counts for Express Entry":" - not skilled, no work points")):"-"],
+          ["High-wage list (IRCC)", inp.noc?(inp.noc.level>0?("Listed - "+NOC_LEVEL_TXT[inp.noc.level]+" (work +"+NOC_WORK_PTS[inp.noc.level]+" / offer +"+NOC_OFFER_PTS[inp.noc.level]+")"):"Not listed - no high-wage points"):"-"],
+          ["Foreign skilled work", inp.foreignWork===0?"None":inp.foreignWork>=3?"3 years or more":"1-2 years"],
+          ["Provincial nomination", inp.pnp?"Yes - +600 pts":"No"],
+          ["Sibling in Canada", inp.sibling?"Yes - +15 pts":"No"]
+        ];
+        if(inp.withSpouse){ prof.push(["Spouse education", EDU_LABELS[inp.spEdu]]); prof.push(["Spouse Canadian work", canWorkLabel(inp.spCanWork)]); }
+        prof.forEach(function(p){ add(p[0]+": "+p[1], 10, false, 1, 12); });
+        /* 2 Breakdown — the core of the PDF */
+        add("2. Verified breakdown - every point, line by line", 14, true, 14, 0);
+        add("Each line is one IRCC factor: what you earned, the maximum for that factor, and the rule behind it.", 9.5, false, 2, 0);
+        var lastG="";
+        res.rows.forEach(function(r){
+          if(r.g!==lastG){ add(GROUP_TITLES[r.g], 11, true, 10, 0); lastG=r.g; }
+          add(r.label+":  "+r.pts+" / "+r.max+" points", 10.5, true, 6, 0);
+          add(r.why, 9.5, false, 1, 14);
+        });
+        add("ESTIMATED CRS TOTAL: "+res.total+" / 1,270", 13, true, 12, 0);
+        /* 3 Chances */
+        add("3. Your chances, by pathway", 14, true, 14, 0);
+        var v=verdictFor(inp,res);
+        add(v.title, 11, true, 4, 0);
+        add(v.text, 10, false, 2, 0);
+        pathways(inp,res).forEach(function(p){
+          var pos = p.na?("Not eligible yet - "+p.note) : res.total>=p.cut?("Above the cut-off by "+(res.total-p.cut)+" pts") : ((p.cut-res.total)+" pts short - "+p.note);
+          add(p.name+" - recent cut-off "+p.cut+": "+pos, 10, false, 3, 12);
+        });
+        add("Cut-offs are from IRCC rounds held under the previous points grid (before Nov 3, 2026) and are a guide, not a promise. There is no fixed passing score.", 9, false, 4, 0);
+        /* 4 Plan */
+        add("4. Your personal plan to raise this score", 14, true, 14, 0);
+        var opts=boostOptions(inp,res);
+        if(opts.length){
+          opts.forEach(function(o,i){ add("Step "+(i+1)+": +"+o.delta+" pts - "+o.label, 10.5, true, 5, 0); add(o.sub+" -> new score "+o.total+" / 1,270", 9.5, false, 1, 14); });
+        } else add("Your profile is already at or near the practical maximum for the main levers. A provincial nomination (+600) is the only large item left.", 10, false, 2, 0);
+        /* 5 Checklist */
+        add("5. Document checklist for your Express Entry profile", 14, true, 14, 0);
+        buildChecklist(inp).forEach(function(it){ add(it.t, 10.5, true, 6, 0); add(it.d, 9.5, false, 1, 14); });
+        /* 6 Next steps */
+        add("6. Your next steps", 14, true, 14, 0);
+        var top=opts.length?opts[0]:null;
+        var steps=[
+          "1. Book / re-take your language test first - it is the highest-value lever for most profiles"+(top?(", and your biggest single gain above is: "+top.label.toLowerCase()+" (+"+top.delta+" pts)"):"")+".",
+          "2. Start your ECA now if your education is from outside Canada - it commonly takes weeks and your profile cannot claim education points without it.",
+          "3. Collect employer reference letters while the details are fresh - duties must match your NOC code.",
+          "4. Create your Express Entry profile once documents are in hand, and re-check your score in the official IRCC tool.",
+          "5. Watch category rounds - French-language and occupation rounds have cut off far below general / CEC rounds in 2026."
+        ];
+        steps.forEach(function(s){ add(s, 10, false, 3, 0); });
+        /* 7 NOC reference */
+        add("7. NOC codes & the median wage - quick reference", 14, true, 14, 0);
+        add("Your NOC code is the 5-digit code the National Occupational Classification assigns to your occupation. The second digit is its TEER level (0-5): only TEER 0-3 work counts as skilled and earns CRS work points, category-based draws invite specific NOC codes, and your employer reference letters must match the main duties listed under your code. Find yours by matching your real duties - not your job title - on IRCC's Find your NOC page or the official NOC website (NOC 2021).", 10, false, 2, 0);
+        add("The median wage is the middle hourly pay published by Job Bank for your NOC code - half the workers in that occupation earn more, half earn less. It is not your salary. Under the Nov 3, 2026 rules, IRCC compares your occupation's Canada-wide median to the national median across all occupations: at least 1.3x earns a 20-point Canadian-work bonus or 50 job-offer points, 1.5x earns 40 / 70, and 2x earns 70 / 100.", 10, false, 4, 0);
+        add("Disclaimer: This report is an estimate generated from the answers you entered and IRCC's published CRS criteria as of November 3, 2026. It is not immigration advice and not a guarantee of an invitation. Your official score is calculated inside your Express Entry profile - confirm important decisions with IRCC or a licensed Canadian immigration consultant (RCIC).", 8.5, false, 12, 0);
+        return out;
+      }
+      function createPdfBlob(lines){
+        var pageW=612, pageH=792, margin=48, topY=744, bottomY=48;
+        var pages=[], cur=[], y=topY;
+        function escLine(l){ return "BT /F"+(l.b?2:1)+" "+l.s+" Tf 1 0 0 1 "+(margin+(l.indent||0))+" "+y.toFixed(1)+" Tm ("+pdfEscape(l.t)+") Tj ET"; }
+        lines.forEach(function(l){
+          var h=l.s*1.4+(l.gap||0);
+          if(y-h<bottomY){ pages.push(cur); cur=[]; y=topY; }
+          y-=(l.gap||0);
+          cur.push(escLine(l));
+          y-=l.s*1.4;
+        });
+        if(cur.length||!pages.length) pages.push(cur);
+        /* footer page numbers as separate content appended per page */
+        pages.forEach(function(content, idx){
+          content.push("BT /F1 8 Tf 1 0 0 1 "+margin+" 30 Tm ("+pdfEscape("CRS Full Report - Page "+(idx+1)+" of "+pages.length)+") Tj ET");
+        });
+        var objs=[];
+        objs[1]="<< /Type /Catalog /Pages 2 0 R >>";
+        var kids=pages.map(function(_,i){ return (5+i*2)+" 0 R"; }).join(" ");
+        objs[2]="<< /Type /Pages /Kids ["+kids+"] /Count "+pages.length+" >>";
+        objs[3]="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
+        objs[4]="<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
+        pages.forEach(function(content,i){
+          var pageNum=5+i*2, contNum=6+i*2;
+          objs[pageNum]="<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+pageW+" "+pageH+"] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents "+contNum+" 0 R >>";
+          var stream=content.join("\n");
+          objs[contNum]="<< /Length "+stream.length+" >>\nstream\n"+stream+"\nendstream";
+        });
+        var maxObj=4+pages.length*2;
+        var pdf="%PDF-1.4\n", offsets=[0];
+        for(var n=1;n<=maxObj;n++){ offsets[n]=pdf.length; pdf+=n+" 0 obj\n"+objs[n]+"\nendobj\n"; }
+        var xrefPos=pdf.length;
+        pdf+="xref\n0 "+(maxObj+1)+"\n0000000000 65535 f \n";
+        for(var m=1;m<=maxObj;m++){ var off=String(offsets[m]); while(off.length<10) off="0"+off; pdf+=off+" 00000 n \n"; }
+        pdf+="trailer\n<< /Size "+(maxObj+1)+" /Root 1 0 R >>\nstartxref\n"+xrefPos+"\n%%EOF";
+        return new Blob([pdf],{type:"application/pdf"});
+      }
+      /* ============ PDF DELIVERY ============
+         Diagnosis (verified Nov 18, 2026 on the live page in a top-level
+         Chrome tab): the PDF itself always generated correctly, but two
+         delivery channels failed silently:
+           1. The old Download button ran a handler that created a
+              throwaway <a> in JS and called .click() on it. That synthetic
+              click produced NO download at all in the customer's browser —
+              no file, no error, nothing.
+           2. The on-page preview embedded the PDF in an <iframe> pointing
+              at the blob URL; the browser blocked it outright and showed
+              "This content is blocked. Contact the site owner to fix the
+              issue." in a grey box.
+         Delivery now works like this:
+           1. preparePdf() builds the file the moment the report appears
+              (including on return from Stripe) and points the REAL
+              Download anchor — an element that lives in the DOM from page
+              load — at the blob URL, with its download attribute set to
+              CRS-Full-Report-<score>pts.pdf. The customer's tap is then a
+              native download-link click, which the browser honours.
+           2. The same blob URL feeds the "Open PDF in new tab" link
+              (verified working) and the "PDF ready" card under the
+              buttons. There is no embedded blob-PDF preview anymore, so
+              the blocked-content box can never appear.
+         If generation ever fails, showPdfError() puts a visible message
+         in the report instead of failing silently. */
+      var lastPdfUrl=null;
+      function showPdfError(msg){
+        var box=$("pdfError");
+        if(box){ box.innerHTML="<b>Sorry — your PDF could not be created.</b> "+msg; box.classList.remove("hidden"); }
+        var st=$("reportStatus"); if(st) st.textContent="Your PDF could not be created — see the message below the buttons.";
+      }
+      function hidePdfError(){ var box=$("pdfError"); if(box) box.classList.add("hidden"); }
+      function preparePdf(){
+        try{
+          var blob=createPdfBlob(buildPdfVisualLines());
+          if(!blob || blob.size<800) return false;
+          if(lastPdfUrl) URL.revokeObjectURL(lastPdfUrl);
+          lastPdfUrl=URL.createObjectURL(blob);
+          var fname="CRS-Full-Report-"+(lastReportRes?lastReportRes.total:0)+"pts.pdf";
+          var dl=$("downloadReportBtn");
+          if(dl){ dl.href=lastPdfUrl; dl.setAttribute("download", fname); }
+          var open=$("openPdfBtn");
+          if(open){ open.href=lastPdfUrl; open.classList.remove("hidden"); }
+          var card=$("pdfReadyCard"); if(card) card.classList.remove("hidden");
+          var nm=$("pdfReadyName"); if(nm) nm.textContent=fname;
+          var mt=$("pdfReadyMeta"); if(mt) mt.textContent=" ("+Math.max(1,Math.round(blob.size/1024))+" KB)";
+          var ro=$("pdfReadyOpen"); if(ro) ro.href=lastPdfUrl;
+          hidePdfError();
+          return true;
+        }catch(e){ return false; }
+      }
+
+      /* ============ PAYMENT RETURN (Stripe) ============
+         The Stripe Payment Link opens in a new tab, so this page normally keeps
+         the visitor's answers. But if Stripe is configured to redirect back here
+         in the same tab (…?paid=1), the page reloads fresh — so before the visitor
+         leaves for Stripe we keep a throwaway, this-session-only copy of their
+         answers and restore it on return, then open the breakdown automatically. */
+      function snapshotInputs(){
+        try{
+          var data={sel:{}, rad:{}, noc:selectedNoc};
+          Array.prototype.forEach.call(document.querySelectorAll("#crsForm select, #crsForm input[type='range'], #crsForm input[type='text']"), function(el){ if(el.id) data.sel[el.id]=el.value; });
+          ["marital","hwWork","jobOffer","cert","pnp","sibling"].forEach(function(n){ data.rad[n]=radioVal(n); });
+          sessionStorage.setItem("crsPaySnapshot", JSON.stringify(data));
+        }catch(e){}
+      }
+      function restoreSnapshot(){
+        try{
+          var raw=sessionStorage.getItem("crsPaySnapshot"); if(!raw) return false;
+          var d=JSON.parse(raw); if(!d||!d.sel) return false;
+          if(d.sel.lang1Name) $("lang1Name").value=d.sel.lang1Name;
+          if(d.sel.testType) $("testType").value=d.sel.testType;
+          renderAbilityGrid1(); /* rebuild first-language inputs in the right test mode */
+          Object.keys(d.sel).forEach(function(id){ var el=$(id); if(el) el.value=d.sel[id]; });
+          $("ageVal").textContent=$("ageRange").value;
+          if(d.noc){
+            var entry=null;
+            NOC_DB.forEach(function(e){ if(e[0]===d.noc.code) entry=e; });
+            if(entry) selectNoc(entry);
+          }
+          Object.keys(d.rad||{}).forEach(function(n){ setRadio(n, d.rad[n]); });
+          scenario=null; recalc();
+          return true;
+        }catch(e){ return false; }
+      }
+      /* Shows the full breakdown. The "Payment received — thank you" banner
+         appears ONLY when paidConfirmed is true — a genuine return from
+         Stripe (see the return handler at the bottom). Every other way of
+         opening the breakdown uses neutral wording and never claims a
+         payment happened: this page cannot verify payments, so it must not
+         thank people for payments it has not seen. */
+      function showBreakdown(paidConfirmed){
+        buildReport();
+        var st=$("reportStatus");
+        if(paidConfirmed){
+          $("paidBanner").classList.remove("hidden");
+          if(st) st.textContent="Payment received — your full breakdown is ready. Tap “Open my PDF” below — in the PDF tab, click the download icon at the top to save the file to your device.";
+        } else {
+          $("paidBanner").classList.add("hidden");
+          if(st) st.textContent="Your full breakdown is ready — tap “Open my PDF” below. In the PDF tab, click the download icon at the top to save the file to your device.";
+        }
+      }
+
+      /* ============ DRAWS GRID ============ */
+      $("drawGrid").innerHTML = DRAWS.map(function(d){
+        return '<div class="draw"><div class="dt">'+d.date+'</div><div class="dn">'+d.name+'</div><div class="row"><span>Cut-off score</span><span class="cut">'+d.cut+'</span></div><div class="row"><span>Invitations issued</span><b>'+d.itas.toLocaleString()+'</b></div></div>';
+      }).join("");
+
+      /* ============ EVENTS ============ */
+      renderAbilityGrid1();
+      renderClbGrid("abilityGrid2","ab2_",0);
+      renderClbGrid("abilityGridSpouse","abS_",7);
+      $("ageRange").addEventListener("input",function(){ $("ageVal").textContent=$("ageRange").value; scenario=null; recalc(); });
+      $("nocSearch").addEventListener("input",function(){
+        if(selectedNoc && $("nocSearch").value!==selectedNoc.title){ selectedNoc=null; $("nocSelected").classList.add("hidden"); $("nocSelected").innerHTML=""; }
+        renderNocResults();
+      });
+      $("nocSearch").addEventListener("focus",renderNocResults);
+      ["education","canStudy","canWork","foreignWork","spEducation","spCanWork"].forEach(function(id){
+        $(id).addEventListener("change",function(){ scenario=null; recalc(); });
+      });
+      ["lang1Name","testType"].forEach(function(id){
+        $(id).addEventListener("change",function(){ scenario=null; renderAbilityGrid1(); recalc(); });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('input[type="radio"]'),function(r){
+        r.addEventListener("change",function(){ scenario=null; recalc(); });
+      });
+      $("boostReset").addEventListener("click",function(){
+        scenario=null;
+        $("scenarioNote").classList.add("hidden");
+        $("boostReset").classList.add("hidden");
+        recalc();
+      });
+      /* full report buttons */
+      $("generateReportBtn").addEventListener("click", function(){ snapshotInputs(); buildReport(); });
+      /* Paying: generate the breakdown FIRST, in this tab, and keep a session
+         snapshot — so the visitor always has their report, whichever tab
+         Stripe sends them back to. The link itself still opens Stripe.
+         Clicking Pay also stamps crsPayStarted (time of the click). The stamp
+         by itself shows nothing and marks nobody as paid — it only arms the
+         return check at the bottom, so a "Payment received" message can
+         appear solely when this session both started a payment here AND
+         came back on Stripe's return address. */
+      $("reportCta").addEventListener("click", function(){
+        snapshotInputs();
+        try{ sessionStorage.setItem("crsPayStarted", String(Date.now())); }catch(e){}
+        if(!reportGenerated) buildReport();
+        var n=$("payNotice"); if(n) n.classList.remove("hidden");
+      });
+      /* "I already paid" is a self-declared safety net: it opens the
+         breakdown but NOT the payment banner — the page takes the visitor's
+         word to show the report; it does not claim a payment was received. */
+      $("paidAlreadyBtn").addEventListener("click", function(){ showBreakdown(false); });
+      /* The Download control is a real anchor whose href + download name
+         were set by preparePdf() when this report was generated, so a tap
+         is a native browser download — no script-created click involved.
+         This listener only steps in when the answers changed AFTER
+         generation: it stops the tap, rebuilds the report and PDF, and
+         asks for one more tap, rather than saving a stale breakdown. */
+      $("downloadReportBtn").addEventListener("click", function(ev){
+        var stale=false;
+        try{ stale = !lastReportRes || JSON.stringify(readInputs())!==JSON.stringify(lastReportInp); }catch(e){}
+        if(stale){
+          ev.preventDefault();
+          buildReport();
+          var st=$("reportStatus");
+          if(st) st.textContent="Your answers changed, so your report and PDF were just refreshed — tap “Open my PDF” to view the updated file, or try the direct download again.";
+          return;
+        }
+        var st2=$("reportStatus");
+        if(st2 && lastReportRes) st2.textContent="Direct download requested for CRS-Full-Report-"+lastReportRes.total+"pts.pdf. If nothing saves, use “Open my PDF” above — in the PDF tab, click the download icon at the top to save the file to your device.";
+      });
+      $("copyReportBtn").addEventListener("click", function(){
+        if(!reportGenerated) buildReport();
+        var txt=reportPlainText();
+        function done(){ $("reportStatus").textContent="Report summary copied — paste it anywhere to keep or share it."; }
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(txt).then(done, function(){ $("reportStatus").textContent="Copy was blocked by the browser — use “Open my PDF” instead."; });
+        } else { $("reportStatus").textContent="Copy is not available here — use “Open my PDF” instead."; }
+      });
+      /* currency toggle */
+      $("curCad").addEventListener("click",function(){
+        $("curCad").classList.add("on"); $("curInr").classList.remove("on");
+        $("priceVal").innerHTML="$1.99 <small>one-time · CAD</small>";
+        $("priceNote").textContent="Complete score check + report, for one profile. No subscription.";
+      });
+      $("curInr").addEventListener("click",function(){
+        $("curInr").classList.add("on"); $("curCad").classList.remove("on");
+        $("priceVal").innerHTML="₹199 <small>one-time · INR</small>";
+        $("priceNote").textContent="Same complete score check + report, priced for applicants in India. Checkout is via Stripe at $1.99 CAD — your card converts to about ₹199. No subscription.";
+      });
+      recalc();
+      /* Returning from Stripe after payment. The "Payment received — thank
+         you" banner is shown ONLY when BOTH are true:
+           1. the address carries Stripe's return marker (?paid=1, or
+              payment=success, or a session_id), AND
+           2. this browser session actually started a payment — the Pay
+              button on this page stamped crsPayStarted within the last hour
+              when it was clicked.
+         A ?paid=1 address opened directly, shared with someone, or restored
+         later has no fresh stamp, so it produces no payment message (the
+         visitor's own saved answers are still restored, silently). Either
+         way the marker is then consumed: the payment parameters are removed
+         from the address bar and the session stamp is cleared, so a refresh
+         or a later visit can never repeat the message. A static page cannot
+         verify a Stripe payment with the bank — this is the strongest
+         honest check it can make, and it never thanks anyone on the word
+         of a bare link alone. */
+      var paidReturn=false;
+      try{
+        var qs=new URLSearchParams(window.location.search);
+        paidReturn = qs.get("paid")==="1" || qs.get("payment")==="success" || qs.has("session_id");
+      }catch(e){}
+      if(paidReturn){
+        var payStartedAt=0;
+        try{ payStartedAt=parseInt(sessionStorage.getItem("crsPayStarted")||"0",10)||0; }catch(e){}
+        var genuineReturn = payStartedAt>0 && (Date.now()-payStartedAt) < 60*60*1000;
+        restoreSnapshot();
+        if(genuineReturn){
+          showBreakdown(true);
+          try{ sessionStorage.removeItem("crsPaySnapshot"); }catch(e){}
+        }
+        try{ sessionStorage.removeItem("crsPayStarted"); }catch(e){}
+        try{
+          var cleanQs=new URLSearchParams(window.location.search);
+          cleanQs.delete("paid");
+          cleanQs.delete("payment");
+          cleanQs.delete("session_id");
+          var qsStr=cleanQs.toString();
+          window.history.replaceState(null,"",window.location.pathname+(qsStr?"?"+qsStr:"")+window.location.hash);
+        }catch(e){}
+      }
+    })();
+    </script>
+  </body>
+</html>
