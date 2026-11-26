@@ -577,7 +577,7 @@
       <!-- ================= DRAWS ================= -->
       <div class="section-head">
         <h2>Latest Express Entry draws</h2>
-        <p>The most recent IRCC rounds of invitations, checked November 13–17, 2026. PNP cut-offs look high because they include the 600 nomination points. Rounds are paused while IRCC re-scores every profile under the Nov 3, 2026 rules.</p>
+        <p>The most recent IRCC rounds of invitations, checked November 26, 2026. PNP cut-offs look high because they include the 600 nomination points.</p>
       </div>
       <div class="draws" id="drawGrid"></div>
 
@@ -726,7 +726,7 @@
 
       <footer>
         <p><b>Disclaimer:</b> This calculator is an unofficial estimate based on IRCC’s published Comprehensive Ranking System criteria as of November 3, 2026. It is not affiliated with the Government of Canada or IRCC, is not immigration advice, and cannot guarantee an invitation or permanent residence. Immigration rules change — verify your score in the official IRCC tool before acting.</p>
-        <p>Sources: IRCC CRS criteria and rounds of invitations (via <a href="https://www.studyimmigration.com/blog/crs-score-calculator-explained/" target="_blank" rel="noopener">StudyImmigration’s CRS grid summary, checked Nov 13, 2026</a>), <a href="https://crscalculatorcanada.com/methodology/" target="_blank" rel="noopener">PointTally CRS methodology</a>, <a href="https://chkimmigration.ca/updates.php" target="_blank" rel="noopener">CHK Immigration draw tracker</a>, <a href="https://crsmeter.com/express-entry-draws/" target="_blank" rel="noopener">CRS Meter draw history</a>. Draw data checked November 17, 2026. The occupation finder’s high-wage tiers use IRCC’s 186-occupation list (Nov 3, 2026), cross-checked between two published copies: <a href="https://www.nextmovepath.com/tools/crs-calculator/high-wage-occupations/" target="_blank" rel="noopener">NextMovePath</a> and <a href="https://maplevisa.ca/express-entry/high-wage-occupations/" target="_blank" rel="noopener">MapleVisa</a> (both checked Nov 18, 2026).</p>
+        <p>Sources: IRCC CRS criteria and rounds of invitations (via <a href="https://www.studyimmigration.com/blog/crs-score-calculator-explained/" target="_blank" rel="noopener">StudyImmigration’s CRS grid summary, checked Nov 13, 2026</a>), <a href="https://crscalculatorcanada.com/methodology/" target="_blank" rel="noopener">PointTally CRS methodology</a>, <a href="https://chkimmigration.ca/updates.php" target="_blank" rel="noopener">CHK Immigration draw tracker</a>, <a href="https://crsmeter.com/express-entry-draws/" target="_blank" rel="noopener">CRS Meter draw history</a>. Draw data checked November 26, 2026. The occupation finder’s high-wage tiers use IRCC’s 186-occupation list (Nov 3, 2026), cross-checked between two published copies: <a href="https://www.nextmovepath.com/tools/crs-calculator/high-wage-occupations/" target="_blank" rel="noopener">NextMovePath</a> and <a href="https://maplevisa.ca/express-entry/high-wage-occupations/" target="_blank" rel="noopener">MapleVisa</a> (both checked Nov 18, 2026).</p>
       </footer>
     </div>
 
@@ -1003,14 +1003,14 @@
 
       /* ============ CHANCES ============ */
       var DRAWS=[
+        {date:"Nov 26, 2026", name:"STEM occupations", cut:547, itas:600},
+        {date:"Nov 25, 2026", name:"French-language proficiency", cut:401, itas:6000},
+        {date:"Nov 23, 2026", name:"Provincial Nominee Program", cut:673, itas:1999},
         {date:"Oct 28, 2026", name:"Transport occupations", cut:477, itas:150},
         {date:"Oct 27, 2026", name:"French-language proficiency", cut:407, itas:5000},
         {date:"Oct 26, 2026", name:"Provincial Nominee Program", cut:761, itas:792},
         {date:"Oct 16, 2026", name:"French-language proficiency", cut:435, itas:5000},
-        {date:"Oct 15, 2026", name:"Canadian Experience Class", cut:519, itas:2500},
-        {date:"Oct 13, 2026", name:"Provincial Nominee Program", cut:772, itas:752},
-        {date:"Sep 29, 2026", name:"Canadian Experience Class", cut:518, itas:2000},
-        {date:"Sep 1, 2026", name:"Canadian Experience Class", cut:521, itas:2000}
+        {date:"Oct 15, 2026", name:"Canadian Experience Class", cut:519, itas:2500}
       ];
       function pathways(inp, res){
         var list=[];
