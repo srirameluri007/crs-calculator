@@ -341,6 +341,20 @@
       .sample-fig img{width:100%;height:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:block}
       .sample-fig figcaption{font-size:13.5px;color:var(--muted);margin-top:9px}
       .sample-fig figcaption b{color:var(--ink)}
+      .help-line{margin:14px 0 0;font-size:14.5px;color:var(--muted);text-align:center}
+      .help-line a{color:#2f7d1e;font-weight:700}
+      /* ---------- done-for-you WhatsApp service ---------- */
+      .dfy{margin-top:26px;background:linear-gradient(160deg,#2e0a5e,#230251);border-radius:var(--radius);padding:26px;color:#f5f2ff;box-shadow:var(--shadow)}
+      .dfy-in{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center}
+      @media (max-width:720px){.dfy-in{grid-template-columns:1fr}}
+      .dfy h2{font-size:23px;font-weight:900}
+      .dfy p{color:#e6defa}
+      .dfy .fineprint{color:#b9aed6}
+      .dfy-cta{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:18px;text-align:center}
+      .dfy-price{font-family:"Lato",sans-serif;font-weight:900;font-size:40px;line-height:1;color:#fbaf00}
+      .dfy-price small{font-size:15px;color:#b9aed6;font-weight:700}
+      .wa-btn{display:block;background:#25d366;color:#083312;font-weight:800;text-decoration:none;padding:13px 18px;border-radius:10px;margin-top:12px;font-size:16px}
+      .wa-btn:hover{background:#1fb857}
       @media print{
         body{background:#fff !important;color:#111 !important}
         .report,.report p,.report .muted,.r-profile div span:first-child{color:#111 !important}
@@ -413,6 +427,7 @@
           <div class="hstep"><span class="hnum">2</span><div><b>See your score — FREE</b><span>Your total plus every point explained, line by line. No card, no signup.</span></div></div>
           <div class="hstep"><span class="hnum">3</span><div><b>Want the plan? $1.99</b><span>Chances in every pathway, every way to gain points, and a 3-page PDF. One-time payment.</span></div></div>
         </div>
+        <p class="help-line">Not sure how to use the calculator? <a href="https://wa.me/12265774101?text=Hi%2C%20I%27d%20like%20my%20personal%20CRS%20score%20calculated%20(%249.99).%20Please%20help%20me%20get%20started." target="_blank" rel="noopener">WhatsApp us</a> — we’ll calculate your personal score with you for $9.99.</p>
       </header>
 
       <div class="layout">
@@ -779,6 +794,22 @@
           <img src="sample-report.jpg" alt="Sample of the 3-page CRS full report: score and category breakdown, chances by pathway, personal points plan and document checklist" loading="lazy">
           <figcaption><b>This is the real $1.99 report</b> — all 3 pages, generated from a test profile (score 380). Yours is built from your own answers, on this page, the moment you unlock it. Nothing is emailed and nothing is made up: every number comes from the answers you enter above.</figcaption>
         </figure>
+      </section>
+
+      <!-- ================= DONE-FOR-YOU (WhatsApp) ================= -->
+      <section class="dfy" aria-labelledby="h-dfy">
+        <div class="dfy-in">
+          <div>
+            <h2 id="h-dfy">Not sure how to use the calculator? We’ll do it with you.</h2>
+            <p style="margin:8px 0 0">Message us on WhatsApp and we’ll go through the questions together, calculate your <b>personal CRS score</b> on the new Nov 2026 rules, and send you your <b>full report</b> — your chances in every pathway, your personal plan to gain points, and the 3-page PDF.</p>
+            <p class="fineprint" style="margin-top:10px">A score-calculation and report service using IRCC’s published grid — an estimate only, not immigration advice. One-time payment, no subscription.</p>
+          </div>
+          <div class="dfy-cta">
+            <div class="dfy-price">$9.99 <small>one-time</small></div>
+            <a class="wa-btn" href="https://wa.me/12265774101?text=Hi%2C%20I%27d%20like%20my%20personal%20CRS%20score%20calculated%20(%249.99).%20Please%20help%20me%20get%20started." target="_blank" rel="noopener">Chat on WhatsApp</a>
+            <p class="fineprint" style="text-align:center;margin-top:10px">+1 226 577 4101</p>
+          </div>
+        </div>
       </section>
 
       <!-- ================= FULL REPORT ================= -->
