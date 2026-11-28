@@ -355,6 +355,39 @@
       .dfy-price small{font-size:15px;color:#b9aed6;font-weight:700}
       .wa-btn{display:block;background:#25d366;color:#083312;font-weight:800;text-decoration:none;padding:13px 18px;border-radius:10px;margin-top:12px;font-size:16px}
       .wa-btn:hover{background:#1fb857}
+      /* ---------- top price strip ---------- */
+      .price-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+      @media (max-width:820px){.price-strip{grid-template-columns:1fr}}
+      .pcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+      .pcard.featured{border:2px solid #c77400}
+      .pcard.dark{background:linear-gradient(160deg,#2e0a5e,#230251);border-color:#230251;color:#f5f2ff}
+      .pcard-tag{font-size:11.5px;font-weight:900;letter-spacing:.12em;color:var(--muted)}
+      .pcard.dark .pcard-tag{color:#b9aed6}
+      .pcard-price{font-family:"Lato",sans-serif;font-weight:900;font-size:32px;line-height:1.1;margin:4px 0 8px}
+      .pcard.featured .pcard-price{color:#c77400}
+      .pcard.dark .pcard-price{color:#fbaf00}
+      .pcard-price small{font-size:13px;color:var(--muted);font-weight:700}
+      .pcard.dark .pcard-price small{color:#b9aed6}
+      .pcard ul{margin:0 0 14px;padding-left:18px;font-size:13.5px;line-height:1.5;color:var(--muted)}
+      .pcard.dark ul{color:#e6defa}
+      .pcard-btn{margin-top:auto;text-align:center;text-decoration:none;font-weight:800;padding:11px 14px;border-radius:10px;font-size:14.5px}
+      .pcard-btn.ghost{border:2px solid #230251;color:#230251}
+      .pcard-btn.gold{background:#230251;color:#fbaf00}
+      .pcard-btn.wa{background:#25d366;color:#083312}
+      /* ---------- draw alerts subscribe ---------- */
+      .subscribe{margin:26px 0 0;background:linear-gradient(160deg,#2e0a5e,#230251);border-radius:var(--radius);padding:26px;color:#f5f2ff;box-shadow:var(--shadow)}
+      .sub-in{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+      @media (max-width:820px){.sub-in{grid-template-columns:1fr}}
+      .subscribe h2{font-size:23px;font-weight:900}
+      .subscribe p{color:#e6defa}
+      .sub-row{display:flex;gap:10px}
+      @media (max-width:520px){.sub-row{flex-direction:column}}
+      .sub-form input[type=email]{flex:1;padding:13px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:#fff;color:#22103f;font-size:15px;font-family:inherit;min-width:0}
+      .sub-form button{padding:13px 20px;border:none;border-radius:10px;background:#fbaf00;color:#230251;font-weight:900;font-size:15px;cursor:pointer;font-family:inherit}
+      .sub-form button:disabled{opacity:.6;cursor:default}
+      .sub-msg{margin:10px 0 0;font-size:14px;min-height:20px}
+      .sub-msg.ok{color:#aee556;font-weight:700}
+      .sub-msg.err{color:#ffb3ab;font-weight:700}
       @media print{
         body{background:#fff !important;color:#111 !important}
         .report,.report p,.report .muted,.r-profile div span:first-child{color:#111 !important}
@@ -422,6 +455,38 @@
           <span class="chip">Latest draw: <b>Nov 26, 2026 · cut-off 547</b></span>
           <span class="chip">Latest round: <b>STEM occupations · Nov 26, 2026</b></span>
         </div>
+        <div class="price-strip" aria-label="Your three options">
+          <div class="pcard">
+            <div class="pcard-tag">DO IT YOURSELF</div>
+            <div class="pcard-price">FREE</div>
+            <ul>
+              <li>Your CRS score on the new Nov 2026 rules</li>
+              <li>Every point explained, line by line</li>
+              <li>Instant, on this page — no signup</li>
+            </ul>
+            <a class="pcard-btn ghost" href="#crsForm">Start free ↓</a>
+          </div>
+          <div class="pcard featured">
+            <div class="pcard-tag">FULL REPORT</div>
+            <div class="pcard-price">$1.99 <small>one-time</small></div>
+            <ul>
+              <li>Everything in Free, <b>plus</b>:</li>
+              <li>Your chances in every pathway + your gap to each cut-off</li>
+              <li>Personal plan to gain points + the 3-page PDF</li>
+            </ul>
+            <a class="pcard-btn gold" href="#premium">See the full report ↓</a>
+          </div>
+          <div class="pcard dark">
+            <div class="pcard-tag">DONE WITH YOU</div>
+            <div class="pcard-price">$9.99 <small>one-time</small></div>
+            <ul>
+              <li>Not sure how to use the calculator?</li>
+              <li>We go through the questions with you on WhatsApp</li>
+              <li>Your personal score + full report sent to you</li>
+            </ul>
+            <a class="pcard-btn wa" href="https://wa.me/12265774101?text=Hi%2C%20I%27d%20like%20my%20personal%20CRS%20score%20calculated%20(%249.99).%20Please%20help%20me%20get%20started." target="_blank" rel="noopener">Chat on WhatsApp</a>
+          </div>
+        </div>
         <div class="howit" aria-label="How it works">
           <div class="hstep"><span class="hnum">1</span><div><b>Answer 6 short steps</b><span>Age, education, language, work — about 2 minutes.</span></div></div>
           <div class="hstep"><span class="hnum">2</span><div><b>See your score — FREE</b><span>Your total plus every point explained, line by line. No card, no signup.</span></div></div>
@@ -429,6 +494,24 @@
         </div>
         <p class="help-line">Not sure how to use the calculator? <a href="https://wa.me/12265774101?text=Hi%2C%20I%27d%20like%20my%20personal%20CRS%20score%20calculated%20(%249.99).%20Please%20help%20me%20get%20started." target="_blank" rel="noopener">WhatsApp us</a> — we’ll calculate your personal score with you for $9.99.</p>
       </header>
+
+      <!-- ================= DRAW ALERTS SUBSCRIBE ================= -->
+      <section class="subscribe" aria-labelledby="h-sub">
+        <div class="sub-in">
+          <div>
+            <h2 id="h-sub">Never miss a draw — free email alerts</h2>
+            <p style="margin:8px 0 0">IRCC holds Express Entry draws without warning, and cut-offs move fast. Subscribe and we’ll email you whenever there’s a new draw — the date, the category and the cut-off score — so you always know what’s going on and where you stand.</p>
+          </div>
+          <form id="subForm" class="sub-form" novalidate>
+            <div class="sub-row">
+              <input type="email" id="subEmail" name="email" placeholder="Your email address" aria-label="Email address" required autocomplete="email">
+              <button type="submit" id="subBtn">Subscribe free</button>
+            </div>
+            <p class="sub-msg" id="subMsg" role="status"></p>
+            <p class="fineprint" style="color:#b9aed6;margin-top:8px">Free forever. One short email per draw. No spam, and we never sell your address — unsubscribe anytime with one reply.</p>
+          </form>
+        </div>
+      </section>
 
       <div class="layout">
         <!-- ================= FORM ================= -->
@@ -742,7 +825,7 @@
       <div class="draws" id="drawGrid"></div>
 
       <!-- ================= PREMIUM ================= -->
-      <section class="premium" aria-labelledby="h-premium">
+      <section class="premium" id="premium" aria-labelledby="h-premium">
         <h2 id="h-premium">Your complete CRS score check — with the full chances report</h2>
         <div class="cols">
           <div>
@@ -811,6 +894,410 @@
           </div>
         </div>
       </section>
+
+<!-- ================= PNP HUB ================= -->
+<style>
+  .pnp{margin-top:26px}
+  .pnp-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+  .pnp-tab{border:2px solid #230251;background:#fff;color:#230251;font-weight:800;padding:9px 14px;border-radius:999px;cursor:pointer;font-size:14px;font-family:inherit}
+  .pnp-tab.on{background:#230251;color:#fbaf00}
+  .pnp-tab.soon{border-color:var(--line);color:var(--muted);cursor:default;font-weight:600}
+  .pnp-panel{display:none}
+  .pnp-panel.on{display:block}
+  .pnp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+  @media (max-width:720px){.pnp-grid{grid-template-columns:1fr}}
+  .pnp-field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+  .pnp-field .hint{font-weight:400;color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+  .pnp-field select,.pnp-field input[type=number]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+  .pnp-check{display:flex;gap:10px;align-items:flex-start;background:#faf8ff;border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+  .pnp-check input{margin-top:3px;width:17px;height:17px;accent-color:#230251}
+  .pnp-check label{font-size:14px;font-weight:600}
+  .pnp-check .hint{font-weight:400;color:var(--muted);font-size:12.5px;display:block}
+  .pnp-result{margin-top:20px;background:linear-gradient(160deg,#2e0a5e,#230251);border-radius:14px;padding:20px;color:#f5f2ff}
+  .pnp-score{font-family:"Lato",sans-serif;font-weight:900;font-size:42px;color:#fbaf00;line-height:1}
+  .pnp-score small{font-size:17px;color:#b9aed6}
+  .pnp-verdict{margin-top:8px;font-size:15px;color:#e6defa}
+  .pnp-break{margin-top:14px;background:#fff;border-radius:12px;padding:6px 16px;color:var(--ink)}
+  .pnp-break .row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+  .pnp-break .row:first-child{border-top:none}
+  .pnp-break .row b{font-family:"Lato",sans-serif;white-space:nowrap}
+  .pnp-src{font-size:12.5px;color:var(--muted);margin-top:12px}
+</style>
+<section class="card pnp" id="pnpHub" aria-labelledby="h-pnp">
+  <h2 id="h-pnp" style="font-size:24px;font-weight:900">Provincial Nominee Programs — check your points by province</h2>
+  <p style="margin:8px 0 0">A provincial nomination adds <b>+600 points</b> to your CRS score — for most people below the federal cut-offs, this is the real path. Every province scores you differently, on its own official grid. Pick a province, answer its questions, and see your points with every factor explained. Free, like the CRS score.</p>
+  <div class="pnp-tabs" id="pnpTabs" role="tablist" aria-label="Choose a province"></div>
+  <div id="pnpPanels"></div>
+  <p class="fineprint" style="margin-top:14px">Estimates from each province’s published grid — not immigration advice and not a guarantee of an invitation. Provinces run their own draws and can change their grids at any time.</p>
+  <p class="fineprint" style="margin-top:8px"><b>No points calculator for Nova Scotia or the territories — because they don’t use one.</b> Since February 2026, Nova Scotia’s four streams (Skilled Worker, Graduate, Express Entry, Entrepreneur) are eligibility-based: you submit an Expression of Interest and the province selects from the pool by its priorities — a job offer and Nova Scotia experience matter most. Yukon, the Northwest Territories and Nunavut are also employer-driven with no points grid. We won’t show you a points score a province doesn’t actually use.</p>
+</section>
+<script>
+(function(){
+  var PROVINCES = [
+    {
+      id:'sinp', tab:'Saskatchewan', name:'Saskatchewan (SINP)', program:'International Skilled Worker — Express Entry & Occupations In-Demand', max:110, pass:60,
+      intro:'Saskatchewan scores education, experience, language, age and your connection to the province. You need at least 60 of 110 points to be eligible; the EOI pool then ranks candidates.',
+      source:'https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/assess-your-eligibility',
+      fields:[
+        {k:'edu', t:'sel', label:'Education and training', hint:'Use the Canadian equivalency of your credential', opts:[['Master’s or doctorate degree',23],['Bachelor’s degree (three-year degree or longer)',20],['Trade certification equivalent to journeyperson status in Saskatchewan',20],['Diploma requiring two (but less than three) years of post-secondary study',15],['Certificate, or at least two semesters (but less than a two-year program)',12]]},
+        {k:'work5', t:'sel', label:'Skilled work experience — in the last 5 years', hint:'In the occupation on your application', opts:[['5 years',10],['4 years',8],['3 years',6],['2 years',4],['1 year',2],['Less than 1 year',0]]},
+        {k:'work10', t:'sel', label:'Skilled work experience — 6 to 10 years before applying', opts:[['5 years',5],['4 years',4],['3 years',3],['2 years',2],['1 year',1],['Less than 1 year',0]]},
+        {k:'lang1', t:'sel', label:'First language test (English or French)', opts:[['CLB 8 or higher',20],['CLB 7',18],['CLB 6',16],['CLB 5',14],['CLB 4',12],['No language test results',0]]},
+        {k:'lang2', t:'sel', label:'Second language test (the other of English / French)', opts:[['CLB 8 or higher',10],['CLB 7',8],['CLB 6',6],['CLB 5',4],['CLB 4',2],['Not applicable',0]]},
+        {k:'age', t:'sel', label:'Age', opts:[['22–34 years',12],['35–45 years',10],['18–21 years',8],['46–50 years',8],['Under 18 years',0],['More than 50 years',0]]},
+        {k:'conn', t:'sel', label:'Saskatchewan connection', hint:'Job-offer applicants score the offer. Express Entry / In-Demand applicants score family and past Saskatchewan experience below', opts:[['High-skilled job offer from a Saskatchewan employer',30],['Close family relative living in Saskatchewan',20],['No Saskatchewan connection',0]]},
+        {k:'skwork', t:'chk', label:'I worked in Saskatchewan before', hint:'At least 12 months in the past 5 years on a valid work permit (Express Entry / In-Demand only)', pts:5},
+        {k:'skstudy', t:'chk', label:'I studied in Saskatchewan before', hint:'At least one full-time academic year at a recognised Saskatchewan institution (Express Entry / In-Demand only)', pts:5}
+      ]
+    },
+    {
+      id:'mpnp', tab:'Manitoba', name:'Manitoba (MPNP)', program:'Expression of Interest ranking — Skilled Worker & International Education streams', max:1000, pass:null,
+      intro:'Manitoba ranks EOI profiles out of 1,000. Language is scored per skill band. You must have at least one connection to Manitoba to submit an EOI — and work or study in another province costs you points.',
+      source:'https://immigratemanitoba.com/immigrate-to-manitoba/general-mpnp-policies/sw-eoi-ranking/',
+      fields:[
+        {k:'bandL', t:'sel', label:'First language — Listening band', opts:[['CLB 8 or higher',25],['CLB 7',22],['CLB 6',20],['CLB 5',17],['CLB 4',12],['CLB 3 or lower',0]]},
+        {k:'bandR', t:'sel', label:'First language — Reading band', opts:[['CLB 8 or higher',25],['CLB 7',22],['CLB 6',20],['CLB 5',17],['CLB 4',12],['CLB 3 or lower',0]]},
+        {k:'bandW', t:'sel', label:'First language — Writing band', opts:[['CLB 8 or higher',25],['CLB 7',22],['CLB 6',20],['CLB 5',17],['CLB 4',12],['CLB 3 or lower',0]]},
+        {k:'bandS', t:'sel', label:'First language — Speaking band', opts:[['CLB 8 or higher',25],['CLB 7',22],['CLB 6',20],['CLB 5',17],['CLB 4',12],['CLB 3 or lower',0]]},
+        {k:'lang2', t:'sel', label:'Second official language', hint:'The language you are less proficient in, with a valid test', opts:[['CLB 5 or higher overall',25],['Below CLB 5 / no second-language test',0]]},
+        {k:'age', t:'sel', label:'Age', opts:[['21–45 years',75],['20 years',40],['46 years',40],['19 years',30],['47 years',30],['18 years',20],['48 years',20],['49 years',10],['50 years or older',0]]},
+        {k:'work', t:'sel', label:'Work experience — last 5 years', hint:'Full years of full-time work (30+ hours/week, 6+ months per employer)', opts:[['Four years or more',75],['Three years',60],['Two years',50],['One year',40],['Less than one year',0]]},
+        {k:'licensed', t:'chk', label:'Fully licensed/certified to practise my regulated occupation in Manitoba', pts:100},
+        {k:'edu', t:'sel', label:'Highest level of education completed', opts:[['Master’s degree or doctorate',125],['Two post-secondary programs of at least two years each',115],['One post-secondary program of three years or more',110],['One post-secondary program of two years',100],['One-year post-secondary program',70],['Trade certificate',70],['No formal post-secondary education',0]]},
+        {k:'conn', t:'sel', label:'Your strongest connection to Manitoba', hint:'Only your highest-scoring connection counts', opts:[['Working in Manitoba 6+ months with a long-term job offer from the same employer',500],['Invitation to Apply under a Strategic Initiative',500],['Close relative in Manitoba',200],['Previous work experience in Manitoba (six months or more)',100],['Completed a post-secondary program in Manitoba (two years or more)',100],['Completed a post-secondary program in Manitoba (one year)',50],['Close friend or distant relative in Manitoba',50],['No connection to Manitoba',0]]},
+        {k:'regional', t:'chk', label:'My destination in Manitoba is outside Winnipeg', hint:'Adds 50 with a Manitoba connection — not with the two 500-point demand options', pts:50},
+        {k:'riskWork', t:'chk', label:'I (or my spouse) have work experience in another Canadian province', hint:'Risk assessment: −100 points', pts:-100},
+        {k:'riskStudy', t:'chk', label:'I (or my spouse) studied in another Canadian province', hint:'Risk assessment: −100 points', pts:-100}
+      ]
+    },
+    {
+      id:'bcpnp', tab:'British Columbia', name:'British Columbia (BC PNP)', program:'Skills Immigration Registration System (SIRS)', max:200, pass:null,
+      intro:'BC scores your registration out of 200. You need a B.C. job offer to register — points come from experience in that occupation, education, language, the wage offered, and where in B.C. the job is.',
+      source:'https://www.welcomebc.ca/immigrate-to-b-c/bc-pnp-skills-immigration-program-guide-december-4-2025',
+      fields:[
+        {k:'exp', t:'sel', label:'Work experience directly related to the B.C. job offer', hint:'Same NOC as the job offer, in the last 10 years', opts:[['5 or more years',20],['At least 4, less than 5 years',16],['At least 3, less than 4 years',12],['At least 2, less than 3 years',8],['At least 1, less than 2 years',4],['Less than 1 year',1],['No experience',0]]},
+        {k:'expCan', t:'chk', label:'At least 1 year of that related experience was in Canada', pts:10},
+        {k:'expBC', t:'chk', label:'I am currently working full-time in B.C. for this employer in this occupation', pts:10},
+        {k:'edu', t:'sel', label:'Highest level of education', opts:[['Doctoral degree',27],['Master’s degree',22],['Post-graduate certificate or diploma (after a bachelor’s)',15],['Bachelor’s degree',15],['Associate degree',5],['Post-secondary diploma or certificate (trades or non-trades)',5],['Secondary school or less',0]]},
+        {k:'eduLoc', t:'sel', label:'Where that highest credential was completed', opts:[['In British Columbia',8],['In Canada, outside B.C.',6],['Outside Canada',0]]},
+        {k:'designation', t:'chk', label:'I hold an eligible B.C. professional designation for this occupation', hint:'E.g. a SkilledTradesBC trade certificate, ECE registry, BC Care Aide registry, licensed practical nurse', pts:5},
+        {k:'lang', t:'sel', label:'Language proficiency — your lowest CLB across the four skills', hint:'English or French', opts:[['CLB 9 or higher',30],['CLB 8',25],['CLB 7',20],['CLB 6',15],['CLB 5',10],['CLB 4',5],['Below CLB 4, or no test submitted',0]]},
+        {k:'bilingual', t:'chk', label:'I have CLB 4+ in all four skills in BOTH English and French (valid tests in both)', pts:10},
+        {k:'wage', t:'wage', label:'Hourly wage of the B.C. job offer (CAD $ per hour)', hint:'Base wage only — no bonuses, commissions, tips or overtime. B.C. awards roughly $1 of hourly wage = 1 point, from $16/hr up to $70+/hr'},
+        {k:'area', t:'sel', label:'Area of employment within B.C.', opts:[['Area 1 — Metro Vancouver Regional District',0],['Area 2 — Squamish, Abbotsford, Agassiz, Mission, Chilliwack',5],['Area 3 — Anywhere else in B.C.',15]]},
+        {k:'regional', t:'chk', label:'Regional bonus: 1+ year of work in Area 2 or 3 in the last 5 years, OR I graduated from a public B.C. institution outside Metro Vancouver', hint:'Only counts if the job is in Area 2 or 3', pts:10}
+      ]
+    },
+    {
+      id:'aaip', tab:'Alberta', name:'Alberta (AAIP)', program:'Worker Expression of Interest (EOI) points grid', max:100, pass:null,
+      intro:'Alberta scores worker EOIs out of 100 — 69 human-capital points and 31 economic points. Draws then select by the province’s sector and labour-market priorities, so there is no fixed pass mark.',
+      source:'https://www.alberta.ca/system/files/im-worker-stream-expression-of-interest-points-grid.pdf',
+      fields:[
+        {k:'eduLvl', t:'sel', label:'Highest level of education completed', opts:[['Doctorate degree',12],['Master’s degree',10],['Bachelor’s degree',7],['Trades certificate / diploma',7],['Diploma / certificate',4],['Secondary school or lower',0]]},
+        {k:'eduLoc', t:'sel', label:'Where that education was completed', opts:[['In Alberta',10],['In another Canadian province or territory',6],['Outside Canada',0]]},
+        {k:'langEn', t:'sel', label:'English proficiency — your lowest CLB across the four skills', opts:[['CLB 6 or higher',10],['CLB 5',8],['CLB 4',5],['CLB 3 or lower, or no test',0]]},
+        {k:'langFr', t:'sel', label:'French proficiency — your lowest NCLC across the four skills', hint:'Alberta scores both languages and awards the higher value', opts:[['NCLC 6 or higher',8],['NCLC 5',5],['NCLC 4',3],['NCLC 3 or lower, or no test',0]]},
+        {k:'bilingual', t:'chk', label:'I have CLB / NCLC 4 or higher in BOTH English and French', pts:3},
+        {k:'workTot', t:'sel', label:'Total work experience (Canada and abroad)', opts:[['12 or more months',11],['6–11 months',7],['Less than 6 months',3]]},
+        {k:'workCan', t:'sel', label:'Work experience in Canada', opts:[['6 months or more in Alberta',10],['6 months or more in another province or territory',6],['Less than 6 months in Canada, or none',0]]},
+        {k:'age', t:'sel', label:'Age', opts:[['21–34 years',5],['35–49 years',4],['18–20 years',3],['50 years or older',3]]},
+        {k:'family', t:'chk', label:'I have a parent, child or sibling living in Alberta who is a Canadian citizen or permanent resident (18+)', pts:8},
+        {k:'offer', t:'sel', label:'Alberta job offer', opts:[['Permanent, full-time job offer in Alberta',10],['No Alberta job offer',0]]},
+        {k:'rural', t:'chk', label:'My job offer has a Rural Renewal Stream community endorsement, or is in tourism & hospitality, or law enforcement', pts:6},
+        {k:'jobLoc', t:'sel', label:'Location of the Alberta job', hint:'Only scored if you have an Alberta job offer', opts:[['Rural Renewal Stream designated community',5],['Other Alberta community (outside Calgary and Edmonton metro areas)',5],['Calgary Census Metropolitan Area',0],['Edmonton Census Metropolitan Area',0]]},
+        {k:'regulated', t:'chk', label:'My job offer is in a regulated occupation in Alberta and I hold the certification/licensing to practise it', pts:10}
+      ]
+    },
+    {
+      id:'quebec', tab:'Quebec', name:'Quebec (PSTQ)', program:'Skilled Worker Selection Program — Arrima ranking grid', max:1400, pass:null,
+      intro:'Quebec runs its own system (not a PNP). Arrima ranks declarations of interest out of 1,400 points — French is the biggest single factor, and English scores zero. There is no fixed pass mark: each invitation round sets its own minimum, and you must also meet your stream’s conditions (Streams 1–2 ask for French oral level 7 or 5 respectively). If your spouse comes with you, your own ceilings drop and your spouse adds up to 140 points instead (maximum total 1,300).',
+      source:'https://cdn-contenu.quebec.ca/cdn-contenu/immigration/publications/fr/Pointage_criteres.pdf',
+      fields:[
+        {k:'spouse', t:'chk', label:'My spouse or partner will accompany me to Quebec', hint:'Changes your scoring: your French, age, experience and education ceilings drop, and the spouse factors below start counting', pts:0},
+        {k:'frL', t:'sel', label:'French — oral comprehension (listening), Québec level', hint:'From an accepted French test (TCF, TEF, DELF/DALF…) within the last 2 years', opts:[['Levels 1–4',0],['Levels 5–6',38],['Levels 7–8',44],['Levels 9–10',50],['Levels 11–12',50]]},
+        {k:'frS', t:'sel', label:'French — oral production (speaking), Québec level', opts:[['Levels 1–4',0],['Levels 5–6',38],['Levels 7–8',44],['Levels 9–10',50],['Levels 11–12',50]]},
+        {k:'frR', t:'sel', label:'French — written comprehension (reading), Québec level', opts:[['Levels 1–4',0],['Levels 5–6',38],['Levels 7–8',44],['Levels 9–10',50],['Levels 11–12',50]]},
+        {k:'frW', t:'sel', label:'French — written production (writing), Québec level', opts:[['Levels 1–4',0],['Levels 5–6',38],['Levels 7–8',44],['Levels 9–10',50],['Levels 11–12',50]]},
+        {k:'ageQ', t:'sel', label:'Your age', opts:[['18–19 years',110],['20–30 years',120],['31 years',110],['32 years',100],['33 years',90],['34 years',80],['35 years',75],['36 years',70],['37 years',65],['38 years',60],['39 years',55],['40 years',50],['41 years',40],['42 years',30],['43 years',20],['44 years',10],['45 years or older',0]]},
+        {k:'workQ', t:'sel', label:'Work experience — any occupation, any country, last 5 years', hint:'Full-time equivalent', opts:[['Less than 12 months',0],['12–23 months',20],['24–35 months',40],['36–47 months',50],['48 months or more',70]]},
+        {k:'eduQ', t:'sel', label:'Highest level of education', hint:'Foreign diplomas are mapped to their Québec equivalency', opts:[['Secondary general completed',13],['Secondary vocational, 600–899 hours (Québec diploma)',13],['Secondary vocational 900+ hours (Québec), or vocational 1 year+ full-time (outside Québec)',26],['Postsecondary general, 2 years full-time',39],['Postsecondary technical 900+ hours (Québec), or technical 1–2 years full-time (outside Québec)',52],['Postsecondary technical 3 years full-time, or university 1st cycle 1 year full-time',78],['University 1st cycle, 2 years full-time',91],['University 1st cycle, 3–4 years full-time',104],['University 1st cycle 5+ years full-time, or 2nd cycle 1 year full-time',110],['University 2nd cycle, 2+ years full-time',117],['Medical specialisation 2+ years full-time, or 3rd cycle (doctorate)',130]]},
+        {k:'diag', t:'sel', label:'Labour-market diagnosis of your main occupation in Québec', hint:'Québec publishes a diagnosis (balanced / slight deficit / deficit) for every occupation. If you don’t know yours, leave “balanced” — it is the cautious choice', opts:[['Balanced, or no diagnosis',0],['Slight deficit',1],['Deficit',2]]},
+        {k:'occExp', t:'sel', label:'Your experience in that main occupation, last 5 years', opts:[['Less than 12 months',0],['12–23 months',1],['24–35 months',2],['36–47 months',3],['48–60 months',4]]},
+        {k:'qcDip', t:'sel', label:'Highest Québec diploma', opts:[['No Québec diploma',0],['Secondary general completed',20],['Secondary vocational (DEP/ASP), 600–899 hours',20],['Secondary vocational (DEP), 900+ hours',40],['Postsecondary general, 2 years full-time',60],['Postsecondary technical, 900+ hours',80],['Postsecondary technical, 3 years full-time',120],['University 1st cycle, 1 year full-time',120],['University 1st cycle, 2 years full-time',140],['University 1st cycle, 3–4 years full-time',160],['University 1st cycle, 5+ years full-time',170],['University 2nd cycle, 1 year full-time',170],['University 2nd cycle, 2+ years full-time',180],['University medical specialisation, 2+ years full-time',200],['University 3rd cycle (doctorate)',200]]},
+        {k:'qcWork', t:'sel', label:'Work experience in Québec, last 5 years', opts:[['Less than 12 months',0],['12–23 months',40],['24–35 months',80],['36–47 months',120],['48–60 months',160]]},
+        {k:'cmmRes', t:'sel', label:'Time living outside the Montréal metropolitan area (stay still ongoing)', opts:[['0–5 months / I live in the Montréal area',0],['6–11 months',6],['12–23 months',16],['24–35 months',24],['36–47 months',32],['48 months or more',40]]},
+        {k:'cmmWork', t:'sel', label:'Work experience outside the Montréal metropolitan area', opts:[['0–5 months',0],['6–11 months',9],['12–23 months',24],['24–35 months',36],['36–47 months',48],['48 months or more',60]]},
+        {k:'cmmStudy', t:'sel', label:'Study stay outside the Montréal metropolitan area', opts:[['0–5 months',0],['6–11 months',3],['12–23 months',8],['24–35 months',12],['36–47 months',16],['48 months or more',20]]},
+        {k:'qcOffer', t:'sel', label:'Validated job offer in your main occupation', opts:[['No validated job offer',0],['Validated job offer inside the Montréal metropolitan area',30],['Validated job offer outside the Montréal metropolitan area',50]]},
+        {k:'auth', t:'chk', label:'I hold an authorisation to practise my profession in Québec, or my training/diploma is recognised by the Québec regulatory authority', pts:50},
+        {k:'studyStay', t:'sel', label:'Study stay in Québec that did NOT lead to a Québec diploma', hint:'At a designated learning institution; language courses don’t count', opts:[['No such study stay',0],['6–11 months — completed',1],['6–11 months — still in progress',5],['12–23 months — completed',3],['12–23 months — still in progress',12],['24–35 months — completed',5],['24–35 months — still in progress',18],['36–47 months — completed',8],['36–47 months — still in progress',24],['48 months or more — completed',10],['48 months or more — still in progress',30],['Less than 6 months',0]]},
+        {k:'relative', t:'sel', label:'Relative in Québec', hint:'Must be 18+, a permanent resident or citizen, and you must plan to settle in their region outside Montréal', opts:[['No relative in Québec',0],['My parent, child or sibling',10],['My spouse’s child, parent or sibling',5]]},
+        {k:'spFrL', t:'sel', label:'SPOUSE — French oral comprehension, Québec level', hint:'Only counts if your spouse accompanies you', opts:[['Levels 1–3',0],['Level 4',4],['Levels 5–6',6],['Levels 7–8',8],['Levels 9–10',10],['Levels 11–12',10]]},
+        {k:'spFrS', t:'sel', label:'SPOUSE — French oral production, Québec level', opts:[['Levels 1–3',0],['Level 4',4],['Levels 5–6',6],['Levels 7–8',8],['Levels 9–10',10],['Levels 11–12',10]]},
+        {k:'spFrR', t:'sel', label:'SPOUSE — French written comprehension, Québec level', opts:[['Levels 1–3',0],['Level 4',4],['Levels 5–6',6],['Levels 7–8',8],['Levels 9–10',10],['Levels 11–12',10]]},
+        {k:'spFrW', t:'sel', label:'SPOUSE — French written production, Québec level', opts:[['Levels 1–3',0],['Level 4',4],['Levels 5–6',6],['Levels 7–8',8],['Levels 9–10',10],['Levels 11–12',10]]},
+        {k:'spAge', t:'sel', label:'SPOUSE — age', opts:[['20–30 years',20],['16–19 years',18],['31 years',18],['32 years',17],['33 years',16],['34 years',15],['35 years',14],['36 years',12],['37 years',10],['38 years',8],['39 years',7],['40 years',6],['41 years',5],['42 years',4],['43 years',3],['44 years',2],['45 years or older',0]]},
+        {k:'spQcWork', t:'sel', label:'SPOUSE — work experience in Québec, last 5 years', opts:[['0–5 months',0],['6–11 months',5],['12–23 months',10],['24–35 months',15],['36–47 months',23],['48–60 months',30]]},
+        {k:'spEdu', t:'sel', label:'SPOUSE — highest level of education', opts:[['Secondary general',2],['Secondary vocational, 600–899 hours (Québec)',2],['Secondary vocational 900+ hours (Québec), or vocational 1 year+ (outside Québec)',4],['Postsecondary general, 2 years',6],['Postsecondary technical 900+ hours (Québec), or 1–2 years (outside Québec)',8],['Postsecondary technical, 3 years, or university 1st cycle 1 year',12],['University 1st cycle, 2 years',14],['University 1st cycle, 3–4 years',16],['University 1st cycle 5+ years, or 2nd cycle 1 year',17],['University 2nd cycle, 2+ years',18],['Medical specialisation 2+ years, or 3rd cycle',20],['No completed education',0]]},
+        {k:'spQcDip', t:'sel', label:'SPOUSE — highest Québec diploma', opts:[['No Québec diploma',0],['Secondary general',3],['Vocational, 600–899 hours',3],['Vocational, 900+ hours',6],['Postsecondary general, 2 years',9],['Postsecondary technical, 900+ hours',12],['Postsecondary technical, 3 years',18],['University 1st cycle, 1 year',18],['University 1st cycle, 2 years',21],['University 1st cycle, 3–4 years',24],['University 1st cycle 5+ years, or 2nd cycle 1 year',25],['University 2nd cycle, 2+ years',27],['Medical specialisation 2+ years, or 3rd cycle',30]]}
+      ]
+    },
+    {
+      id:'nlpnp', tab:'Newfoundland & Labrador', name:'Newfoundland and Labrador (NLPNP)', program:'Point Assessment Grid — Express Entry Skilled Worker category', max:100, pass:67,
+      intro:'Newfoundland and Labrador scores Express Entry Skilled Worker applicants on this grid — you need at least 67 of 100 points. (The province’s other categories are eligibility-based, and its overall EOI selection weighs provincial priorities, not points.)',
+      source:'https://www.gov.nl.ca/immigration/files/AnnexA_PNP.pdf',
+      fields:[
+        {k:'edu', t:'sel', label:'Education and training', opts:[['Master’s or doctorate degree',28],['University degree requiring at least 3 years of full-time study',23],['Trade certification equivalent to journeyperson status in Newfoundland and Labrador',23],['Degree, diploma or certificate requiring at least 2 years of full-time post-secondary study',18],['Degree, diploma or certificate requiring at least 1 year of full-time post-secondary study',15],['Less than one year of post-secondary study, or none',0]]},
+        {k:'work5', t:'sel', label:'Skilled work experience — most recent 5 years', opts:[['5 years',15],['4 years',12],['3 years',9],['2 years',6],['1 year',3],['Less than 1 year',0]]},
+        {k:'work10', t:'sel', label:'Skilled work experience — 6 to 10 years before applying', opts:[['5 years',7],['4 years',6],['3 years',5],['2 years',4],['1 year',2],['Less than 1 year',0]]},
+        {k:'lang', t:'sel', label:'First official language (English or French)', opts:[['CLB 8 or higher',27],['CLB 7',23],['CLB 6',21],['CLB 5',19],['CLB 4 or lower, or no test',0]]},
+        {k:'age', t:'sel', label:'Age', opts:[['22–33 years',12],['34–45 years',10],['18–21 years',8],['46–50 years',8],['Under 18 years',0],['Over 50 years',0]]},
+        {k:'relative', t:'chk', label:'Close relative in Newfoundland and Labrador', hint:'You or your spouse: parent, sibling, grandparent, aunt, uncle, niece, nephew, cousin or step/in-law of the same — a citizen or permanent resident living in the province', pts:7},
+        {k:'nlwork', t:'chk', label:'I worked in Newfoundland and Labrador before — at least 12 months in the past 5 years on a valid work permit', pts:3},
+        {k:'nlstudy', t:'chk', label:'I studied in Newfoundland and Labrador before — at least one full-time academic year at a recognised institution on a valid study permit', pts:3}
+      ]
+    },
+    {
+      id:'owp', tab:'Ontario', name:'Ontario (OINP)', program:'Ontario Workforce Priority stream — the new single stream since June 2026', max:132, pass:null,
+      intro:'Ontario replaced all its old streams in June 2026 with this one employer-driven stream. Your employer registers the job offer first, then you register an Expression of Interest and are scored on the grid below (maximum 132 — Ontario publishes the factors, not an official total). There is no pass mark: candidates are invited to apply.',
+      source:'https://www.ontario.ca/page/ontario-workforce-priority-stream',
+      fields:[
+        {k:'physician', t:'chk', label:'I am a self-employed physician (OHIP billing number + CPSO registration)', hint:'Physicians don’t need a job offer and don’t score the wage factor — their maximum is 117', pts:0},
+        {k:'teer', t:'sel', label:'Job offer: NOC TEER category', hint:'Set from your employer’s job offer', opts:[['TEER 0 or 1',9],['TEER 2 or 3',6],['TEER 4',0],['TEER 5',0]]},
+        {k:'broad', t:'sel', label:'Job offer: broad occupational category (first digit of the NOC)', opts:[['Category 3 — health occupations',10],['Category 7 — trades, transport and equipment operators',8],['Category 2 — natural and applied sciences',6],['Category 0, 1, 4, 8 or 9',4],['Category 5 or 6 — sales, service, arts and sport',2]]},
+        {k:'wage', t:'sel', label:'Job offer: hourly wage', opts:[['$40.00 per hour or higher',15],['$35.00–$39.99 per hour',12],['$30.00–$34.99 per hour',10],['$25.00–$29.99 per hour',8],['$20.00–$24.99 per hour',5],['Under $20.00 per hour',0]]},
+        {k:'onexp', t:'sel', label:'Ontario work experience', hint:'In the job-offer position first; the “other Ontario work” options apply only if you have under 6 months in the position. Physicians: read “position” as your Ontario medical practice', opts:[['Over 24 months in the job-offer position',18],['13–24 months in the job-offer position',15],['6–12 months in the job-offer position',12],['Under 6 months in the position, but over 24 months of other Ontario work',12],['Under 6 months in the position, but 13–24 months of other Ontario work',9],['Under 6 months in the position, but 6–12 months of other Ontario work',6],['Under 6 months in the position and under 6 months of Ontario work overall',0]]},
+        {k:'earnings', t:'sel', label:'Canadian earnings history — your best single year', hint:'Per a CRA Notice of Assessment issued in the last five years', opts:[['$80,000 or more in a year',10],['$70,000–$79,999 in a year',8],['$50,000–$69,999 in a year',6],['$30,000–$49,999 in a year',4],['Under $30,000 in a year',0]]},
+        {k:'status', t:'sel', label:'Legal status in Canada', opts:[['Valid work permit',10],['Valid study permit',5],['No valid work or study permit',0]]},
+        {k:'edu', t:'sel', label:'Highest level of education', hint:'Canadian credential or an Educational Credential Assessment', opts:[['Doctorate, or a degree in medicine, dentistry, veterinary medicine or optometry',10],['Master’s degree',8],['University certificate or diploma above bachelor level',6],['Bachelor’s degree or equivalent',6],['Ontario College Graduate Certificate',5],['University certificate or diploma below bachelor level',5],['College, CEGEP or other non-university certificate or diploma',5],['Apprenticeship or trades certificate or diploma',5],['Less than a college or trade certificate',0]]},
+        {k:'canedu', t:'sel', label:'Canadian education credentials', hint:'Post-secondary, at least one year full-time, at an eligible Canadian institution', opts:[['More than one Canadian credential',10],['One Canadian credential',5],['No Canadian credential',0]]},
+        {k:'lang', t:'sel', label:'Official language ability — your lowest CLB across the four skills', hint:'On the better of your English / French tests', opts:[['CLB 9 or higher',15],['CLB 8',12],['CLB 7',8],['CLB 6',4],['CLB 5 or lower',0]]},
+        {k:'langs', t:'sel', label:'Knowledge of official languages', hint:'Two languages requires at least CLB 6 in all four skills on both tests', opts:[['Two official languages',10],['One official language',5]]},
+        {k:'region', t:'sel', label:'Location of the job (regional immigration)', opts:[['Northern Ontario',15],['Eastern Ontario',10],['Central Ontario, outside the GTA',10],['Southwestern Ontario',10],['Inside the GTA, except Toronto (Durham, Halton, Peel, York)',5],['Toronto',0]]}
+      ]
+    },
+    {
+      id:'nbpnp', tab:'New Brunswick', name:'New Brunswick (NBPNP)', program:'Express Entry stream — selection factors (Employment in NB & NB Interests pathways)', max:100, pass:67,
+      intro:'New Brunswick’s Express Entry stream scores you out of 100 and you need at least 67 to be eligible. (New Brunswick also runs a francophone Strategic Initiative grid and a Business Immigration grid, both with a 65-point pass mark; its Skilled Worker stream is eligibility-based with no points.)',
+      source:'https://www2.gnb.ca/content/dam/gnb/Corporate/Promo/Immigration/guide-nb-interests.pdf',
+      fields:[
+        {k:'age', t:'sel', label:'Age', opts:[['19–35 years',12],['36 years',11],['37 years',10],['38 years',9],['39 years',8],['40 years',7],['41 years',6],['42 years',5],['43 years',4],['44 years',3],['45 years',2],['46 years',1],['47 years or older',0]]},
+        {k:'bandL', t:'sel', label:'First language — Listening', hint:'Below CLB 7 in any skill makes you ineligible for this stream', opts:[['CLB 9 or higher',6],['CLB 8',5],['CLB 7',4],['Below CLB 7',0]]},
+        {k:'bandR', t:'sel', label:'First language — Reading', opts:[['CLB 9 or higher',6],['CLB 8',5],['CLB 7',4],['Below CLB 7',0]]},
+        {k:'bandW', t:'sel', label:'First language — Writing', opts:[['CLB 9 or higher',6],['CLB 8',5],['CLB 7',4],['Below CLB 7',0]]},
+        {k:'bandS', t:'sel', label:'First language — Speaking', opts:[['CLB 9 or higher',6],['CLB 8',5],['CLB 7',4],['Below CLB 7',0]]},
+        {k:'lang2', t:'sel', label:'Second official language', opts:[['CLB 5 or higher in all four skills',4],['CLB 4 or lower in any skill / no second-language test',0]]},
+        {k:'edu', t:'sel', label:'Education', opts:[['Doctorate (PhD)',25],['Master’s degree, or a professional degree (medicine, veterinary medicine, dentistry, optometry, law, chiropractic medicine, pharmacy)',23],['Two or more post-secondary programs, one of at least 3 years',22],['Post-secondary program of at least 3 years',21],['Post-secondary program of 2 years',19],['Post-secondary program of 1 year',15],['High school',5],['Less than high school',0]]},
+        {k:'work', t:'sel', label:'Work experience — TEER 0, 1, 2 or 3, past 10 years', opts:[['6 or more years',15],['4–5 years',13],['2–3 years',11],['1 year',9],['Less than 1 year',0]]},
+        {k:'arranged', t:'chk', label:'I work in New Brunswick on a closed work permit for the employer named on it', hint:'LMIA-based for a TEER 0–3 job, or LMIA-exempt with 12+ consecutive months for that employer. Scores 10 here and 5 more under Adaptability', pts:10},
+        {k:'nbWork', t:'chk', label:'I previously worked in New Brunswick — at least 1 year full-time in a TEER 0–3 job in the past 10 years', pts:10},
+        {k:'nbStudy', t:'chk', label:'I previously studied in New Brunswick — at least 2 academic years full-time in a program of at least 2 years', pts:5},
+        {k:'relative', t:'chk', label:'A close relative (18+, citizen or permanent resident, living in NB for 12+ months) — mine or my spouse’s', pts:5},
+        {k:'spLang', t:'chk', label:'My spouse/partner has at least CLB 4 in all four skills (English or French)', pts:5},
+        {k:'spWork', t:'chk', label:'My spouse/partner worked in New Brunswick — at least 1 year full-time while authorised', pts:5},
+        {k:'spStudy', t:'chk', label:'My spouse/partner previously studied in New Brunswick (same 2-year definition as above)', pts:5}
+      ]
+    },
+    {
+      id:'peipnp', tab:'Prince Edward Island', name:'Prince Edward Island (PEI PNP)', program:'Express Entry Points Grid — PEI Express Entry Category', max:100, pass:null,
+      intro:'PEI scores Express Entry candidates out of 100 on its own grid — the work-experience and employment factors score differently depending on whether you hold a PEI job offer. A further 10 bonus points are possible if you show proficiency in both official languages (maximum 110). PEI publishes no pass mark: it invites the strongest EOIs by its labour-market priorities. (PEI’s Labour Impact streams use a similar grid in the Workforce Application Guide.)',
+      source:'https://www.princeedwardisland.ca/sites/default/files/publications/pei_pnp_express_entry_guide.pdf',
+      fields:[
+        {k:'offer', t:'chk', label:'I have a job offer in PEI', hint:'Changes how the work-experience and employment factors score', pts:0},
+        {k:'age', t:'sel', label:'Age', opts:[['25–29 years',20],['30–44 years',15],['45–49 years',10],['18–24 years',7],['Over 49 years',0]]},
+        {k:'lang', t:'sel', label:'Language — your LOWEST CLB/NCLC across the four skills', hint:'From a valid test taken within the last 2 years', opts:[['CLB/NCLC 9 or 10',20],['CLB/NCLC 8',15],['CLB/NCLC 7',10],['Below CLB/NCLC 7',0]]},
+        {k:'edu', t:'sel', label:'Highest level of education completed', opts:[['Master’s level or PhD (after a Bachelor’s or Master’s degree)',15],['Bachelor’s degree — at least 3 years of full-time study',12],['Post-secondary diploma in a specific trade — at least 2 years full-time after secondary school',10],['Completion of secondary school',0],['Less than secondary school',0]]},
+        {k:'work', t:'sel', label:'Work experience in the occupation on your Express Entry profile', opts:[['More than 6 years',0],['4–6 years',1],['2–4 years',2],['1–2 years',3],['Less than 1 year',4]]},
+        {k:'empWorking', t:'chk', label:'I am working in PEI on a valid work permit', hint:'Employment factor — only scored if you have a PEI job offer', pts:5},
+        {k:'empRelated', t:'chk', label:'My PEI job offer is related to my education', hint:'Employment factor — only scored if you have a PEI job offer', pts:5},
+        {k:'empQual', t:'chk', label:'My foreign qualification has been verified with the regulated body in PEI', hint:'This is separate from an ECA', pts:5},
+        {k:'empYear', t:'chk', label:'I have at least 1 year of continuous full-time work experience in PEI', pts:5},
+        {k:'adFamily', t:'chk', label:'Close family member(s) living in PEI for at least 12 consecutive months (permanent residents or citizens)', pts:5},
+        {k:'adSpLang', t:'chk', label:'My spouse/partner and/or dependent child(ren) have language ability of CLB/NCLC 6 or higher', pts:5},
+        {k:'adProperty', t:'chk', label:'I have owned residential property in PEI for at least 12 consecutive months', pts:5},
+        {k:'adGrad', t:'chk', label:'I graduated from a recognised PEI post-secondary institution', pts:5},
+        {k:'adSpWork', t:'chk', label:'My spouse/partner has at least 3 years of work experience in the last 5 years', pts:5},
+        {k:'adChild', t:'chk', label:'My dependent child(ren) have been enrolled in a PEI educational institution for at least 6 continuous months', pts:5},
+        {k:'bilingual', t:'chk', label:'I can show proficiency in BOTH official languages (English and French) — bonus points', pts:10}
+      ]
+    }
+  ];
+
+  var COMPUTE = {
+    sinp: function(v, on){
+      var connRow, connLabel;
+      if (v.conn === 30) { connRow = 30; connLabel = 'Saskatchewan connection — job offer'; }
+      else { connRow = Math.min(30, v.conn + v.skwork + v.skstudy); connLabel = 'Saskatchewan connection & adaptability'; }
+      var rows = [['Education and training', v.edu], ['Work experience — last 5 years', v.work5], ['Work experience — 6 to 10 years ago', v.work10], ['First language', v.lang1], ['Second language', v.lang2], ['Age', v.age], [connLabel, connRow]];
+      var total = rows.reduce(function(s, r){ return s + r[1]; }, 0);
+      var verdict = total >= 60
+        ? 'You meet Saskatchewan’s 60-point minimum — profiles like this can submit an Expression of Interest. The pool then ranks candidates, and Saskatchewan invites the strongest profiles in its draws.'
+        : 'You are ' + (60 - total) + ' points below Saskatchewan’s 60-point minimum. The biggest levers are usually language scores, a Saskatchewan connection, and more skilled experience.';
+      return { total: total, rows: rows, verdict: verdict };
+    },
+    mpnp: function(v, on){
+      var lang = v.bandL + v.bandR + v.bandW + v.bandS + v.lang2;
+      var work = v.work + (on.licensed ? 100 : 0);
+      var regionalAdd = (on.regional && v.conn > 0 && v.conn < 500) ? 50 : 0;
+      var adapt = Math.min(500, v.conn + regionalAdd);
+      var risk = (on.riskWork ? -100 : 0) + (on.riskStudy ? -100 : 0);
+      var rows = [['Language proficiency', lang], ['Age', v.age], ['Work experience', work], ['Education', v.edu], ['Adaptability — strongest Manitoba connection' + (regionalAdd ? ' + regional bonus' : ''), adapt]];
+      if (risk) rows.push(['Risk assessment deductions', risk]);
+      var total = lang + v.age + work + v.edu + adapt + risk;
+      var verdict = v.conn === 0
+        ? 'Manitoba requires at least one connection to the province to submit an EOI — with no connection selected, this profile could not enter the pool yet.'
+        : 'Manitoba invites the highest-ranking EOI profiles in its regular draws — there is no fixed pass mark, so every extra point improves your position.';
+      return { total: total, rows: rows, verdict: verdict };
+    },
+    bcpnp: function(v, on, idx, wage){
+      var exp = Math.min(40, v.exp + (on.expCan ? 10 : 0) + (on.expBC ? 10 : 0));
+      var edu = Math.min(40, v.edu + v.eduLoc + (on.designation ? 5 : 0));
+      var lang = Math.min(40, v.lang + (on.bilingual ? 10 : 0));
+      var wagePts = wage < 16 ? 0 : (wage >= 70 ? 55 : Math.floor(wage) - 15);
+      var area = Math.min(25, v.area + ((on.regional && v.area > 0) ? 10 : 0));
+      var rows = [['Directly related work experience', exp], ['Education', edu], ['Language proficiency', lang], ['Hourly wage of the B.C. job offer', wagePts], ['Area of employment within B.C.', area]];
+      var total = exp + edu + lang + wagePts + area;
+      return { total: total, rows: rows, verdict: 'B.C. invites the highest-scoring registrations in its regular and targeted draws — there is no fixed pass mark. A higher wage offer and work outside Metro Vancouver are the strongest levers here.' };
+    },
+    aaip: function(v, on){
+      var lang = Math.max(v.langEn, v.langFr) + ((on.bilingual && v.langEn > 0 && v.langFr > 0) ? 3 : 0);
+      var rural = (v.offer > 0 && on.rural) ? 6 : 0;
+      var loc = v.offer > 0 ? v.jobLoc : 0;
+      var reg = on.regulated ? 10 : 0;
+      var rows = [['Education — level and location', v.eduLvl + v.eduLoc], ['Language — best of English / French, plus bilingual bonus', lang], ['Work experience — total and Canadian', v.workTot + v.workCan], ['Age', v.age], ['Family connection in Alberta', on.family ? 8 : 0], ['Alberta job offer', v.offer], ['Rural Renewal / priority-sector endorsement', rural], ['Job offer location', loc], ['Regulated occupation with certification', reg]];
+      var total = rows.reduce(function(s, r){ return s + r[1]; }, 0);
+      return { total: total, rows: rows, verdict: 'Alberta’s draws select EOIs by sector and labour-market priorities rather than a fixed pass mark — a stronger score and an in-demand occupation both help.' };
+    },
+    quebec: function(v, on, idx){
+      var FR_SP = [0, 30, 35, 40, 40], AGE_SP = [90, 100, 95, 90, 81, 72, 68, 63, 59, 54, 50, 45, 36, 27, 18, 9, 0], WORK_SP = [0, 15, 30, 35, 50], EDU_SP = [11, 11, 22, 33, 44, 66, 77, 88, 93, 99, 110];
+      var sp = !!on.spouse;
+      var fr = sp ? (FR_SP[idx.frL] + FR_SP[idx.frS] + FR_SP[idx.frR] + FR_SP[idx.frW]) : (v.frL + v.frS + v.frR + v.frW);
+      var age = sp ? AGE_SP[idx.ageQ] : v.ageQ;
+      var work = sp ? WORK_SP[idx.workQ] : v.workQ;
+      var edu = sp ? EDU_SP[idx.eduQ] : v.eduQ;
+      var DIAG = [[0, 5, 10, 15, 25], [0, 70, 80, 90, 100], [0, 90, 100, 110, 120]];
+      var diagPts = DIAG[v.diag][v.occExp];
+      var cmm = v.cmmRes + v.cmmWork + v.cmmStudy;
+      var auth = on.auth ? 50 : 0;
+      var spousePts = sp ? (v.spFrL + v.spFrS + v.spFrR + v.spFrW + v.spAge + v.spQcWork + v.spEdu + v.spQcDip) : 0;
+      var rows = [['Human capital — French proficiency', fr], ['Human capital — age', age], ['Human capital — work experience', work], ['Human capital — education', edu], ['Québec’s needs — occupation diagnosis × your experience in it', diagPts], ['Québec’s needs — Québec diploma', v.qcDip], ['Québec’s needs — work experience in Québec', v.qcWork], ['Québec’s needs — stay outside Montréal (living + working + studying)', cmm], ['Québec’s needs — validated job offer', v.qcOffer], ['Québec’s needs — authorisation to practise / recognised training', auth], ['Adaptation — study stay in Québec and relatives', v.studyStay + v.relative]];
+      if (sp) rows.push(['Adaptation — spouse factors', spousePts]);
+      var total = rows.reduce(function(s, r){ return s + r[1]; }, 0);
+      return { total: total, max: sp ? 1300 : 1400, rows: rows, verdict: 'Arrima has no fixed pass mark — each invitation round sets its own minimum score, and you must also meet your stream’s conditions (for example, French oral level 7 for Stream 1, level 5 for Stream 2). French level and Québec experience move this score the most.' };
+    },
+    nlpnp: function(v, on){
+      var work = Math.min(20, v.work5 + v.work10);
+      var conn = (on.relative ? 7 : 0) + (on.nlwork ? 3 : 0) + (on.nlstudy ? 3 : 0);
+      var rows = [['Education and training', v.edu], ['Skilled work experience', work], ['Language ability — first official language', v.lang], ['Age', v.age], ['Connection to Newfoundland and Labrador', conn]];
+      var total = v.edu + work + v.lang + v.age + conn;
+      var verdict = total >= 67
+        ? 'You meet the 67-point minimum for Newfoundland and Labrador’s Express Entry Skilled Worker category.'
+        : 'You are ' + (67 - total) + ' points below the 67-point minimum for this category. Language and education carry the most weight on this grid.';
+      return { total: total, rows: rows, verdict: verdict };
+    },
+    owp: function(v, on){
+      var wage = on.physician ? 0 : v.wage;
+      var rows = [['Job offer — NOC TEER category', v.teer], ['Job offer — broad occupational category', v.broad], ['Job offer — hourly wage' + (on.physician ? ' (not applicable for physicians)' : ''), wage], ['Ontario work experience', v.onexp], ['Canadian earnings history', v.earnings], ['Legal status in Canada', v.status], ['Highest level of education', v.edu], ['Canadian education credentials', v.canedu], ['Official language ability', v.lang], ['Knowledge of official languages', v.langs], ['Regional immigration — job location', v.region]];
+      var total = rows.reduce(function(s, r){ return s + r[1]; }, 0);
+      return { total: total, max: on.physician ? 117 : 132, rows: rows, verdict: 'Ontario invites candidates from the EOI pool — there is no published pass mark or cut-off. Remember the process starts with your employer: they must register the job offer in the OINP Employer Portal before you can register your EOI.' };
+    },
+    nbpnp: function(v, on){
+      var lang = v.bandL + v.bandR + v.bandW + v.bandS + v.lang2;
+      var adaptRaw = (on.nbWork ? 10 : 0) + (on.nbStudy ? 5 : 0) + (on.arranged ? 5 : 0) + (on.relative ? 5 : 0) + (on.spLang ? 5 : 0) + (on.spWork ? 5 : 0) + (on.spStudy ? 5 : 0);
+      var adapt = Math.min(10, adaptRaw);
+      var rows = [['Age', v.age], ['Language skills', lang], ['Education', v.edu], ['Work experience', v.work], ['Arranged employment in New Brunswick', on.arranged ? 10 : 0], ['Adaptability (capped at 10)', adapt]];
+      var total = v.age + lang + v.edu + v.work + (on.arranged ? 10 : 0) + adapt;
+      var verdict = total >= 67
+        ? 'You meet the 67-point pass mark for New Brunswick’s Express Entry stream.'
+        : 'You are ' + (67 - total) + ' points below the 67-point pass mark. Language is scored per skill here, so raising your weakest skill pays off four times over.';
+      return { total: total, rows: rows, verdict: verdict };
+    },
+    peipnp: function(v, on, idx){
+      var WORK_WITH = [15, 15, 10, 5, 0], WORK_WITHOUT = [20, 15, 10, 5, 0];
+      var work = on.offer ? WORK_WITH[idx.work] : WORK_WITHOUT[idx.work];
+      var employment = ((on.offer && on.empWorking) ? 5 : 0) + ((on.offer && on.empRelated) ? 5 : 0) + (on.empQual ? 5 : 0) + (on.empYear ? 5 : 0);
+      employment = Math.min(on.offer ? 15 : 10, employment);
+      var adapt = Math.min(15, (on.adFamily ? 5 : 0) + (on.adSpLang ? 5 : 0) + (on.adProperty ? 5 : 0) + (on.adGrad ? 5 : 0) + (on.adSpWork ? 5 : 0) + (on.adChild ? 5 : 0));
+      var bonus = on.bilingual ? 10 : 0;
+      var rows = [['Age', v.age], ['Language (lowest skill)', v.lang], ['Education', v.edu], ['Work experience (' + (on.offer ? 'with' : 'without') + ' a PEI job offer)', work], ['Employment', employment], ['Adaptability (capped at 15)', adapt], ['Bilingual bonus', bonus]];
+      var total = v.age + v.lang + v.edu + work + employment + adapt + bonus;
+      return { total: total, max: on.bilingual ? 110 : 100, rows: rows, verdict: 'PEI publishes no minimum EOI score — invitations go to the strongest profiles for the province’s labour-market needs in each draw.' };
+    }
+  };
+
+  var SOON = [];
+  var tabsEl = document.getElementById('pnpTabs');
+  var panelsEl = document.getElementById('pnpPanels');
+
+  function el(html){ var d = document.createElement('div'); d.innerHTML = html; return d.firstElementChild; }
+
+  PROVINCES.forEach(function(p, pi){
+    var tab = el('<button type="button" class="pnp-tab' + (pi === 0 ? ' on' : '') + '" role="tab">' + p.tab + '</button>');
+    tab.addEventListener('click', function(){
+      tabsEl.querySelectorAll('.pnp-tab').forEach(function(t){ t.classList.remove('on'); });
+      tab.classList.add('on');
+      panelsEl.querySelectorAll('.pnp-panel').forEach(function(pn){ pn.classList.remove('on'); });
+      document.getElementById('panel-' + p.id).classList.add('on');
+    });
+    tabsEl.appendChild(tab);
+
+    var panel = el('<div class="pnp-panel' + (pi === 0 ? ' on' : '') + '" id="panel-' + p.id + '"></div>');
+    panel.appendChild(el('<h3 style="font-size:19px;font-weight:900">' + p.name + ' <span style="font-weight:600;color:var(--muted);font-size:14px">· ' + p.program + '</span></h3>'));
+    panel.appendChild(el('<p style="margin:6px 0 16px">' + p.intro + '</p>'));
+    var grid = el('<div class="pnp-grid"></div>');
+    p.fields.forEach(function(f){
+      var wrap;
+      if (f.t === 'sel'){
+        wrap = el('<div class="pnp-field"><label for="f-' + p.id + '-' + f.k + '">' + f.label + (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label></div>');
+        var sel = document.createElement('select');
+        sel.id = 'f-' + p.id + '-' + f.k;
+        f.opts.forEach(function(o){ var op = document.createElement('option'); op.textContent = o[0]; op.value = o[1]; sel.appendChild(op); });
+        wrap.appendChild(sel);
+      } else if (f.t === 'wage'){
+        wrap = el('<div class="pnp-field"><label for="f-' + p.id + '-' + f.k + '">' + f.label + (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label></div>');
+        var inp = document.createElement('input');
+        inp.type = 'number'; inp.min = '0'; inp.step = '0.5'; inp.value = '25'; inp.id = 'f-' + p.id + '-' + f.k;
+        wrap.appendChild(inp);
+      } else {
+        wrap = el('<div class="pnp-check"><input type="checkbox" id="f-' + p.id + '-' + f.k + '"><label for="f-' + p.id + '-' + f.k + '">' + f.label + (f.hint ? '<span class="hint">' + f.hint + '</span>' : '') + '</label></div>');
+      }
+      grid.appendChild(wrap);
+    });
+    panel.appendChild(grid);
+    var result = el('<div class="pnp-result"><div class="pnp-score"><span id="score-' + p.id + '">0</span> <small>/ ' + p.max + '</small></div><p class="pnp-verdict" id="verdict-' + p.id + '"></p><div class="pnp-break" id="break-' + p.id + '"></div></div>');
+    panel.appendChild(result);
+    panel.appendChild(el('<p class="pnp-src">Grid source: <a href="' + p.source + '" target="_blank" rel="noopener">official ' + p.tab + ' program page</a>. Your points update as you answer.</p>'));
+    panelsEl.appendChild(panel);
+
+    function collect(){
+      var v = {}, on = {}, idx = {}, wage = 0;
+      p.fields.forEach(function(f){
+        var node = document.getElementById('f-' + p.id + '-' + f.k);
+        if (f.t === 'sel'){ v[f.k] = parseInt(node.value, 10) || 0; idx[f.k] = node.selectedIndex; }
+        else if (f.t === 'wage'){ wage = parseFloat(node.value) || 0; v[f.k] = 0; }
+        else { on[f.k] = node.checked; v[f.k] = node.checked ? f.pts : 0; }
+      });
+      return { v: v, on: on, idx: idx, wage: wage };
+    }
+    function update(){
+      var c = collect();
+      var r = COMPUTE[p.id](c.v, c.on, c.idx, c.wage);
+      document.getElementById('score-' + p.id).textContent = r.total;
+      var small = document.querySelector('#panel-' + p.id + ' .pnp-score small');
+      if (small) small.textContent = '/ ' + (r.max || p.max);
+      document.getElementById('verdict-' + p.id).textContent = r.verdict;
+      document.getElementById('break-' + p.id).innerHTML = r.rows.map(function(row){ return '<div class="row"><span>' + row[0] + '</span><b>' + row[1] + '</b></div>'; }).join('');
+    }
+    panel.addEventListener('change', update);
+    panel.addEventListener('input', update);
+    update();
+  });
+
+  SOON.forEach(function(s){
+    tabsEl.appendChild(el('<span class="pnp-tab soon" title="Calculator being verified against the official grid">' + s + ' · soon</span>'));
+  });
+})();
+</script>
 
       <!-- ================= FULL REPORT ================= -->
       <section class="report hidden" id="fullReport" aria-labelledby="h-report">
@@ -1987,6 +2474,33 @@
       } else {
         restoreSnapshot();
       }
+    })();
+    </script>
+    <script>
+    (function(){
+      var form = document.getElementById('subForm');
+      if(!form) return;
+      var msg = document.getElementById('subMsg');
+      var btn = document.getElementById('subBtn');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var email = document.getElementById('subEmail').value.trim();
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.textContent = 'Please enter a valid email address.'; msg.className = 'sub-msg err'; return; }
+        btn.disabled = true; btn.textContent = 'Subscribing…'; msg.textContent = ''; msg.className = 'sub-msg';
+        fetch('https://formsubmit.co/ajax/suraganiteja@gmail.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ email: email, _subject: 'New CRS draw-alert subscriber', source: 'crs.velvook.com subscribe form' })
+        }).then(function(r){ return r.json(); }).then(function(data){
+          if(data && (data.success === 'true' || data.success === true)){
+            form.reset(); btn.textContent = 'Subscribed ✓'; msg.textContent = 'You’re on the list — watch your inbox for the next draw alert.'; msg.className = 'sub-msg ok';
+          } else {
+            btn.disabled = false; btn.textContent = 'Subscribe free'; msg.textContent = 'That didn’t go through — please try again in a moment.'; msg.className = 'sub-msg err';
+          }
+        }).catch(function(){
+          btn.disabled = false; btn.textContent = 'Subscribe free'; msg.textContent = 'Something went wrong — please try again in a moment.'; msg.className = 'sub-msg err';
+        });
+      });
     })();
     </script>
   </body>
