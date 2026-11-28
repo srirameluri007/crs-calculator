@@ -393,9 +393,21 @@
         .report,.report p,.report .muted,.r-profile div span:first-child{color:#111 !important}
         .report-score .rs,.report-score .rs small{color:#111 !important}
       }
+      .pnp-ticker{display:block;background:#230251;color:#fbaf00;text-decoration:none;overflow:hidden;padding:9px 0;border-bottom:2px solid #fbaf00;position:relative;z-index:6}
+      .pnp-ticker-track{display:inline-flex;white-space:nowrap;animation:pnpTick 40s linear infinite;font-weight:900;letter-spacing:.05em;font-size:14px;font-family:Lato,system-ui,sans-serif}
+      .pnp-ticker:hover .pnp-ticker-track{animation-play-state:paused}
+      .pnp-ticker-chunk{padding-right:16px}
+      @keyframes pnpTick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
     </style>
   </head>
   <body>
+    <!-- ======= PNP ticker ======= -->
+    <a class="pnp-ticker" href="#pnpHub" aria-label="New: PNP nominee program calculators for all provinces — jump to the calculators">
+      <span class="pnp-ticker-track">
+        <span class="pnp-ticker-chunk">NEW — WE NOW HAVE PNP NOMINEE PROGRAM CALCULATORS • SASKATCHEWAN • MANITOBA • BRITISH COLUMBIA • ALBERTA • ONTARIO • NEW BRUNSWICK • PRINCE EDWARD ISLAND • NEWFOUNDLAND &amp; LABRADOR • QUEBEC • CHECK YOUR PROVINCIAL POINTS FREE • A NOMINATION ADDS +600 CRS POINTS •</span>
+        <span class="pnp-ticker-chunk" aria-hidden="true">NEW — WE NOW HAVE PNP NOMINEE PROGRAM CALCULATORS • SASKATCHEWAN • MANITOBA • BRITISH COLUMBIA • ALBERTA • ONTARIO • NEW BRUNSWICK • PRINCE EDWARD ISLAND • NEWFOUNDLAND &amp; LABRADOR • QUEBEC • CHECK YOUR PROVINCIAL POINTS FREE • A NOMINATION ADDS +600 CRS POINTS •</span>
+      </span>
+    </a>
     <!-- ======= side rails (wide screens) ======= -->
     <aside class="rail rail-left" aria-label="Latest cut-offs and CRS tips">
       <div class="rcard">
@@ -922,6 +934,20 @@
   .pnp-break .row:first-child{border-top:none}
   .pnp-break .row b{font-family:"Lato",sans-serif;white-space:nowrap}
   .pnp-src{font-size:12.5px;color:var(--muted);margin-top:12px}
+  .pnp-guide{margin-top:18px;border:2px dashed #fbaf00;border-radius:14px;padding:18px;background:#fffdf4}
+  .pnp-guide h4{margin:0 0 8px;font-size:17px;font-weight:900}
+  .pnp-guide ul{margin:8px 0 8px 18px;padding:0}
+  .pnp-guide li{margin:4px 0}
+  .pg-pay{display:inline-block;background:#230251;color:#fbaf00;font-weight:900;padding:12px 20px;border-radius:10px;text-decoration:none;margin-top:8px}
+  .pg-fine{font-size:13px;color:var(--muted);margin:10px 0 0}
+  .pg-banner{background:#e6f4dc;border:1px solid #2f7d1e;border-radius:11px;padding:12px 14px;margin:0}
+  .pg-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+  .pg-pdf{background:#230251;color:#fbaf00;font-weight:800;padding:11px 16px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center}
+  .pg-pdf2{border:1.5px solid #230251;color:#230251;font-weight:700;padding:11px 16px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center}
+  .pg-body h5{margin:18px 0 6px;font-size:15.5px;font-weight:900;color:#230251}
+  .pg-body ol{margin:6px 0 6px 20px;padding:0}
+  .pg-body li{margin:5px 0}
+  .pg-sample{background:#efe9fa;border-radius:11px;padding:12px 14px;font-style:italic;margin:8px 0}
 </style>
 <section class="card pnp" id="pnpHub" aria-labelledby="h-pnp">
   <h2 id="h-pnp" style="font-size:24px;font-weight:900">Provincial Nominee Programs — check your points by province</h2>
@@ -1225,6 +1251,9 @@
     }
   };
 
+  var PNP_STRIPE_URL = 'https://buy.stripe.com/5kQ8wIffP4XY1prdjr3sI00';
+  var LAST = {};
+  var PANELS = {};
   var SOON = [];
   var tabsEl = document.getElementById('pnpTabs');
   var panelsEl = document.getElementById('pnpPanels');
@@ -1266,6 +1295,30 @@
     panel.appendChild(grid);
     var result = el('<div class="pnp-result"><div class="pnp-score"><span id="score-' + p.id + '">0</span> <small>/ ' + p.max + '</small></div><p class="pnp-verdict" id="verdict-' + p.id + '"></p><div class="pnp-break" id="break-' + p.id + '"></div></div>');
     panel.appendChild(result);
+    var guide = el('<div class="pnp-guide" id="guide-' + p.id + '"></div>');
+    guide.innerHTML =
+      '<div class="pg-lock" id="pglock-' + p.id + '">' +
+        '<h4>🔒 ' + p.tab + ' Nomination Guide — $1.99</h4>' +
+        '<p>Your score above is <b>free</b>. This guide turns it into a plan you can act on — built for ' + p.name + ':</p>' +
+        '<ul>' +
+          '<li><b>Full requirements checklist</b> — everything ' + p.tab + ' asks for, in plain words</li>' +
+          '<li><b>How you get the nomination</b> — the exact steps, in order, from profile to PR</li>' +
+          '<li><b>Employer requirements</b> — what your employer must be, and what they must do</li>' +
+          '<li><b>“Talk to your employer” section</b> — the nominee program explained clearly, so you can convince your employer, with a ready-to-send message</li>' +
+          '<li><b>Your score breakdown included</b> — the PDF is generated from the answers you entered above</li>' +
+        '</ul>' +
+        '<a class="pg-pay" id="pgpay-' + p.id + '" href="' + PNP_STRIPE_URL + '" target="_blank" rel="noopener">Get the ' + p.tab + ' guide · $1.99 via Stripe</a>' +
+        '<p class="pg-fine">One-time payment, no subscription. Stripe opens in a new tab; after paying, Stripe brings you back to this page and your guide unlocks automatically — your answers are saved and restored for you.</p>' +
+      '</div>' +
+      '<div class="pg-open hidden" id="pgopen-' + p.id + '">' +
+        '<p class="pg-banner"><b>Payment received — thank you.</b> Your ' + p.tab + ' Nomination Guide is unlocked below, built from the answers you entered. Your PDF is ready — tap <b>“Open my PDF”</b>, then tap the download icon in the PDF tab to save it.</p>' +
+        '<div class="pg-actions">' +
+          '<a class="pg-pdf" id="pgpdf-' + p.id + '" href="#" target="_blank" rel="noopener">Open my PDF — then tap the download icon to save it</a>' +
+          '<a class="pg-pdf2" id="pgpdfdl-' + p.id + '" href="#" download="">Or try a direct download</a>' +
+        '</div>' +
+        '<div class="pg-body" id="pgbody-' + p.id + '"></div>' +
+      '</div>';
+    panel.appendChild(guide);
     panel.appendChild(el('<p class="pnp-src">Grid source: <a href="' + p.source + '" target="_blank" rel="noopener">official ' + p.tab + ' program page</a>. Your points update as you answer.</p>'));
     panelsEl.appendChild(panel);
 
@@ -1287,12 +1340,449 @@
       if (small) small.textContent = '/ ' + (r.max || p.max);
       document.getElementById('verdict-' + p.id).textContent = r.verdict;
       document.getElementById('break-' + p.id).innerHTML = r.rows.map(function(row){ return '<div class="row"><span>' + row[0] + '</span><b>' + row[1] + '</b></div>'; }).join('');
+      LAST[p.id] = { total: r.total, max: (r.max || p.max), verdict: r.verdict, rows: r.rows };
     }
     panel.addEventListener('change', update);
     panel.addEventListener('input', update);
     update();
+    PANELS[p.id] = { p: p, collect: collect, update: update };
   });
 
+
+  /* ================= PNP NOMINATION GUIDE ($1.99) ================= */
+  var GUIDE = {
+    sinp: {
+      reqs: [
+        'Score at least 60 of 110 on the SINP points grid — the calculator above uses this exact grid.',
+        'Express Entry sub-category: an active Express Entry profile and Job Seeker Validation Code, and you must qualify for FSW, FST or CEC.',
+        'Occupations In-Demand sub-category: at least one year of work experience in the last 10 years in an eligible in-demand occupation.',
+        'Language: at least CLB 4 — and for the Express Entry sub-category, the language level of the federal program you qualify under.',
+        'Education: a post-secondary degree, diploma or certificate of at least one year, with an ECA if it was earned outside Canada.',
+        'Settlement funds for you and your family, plus a settlement plan showing you intend to live and work in Saskatchewan.',
+        'If your occupation is regulated in Saskatchewan, proof that you can be licensed or certified.'
+      ],
+      steps: [
+        'Create an Expression of Interest (EOI) profile in Saskatchewan’s online system (OASIS) and enter the candidate pool.',
+        'Saskatchewan holds EOI draws and invites the highest-scoring candidates in targeted occupations.',
+        'If invited, submit the full application with all documents within the deadline (usually 60 days) and pay the SINP application fee.',
+        'SINP assesses your application and issues a nomination certificate.',
+        'Express Entry candidates: accept the nomination in your IRCC account — 600 points are added — then wait for an Invitation to Apply and submit your PR application to IRCC.',
+        'Occupations In-Demand candidates: apply to IRCC for permanent residence with your nomination certificate.'
+      ],
+      employer: [
+        'Only needed for the job-offer route (Employment Offer sub-category): your employer must register with SINP and obtain a Job Approval Letter (JAL) for your position BEFORE you can apply — you cannot start without it.',
+        'The employer must be a permanent, established business in Saskatchewan and in good standing with the province.',
+        'The job must be full-time and permanent, in a TEER 0, 1, 2 or 3 occupation (or a designated trade), paying at least the Saskatchewan median wage for that occupation.',
+        'Employer registration and the Job Approval Letter are free.',
+        'The employer may be contacted by SINP to verify the job is genuine.'
+      ]
+    },
+    mpnp: {
+      reqs: [
+        'A connection to Manitoba is mandatory to submit an Expression of Interest — a close relative, a close friend or distant relative, past Manitoba work or study, a strategic invitation, or Manitoba employment with a long-term job offer.',
+        'Work experience in the last 5 years (points rise with each full year).',
+        'Language test results for each of the four skills — Manitoba scores points per skill band.',
+        'Education points for completed post-secondary programs; an ECA is needed for education earned outside Canada.',
+        'Age 18 or older, with the most points between 21 and 45.',
+        'Settlement funds and a genuine intention to live in Manitoba. Watch the risk deductions: work or study in another province costs you 100 points each.',
+        'If your occupation is regulated in Manitoba, you must be fully licensed to claim the 100 licensing points.'
+      ],
+      steps: [
+        'Create an Expression of Interest (EOI) profile with Manitoba — it stays in the pool for up to one year.',
+        'Manitoba holds draws and issues Letters of Advice to Apply (LAA) to the highest-ranked profiles, often by stream and connection type.',
+        'Submit your full MPNP application within 60 days of the LAA, with your documents and the application fee.',
+        'MPNP assesses your application; you may be interviewed. If approved, you receive a nomination certificate.',
+        'Apply to IRCC for permanent residence with your nomination, and keep living and working in Manitoba while it is processed.'
+      ],
+      employer: [
+        'For the Skilled Worker in Manitoba stream, the employer must be established and commercially operating in Manitoba — generally for at least three years — with a physical workplace in the province.',
+        'The job offer must be long-term and full-time, at a wage in line with what Manitoba employers pay for that occupation.',
+        'The employer must be in good standing and able to show the position is genuine; Manitoba may ask how the position was recruited.',
+        'There is no employer fee for supporting a nomination, and no LMIA is required for the MPNP itself (working legally in Canada is a separate federal matter).'
+      ]
+    },
+    bcpnp: {
+      reqs: [
+        'A full-time, indeterminate (no fixed end date) job offer from a B.C. employer — required before you can register in the Skills Immigration Registration System (SIRS), which the calculator above scores.',
+        'Work experience directly related to the job offer (same NOC) earns the top experience points.',
+        'Language: minimum CLB 4 for TEER 2 and 3 occupations in the streams that require it; higher language raises your score.',
+        'The wage offered must meet or exceed the B.C. median wage for your occupation.',
+        'Education points require an ECA for credentials earned outside Canada.',
+        'You must genuinely intend to live and work in British Columbia.'
+      ],
+      steps: [
+        'Get the job offer and register in SIRS (BC PNP Online) — your registration is scored out of 200.',
+        'Registrations stay in the pool for up to 12 months; B.C. holds draws and invites the highest scores, often by occupation and sector.',
+        'If invited, submit your full application within 30 days and pay the application fee.',
+        'BC PNP assesses your application — including your employer — and issues a nomination.',
+        'Express Entry BC candidates accept in their IRCC account for +600 points; other streams apply to IRCC directly. Then complete the federal PR stage.'
+      ],
+      employer: [
+        'The employer must be established and in good standing in British Columbia, with a permanent place of business.',
+        'Minimum staff: at least 5 full-time, indeterminate employees if the business is in Metro Vancouver, or at least 3 elsewhere in B.C.',
+        'The business must generally have been operating in B.C. for at least one year (two years for the Entry Level and Semi-Skilled stream).',
+        'The job offer must be genuine, full-time and indeterminate, at a wage that meets the B.C. median for the occupation.',
+        'The employer may be interviewed and must cooperate with BC PNP verification. There is no employer fee.'
+      ]
+    },
+    aaip: {
+      reqs: [
+        'Create a Worker Expression of Interest — Alberta scores it out of 100 (the grid above). Draws select by Alberta’s sector priorities, so there is no fixed pass mark.',
+        'Most worker streams are built around Alberta employment: the Alberta Opportunity Stream requires you to already be working full-time in Alberta for an Alberta employer on a valid work permit.',
+        'Your occupation must be eligible for the stream you choose — some occupations are excluded from the Alberta Opportunity Stream.',
+        'Language minimums apply per stream (for example CLB 4 or 5, depending on the TEER of your occupation).',
+        'A job offer earns economic points; the Rural Renewal Stream also requires an endorsement letter from a designated rural community.',
+        'You must show you can support yourself and that you intend to live in Alberta.'
+      ],
+      steps: [
+        'Submit a Worker Expression of Interest (EOI) in the AAIP portal and enter the candidate pool.',
+        'AAIP holds draws based on labour-market priorities (sector, occupation, region) and invites selected candidates to apply.',
+        'Submit your full stream application with documents and the application fee within the deadline.',
+        'AAIP assesses your application, including employer and job verification, and issues a nomination certificate.',
+        'Apply to IRCC for permanent residence with your nomination and complete the federal stage.'
+      ],
+      employer: [
+        'The business must be legally established and operating in Alberta, with a physical workplace in the province.',
+        'The job must be full-time (at least 30 hours per week), paid, non-seasonal and expected to last at least 12 months.',
+        'Wages and working conditions must meet Alberta employment standards and be in line with the occupation’s going rate.',
+        'For most worker streams the position must be supported by an LMIA or be LMIA-exempt — your work permit situation is checked as part of the application.',
+        'The employer must be in good standing and may be contacted to verify the offer is genuine. There is no AAIP employer fee.'
+      ]
+    },
+    ontario: {
+      reqs: [
+        'An active Express Entry profile is required — Ontario selects candidates directly from the federal pool. There is no separate Ontario application until you are invited.',
+        'You must qualify under the Federal Skilled Worker Program or the Canadian Experience Class.',
+        'Work experience: at least one year of continuous full-time (or equivalent part-time) skilled work experience in the last five years (FSW route) or in Canada in the last three years (CEC route).',
+        'A bachelor’s degree or higher, with an ECA if it was earned outside Canada.',
+        'Language at the level of the federal program you qualify under. French-speaking candidates are also selected through Ontario’s French-Speaking Skilled Worker stream.',
+        'Settlement funds and a genuine intention to live in Ontario. The calculator above uses Ontario’s published Workforce Priority points factors (out of 132).'
+      ],
+      steps: [
+        'Create your Express Entry profile and make sure every detail is accurate — Ontario finds you in the pool.',
+        'Ontario issues Notifications of Interest (NOIs) to selected profiles in targeted draws.',
+        'If you receive an NOI, submit your Ontario application within 45 days and pay the Ontario application fee.',
+        'Ontario assesses your application and, if approved, nominates you — accept in your Express Entry account for +600 points.',
+        'Receive a federal Invitation to Apply and submit your PR application to IRCC.'
+      ],
+      employer: [
+        'The Workforce Priority stream needs NO employer — it is based on your own profile.',
+        'If you instead use one of Ontario’s Employer Job Offer streams, the employer must have been in active business for at least 3 years, with gross annual revenue of at least $1,000,000 in the GTA (or $500,000 elsewhere in Ontario).',
+        'The employer must employ at least 5 full-time Canadian citizens or permanent residents in the GTA (or 3 elsewhere in Ontario).',
+        'Under the Employer Job Offer streams, the job must be full-time and permanent, in a TEER 0–3 occupation, paid at or above the Ontario median wage for that occupation.',
+        'The employer must complete an employer form and may be verified by Ontario. There is no employer fee.'
+      ]
+    },
+    quebec: {
+      reqs: [
+        'Quebec selects its own skilled workers through the PSTQ — the Arrima score above (out of 1,400) ranks your declaration of interest. There is no fixed pass mark; each invitation round sets its own minimum.',
+        'French is the dominant factor: English scores zero, and Streams 1 and 2 also require minimum spoken French (level 7 or level 5 on the Québec scale) as a stream condition.',
+        'Your education, work experience and your occupation’s labour-market diagnosis in Québec all feed the score; a Québec diploma and Québec work experience are heavily rewarded.',
+        'A validated job offer in your main occupation adds points and is the basis of Streams 3 and 4.',
+        'You must intend to settle and work in Québec, and meet the federal requirements at the second stage (medical exam, police certificates, background checks).',
+        'You must show you can support yourself and your family for the first months after arrival (self-sufficiency requirement).'
+      ],
+      steps: [
+        'Create an Arrima account and file a declaration of interest — it is scored and ranked in the pool.',
+        'Québec holds invitation rounds and invites selected profiles to apply.',
+        'Submit your full application and documents through Mon Projet Québec within the deadline, and pay the processing fee.',
+        'If approved, you receive a Certificat de sélection du Québec (CSQ).',
+        'Apply to IRCC for permanent residence — the federal stage checks medical, security and background, then issues your PR.'
+      ],
+      employer: [
+        'For a validated job offer, the employer submits the offer for validation through Québec’s employer services in Arrima — the worker cannot validate an offer alone.',
+        'The business must be legally established and operating in Québec, and the job must be full-time in your main occupation.',
+        'Validation confirms the offer is genuine, the position is real, and the employer is in good standing; the employer pays the government processing fee for the validation request.',
+        'A validated offer inside the Montréal metropolitan area is worth 30 points; outside it, 50 points.'
+      ]
+    },
+    nb: {
+      reqs: [
+        'An active Express Entry profile, and you must qualify for FSW, FST or CEC. New Brunswick scores its own grid out of 100 — you need at least 67 (the grid above).',
+        'A New Brunswick connection: most candidates are selected because of a New Brunswick job offer, an in-demand occupation, or selection through a provincial recruitment event or the provincial pool.',
+        'Language test results, an ECA for education earned outside Canada, and proof of settlement funds.',
+        'At least one year of skilled work experience in the last 10 years in your primary occupation.',
+        'A genuine intention to live and work in New Brunswick.'
+      ],
+      steps: [
+        'Create your Express Entry profile.',
+        'Submit an Expression of Interest to New Brunswick when the provincial pool is open for your pathway (or be selected through an NB recruitment initiative).',
+        'If New Brunswick invites you, submit the full application with documents and the provincial fee within the deadline.',
+        'New Brunswick assesses your application and issues a nomination — accept it in your Express Entry account for +600 points.',
+        'Receive a federal Invitation to Apply and complete your PR application with IRCC.'
+      ],
+      employer: [
+        'A supporting employer must be established and operating in New Brunswick — generally for at least one year — with a physical workplace in the province.',
+        'The job offer must be full-time and permanent (indeterminate), in a skilled occupation, at a wage in line with New Brunswick rates for the occupation.',
+        'The employer must be in good standing and may be asked to show the position is genuine and that recruitment efforts were made.',
+        'There is no employer fee for supporting a nomination.'
+      ]
+    },
+    pei: {
+      reqs: [
+        'An active Express Entry profile, qualifying under FSW, FST or CEC — PEI then scores its own grid out of 100 (plus a bilingual bonus), shown above.',
+        'Create a separate Expression of Interest profile with PEI — the province holds draws (usually monthly) and selects by employer needs and occupation priorities.',
+        'A PEI job offer is not mandatory for the Express Entry category, but candidates working in PEI or with PEI employer support are selected far more often.',
+        'Language results, an ECA for foreign education, and settlement funds are required.',
+        'A genuine intention to live and work in Prince Edward Island.'
+      ],
+      steps: [
+        'Create your Express Entry profile, then create a PEI Expression of Interest profile.',
+        'PEI holds draws and invites selected profiles to apply.',
+        'Submit your full application with documents and the PEI application fee within the deadline.',
+        'PEI assesses your application and issues a nomination — accept in Express Entry for +600 points.',
+        'Complete the federal stage with IRCC and receive your PR.'
+      ],
+      employer: [
+        'A supporting PEI employer must be an established business operating in Prince Edward Island — generally for at least two years — and in good standing.',
+        'The job must be full-time and long-term, at a wage consistent with PEI rates for the occupation.',
+        'The employer is expected to support your settlement in PEI (for example, helping you connect with settlement services) and may be contacted by PEI to verify the offer.',
+        'There is no employer fee for supporting a nomination.'
+      ]
+    },
+    nl: {
+      reqs: [
+        'An active Express Entry profile, qualifying under FSW, FST or CEC. Newfoundland and Labrador scores its own grid out of 100 — you need at least 67 (the grid above).',
+        'A full-time job offer from a Newfoundland and Labrador employer, of at least one year with the possibility of extension, in a skilled occupation.',
+        'Language test results and an ECA for education earned outside Canada.',
+        'Skilled work experience in your occupation — the grid caps the work factor, so the job offer and adaptability factors matter.',
+        'Settlement funds and a genuine intention to live in Newfoundland and Labrador.'
+      ],
+      steps: [
+        'Create your Express Entry profile and secure a qualifying NL job offer.',
+        'Apply to the NL Provincial Nominee Program (Express Entry Skilled Worker category) with your documents.',
+        'The province assesses your application and endorses you — accept the nomination in your Express Entry account for +600 points.',
+        'Receive a federal Invitation to Apply and submit your PR application to IRCC.',
+        'Complete medical and background checks at the federal stage.'
+      ],
+      employer: [
+        'The employer must be established and operating in Newfoundland and Labrador — generally for at least two years (one year in some cases) — with a physical workplace in the province.',
+        'The job must be full-time, for at least one year with the possibility of extension, at a wage in line with provincial rates for the occupation.',
+        'Depending on the occupation and situation, the employer may first need a Job Vacancy Assessment (JVA) through the province, confirming the vacancy could not be filled locally.',
+        'The employer must be in good standing and may be verified by the province. There is no employer fee for the nomination itself.'
+      ]
+    }
+  };
+
+  var EXPLAINER = [
+    'Canada’s provinces can nominate people whose skills match their local job market. That nomination is the most powerful boost in the system: in Express Entry-linked streams it adds 600 points to your CRS score, which in practice guarantees an invitation in a later round. In base streams, the nomination lets you apply to IRCC for permanent residence directly.',
+    'For job-offer streams, your employer’s part is small and specific: confirm the job is genuine and full-time, share basic facts about the business, and (in some provinces) register or confirm details on the province’s employer portal. In most provinces the employer pays no fee for supporting a nomination, and no Labour Market Impact Assessment (LMIA) is needed for the nomination itself.',
+    'Your employer is not “sponsoring” you in the way other countries use the word. They are not responsible for your housing, your family, or the outcome of your application, and they can withdraw their support at any time before a decision. Everything else — the forms, the fees, the documents, the deadlines — is yours.'
+  ];
+  var TALK = [
+    'Ask for something small and specific: “I need a full-time job offer letter on company letterhead, and a few basic details about the business.” Small asks get yes answers.',
+    'Say the cost part first: in most provinces it costs the employer nothing, and there is no LMIA to apply for.',
+    'Remove the risk: “You are not responsible for my application or its outcome, and you can withdraw at any time.”',
+    'Show the official page: send your employer the province’s own program page (linked in the calculator above) so they hear it from the government, not from you.',
+    'Offer to prepare everything: draft the letter yourself for their signature, and complete every form that you are allowed to complete.',
+    'Give them time and a deadline: explain the draw or submission deadline you are aiming at, and ask for a short call to answer their questions.'
+  ];
+  var SAMPLE_MSG = 'Hi [Name], I am applying for permanent residence through the provincial nominee program, and my application would be much stronger with a full-time job offer from [Company]. Your part is small: a job offer letter on letterhead and a few basic details about the business. In most cases it costs the company nothing, there is no LMIA involved, and you are not responsible for the outcome of my application — you can withdraw at any time. I have a short guide that explains exactly how it works, and I can prepare everything for you. Could we talk for 10 minutes this week? Thank you.';
+
+  function pdfEsc(s){ return String(s).replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)'); }
+  function pdfClean(s){
+    return String(s)
+      .replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
+      .replace(/[–—]/g, '-').replace(/•/g, '-')
+      .replace(/[^\x20-\x7E]/g, '');
+  }
+  function buildPnpPdf(pid){
+    var p = null, i;
+    for (i = 0; i < PROVINCES.length; i++) if (PROVINCES[i].id === pid) p = PROVINCES[i];
+    var g = GUIDE[pid];
+    var L = LAST[pid] || { total: 0, max: p.max, verdict: '', rows: [] };
+    var W = 595.28, H = 841.89, M = 46, CW = W - 2 * M;
+    var NAVY = '0.137 0.008 0.318', GOLD = '0.984 0.686 0.000', INK = '0.133 0.063 0.247',
+        MUT = '0.435 0.380 0.596', GREEN = '0.184 0.490 0.118', LGREY = '0.965 0.953 0.988', WHITE = '1 1 1';
+    var pages = [], ops = [], y = 0, pageNo = 0;
+    function rect(x, yy, w, h, fill){ ops.push(fill + ' rg ' + x.toFixed(1) + ' ' + yy.toFixed(1) + ' ' + w.toFixed(1) + ' ' + h.toFixed(1) + ' re f'); }
+    function txt(s, x, yy, size, font, col){ ops.push('BT /' + font + ' ' + size + ' Tf ' + col + ' rg 1 0 0 1 ' + x.toFixed(1) + ' ' + yy.toFixed(1) + ' Tm (' + pdfEsc(pdfClean(s)) + ') Tj ET'); }
+    function wrap(s, size, maxW){
+      var per = Math.max(8, Math.floor(maxW / (size * 0.50)));
+      var words = String(s).split(/\s+/), lines = [], cur = '';
+      words.forEach(function(wd){
+        var t = cur ? cur + ' ' + wd : wd;
+        if (t.length > per && cur){ lines.push(cur); cur = wd; } else { cur = t; }
+      });
+      if (cur) lines.push(cur);
+      return lines;
+    }
+    function footer(){ txt('crs.velvook.com - estimate only, not immigration advice', M, 26, 8, 'F1', MUT); txt('Page ' + pageNo, W - M - 34, 26, 8, 'F1', MUT); }
+    function newPage(first){
+      if (ops.length){ footer(); pages.push(ops.join('\n')); }
+      ops = []; pageNo++;
+      if (first){
+        rect(0, H - 96, W, 96, NAVY);
+        txt('PROVINCIAL NOMINEE GUIDE', M, H - 40, 10.5, 'F2', GOLD);
+        txt(p.tab, M, H - 68, 21, 'F2', WHITE);
+        y = H - 124;
+      } else {
+        txt(p.tab + ' Nominee Guide', M, H - 34, 9, 'F2', MUT);
+        y = H - 60;
+      }
+    }
+    function need(h){ if (y - h < 58) newPage(false); }
+    function para(s, size, col, gap){
+      wrap(s, size, CW).forEach(function(ln){ need(size * 1.45); txt(ln, M, y, size, 'F1', col || INK); y -= size * 1.45; });
+      y -= (gap == null ? 6 : gap);
+    }
+    function h2(s){ need(36); y -= 10; txt(s, M, y, 13.5, 'F2', NAVY); rect(M, y - 6, 30, 3, GOLD); y -= 24; }
+    function bullet(s){
+      wrap(s, 10.5, CW - 16).forEach(function(ln, li){
+        need(15);
+        if (li === 0) txt('-', M + 2, y, 10.5, 'F2', GOLD);
+        txt(ln, M + 16, y, 10.5, 'F1', INK); y -= 15;
+      });
+      y -= 3;
+    }
+    function step(n, s){
+      wrap(s, 10.5, CW - 16).forEach(function(ln, li){
+        need(15);
+        if (li === 0) txt(n + '.', M + 2, y, 10.5, 'F2', NAVY);
+        txt(ln, M + 16, y, 10.5, 'F1', INK); y -= 15;
+      });
+      y -= 3;
+    }
+
+    newPage(true);
+    txt(p.name, M, y, 12.5, 'F2', NAVY); y -= 15;
+    para(p.program, 10, MUT, 10);
+    need(66);
+    rect(M, y - 48, CW, 60, LGREY);
+    txt('YOUR SCORE', M + 14, y, 9.5, 'F2', MUT);
+    txt(String(L.total) + ' / ' + L.max, M + 14, y - 28, 24, 'F2', NAVY);
+    if (p.pass) txt('Pass mark: ' + p.pass, M + 190, y - 26, 11.5, 'F2', GREEN);
+    y -= 70;
+    if (L.verdict) para(L.verdict, 10.5, INK, 8);
+    h2('Your points breakdown');
+    var maxRow = 1;
+    L.rows.forEach(function(r){ if (r[1] > maxRow) maxRow = r[1]; });
+    L.rows.forEach(function(r){
+      need(26);
+      txt(String(r[0]), M, y, 10, 'F1', INK);
+      txt(String(r[1]), W - M - 22, y, 10.5, 'F2', NAVY);
+      y -= 7;
+      rect(M, y - 2, Math.max(6, CW * (r[1] / maxRow)), 3.5, GOLD);
+      y -= 15;
+    });
+    h2('1 - Requirements checklist');
+    g.reqs.forEach(bullet);
+    h2('2 - How you get the nomination, step by step');
+    g.steps.forEach(function(s, i){ step(i + 1, s); });
+    h2('3 - What your employer must be and do');
+    g.employer.forEach(bullet);
+    h2('4 - For your employer: how the nominee program works');
+    EXPLAINER.forEach(function(s){ para(s, 10.5, INK, 7); });
+    h2('5 - How to convince your employer');
+    TALK.forEach(bullet);
+    para('A message you can copy and send:', 10.5, INK, 4);
+    var sl = wrap(SAMPLE_MSG, 10, CW - 24);
+    need(sl.length * 14 + 20);
+    rect(M, y - sl.length * 14 - 4, CW, sl.length * 14 + 18, LGREY);
+    y -= 2;
+    sl.forEach(function(ln){ txt(ln, M + 12, y, 10, 'F1', INK); y -= 14; });
+    y -= 12;
+    para('Prepared from the official ' + p.tab + ' program pages (linked in the calculator at crs.velvook.com). Rules change - confirm on the official page before you apply. This guide is general information and an estimate only, not immigration advice.', 9, MUT, 0);
+    footer(); pages.push(ops.join('\n'));
+
+    var total = 5 + pages.length * 2;
+    var kids = pages.map(function(_, i){ return (5 + i * 2) + ' 0 R'; }).join(' ');
+    var out = '%PDF-1.4\n', offsets = {};
+    function addObj(num, body){ offsets[num] = out.length; out += num + ' 0 obj\n' + body + '\nendobj\n'; }
+    addObj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    addObj(2, '<< /Type /Pages /Kids [' + kids + '] /Count ' + pages.length + ' >>');
+    addObj(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    addObj(4, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    pages.forEach(function(content, i){
+      var pn = 5 + i * 2, cn = 6 + i * 2;
+      addObj(pn, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + W + ' ' + H + '] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ' + cn + ' 0 R >>');
+      offsets[cn] = out.length;
+      out += cn + ' 0 obj\n<< /Length ' + content.length + ' >>\nstream\n' + content + '\nendstream\nendobj\n';
+    });
+    var xrefPos = out.length;
+    out += 'xref\n0 ' + total + '\n0000000000 65535 f \n';
+    for (var k = 1; k < total; k++) out += String(offsets[k] || 0).padStart(10, '0') + ' 00000 n \n';
+    out += 'trailer\n<< /Size ' + total + ' /Root 1 0 R >>\nstartxref\n' + xrefPos + '\n%%EOF';
+    return new Blob([out], { type: 'application/pdf' });
+  }
+
+  function renderGuide(pid){
+    var meta = PANELS[pid]; if (!meta) return;
+    var p = meta.p, g = GUIDE[pid];
+    var L = LAST[pid] || { total: 0, max: p.max, verdict: '', rows: [] };
+    var body = document.getElementById('pgbody-' + pid);
+    if (!body) return;
+    var h = '<p style="margin:4px 0 0"><b>Your ' + p.tab + ' score: ' + L.total + ' / ' + L.max + '</b>' + (p.pass ? ' · pass mark ' + p.pass : '') + '. ' + L.verdict + '</p>';
+    h += '<h5>1 · Requirements checklist</h5><ul>' + g.reqs.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
+    h += '<h5>2 · How you get the nomination, step by step</h5><ol>' + g.steps.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ol>';
+    h += '<h5>3 · What your employer must be and do</h5><ul>' + g.employer.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
+    h += '<h5>4 · For your employer: how the nominee program works</h5>' + EXPLAINER.map(function(x){ return '<p>' + x + '</p>'; }).join('');
+    h += '<h5>5 · How to convince your employer</h5><ul>' + TALK.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
+    h += '<p style="margin:10px 0 0"><b>A message you can copy and send:</b></p><p class="pg-sample">' + SAMPLE_MSG + '</p>';
+    h += '<p class="pg-fine">Prepared from the official ' + p.tab + ' program pages (linked in the calculator above). Rules change — confirm on the official page before you apply. General information and estimates only, not immigration advice.</p>';
+    body.innerHTML = h;
+    var url = URL.createObjectURL(buildPnpPdf(pid));
+    var open = document.getElementById('pgpdf-' + pid), dl = document.getElementById('pgpdfdl-' + pid);
+    var fname = 'PNP-Guide-' + p.tab.replace(/[^A-Za-z0-9]+/g, '-') + '.pdf';
+    if (open) open.href = url;
+    if (dl){ dl.href = url; dl.setAttribute('download', fname); }
+  }
+
+  function snapshotAnswers(pid){
+    var c = PANELS[pid].collect();
+    return { pid: pid, idx: c.idx, on: c.on, wage: c.wage, ts: Date.now() };
+  }
+  function restoreAnswers(snap){
+    var meta = PANELS[snap.pid]; if (!meta) return;
+    var p = meta.p;
+    p.fields.forEach(function(f){
+      var node = document.getElementById('f-' + p.id + '-' + f.k);
+      if (!node) return;
+      if (f.t === 'sel' && snap.idx && snap.idx[f.k] != null) node.selectedIndex = snap.idx[f.k];
+      else if (f.t === 'wage') node.value = snap.wage || node.value;
+      else if (f.t === 'chk') node.checked = !!(snap.on && snap.on[f.k]);
+    });
+    meta.update();
+  }
+
+  PROVINCES.forEach(function(p){
+    var pay = document.getElementById('pgpay-' + p.id);
+    if (pay) pay.addEventListener('click', function(){
+      try {
+        localStorage.setItem('pnpPaySnapshot', JSON.stringify(snapshotAnswers(p.id)));
+        localStorage.setItem('pnpPayStarted', String(Date.now()));
+      } catch (e) {}
+    });
+  });
+
+  (function(){
+    var snap = null;
+    try { snap = JSON.parse(localStorage.getItem('pnpPaySnapshot') || 'null'); } catch (e) {}
+    if (snap && PANELS[snap.pid]) restoreAnswers(snap);
+    var qs = window.location.search || '';
+    var paidReturn = /[?&](paid=1|payment=success|session_id=)/.test(qs);
+    var started = 0, crsStarted = 0;
+    try {
+      started = parseInt(localStorage.getItem('pnpPayStarted') || '0', 10) || 0;
+      crsStarted = parseInt(localStorage.getItem('crsPayStarted') || '0', 10) || 0;
+    } catch (e) {}
+    var fresh = started && (Date.now() - started) < 24 * 3600 * 1000;
+    var crsNewer = crsStarted && crsStarted > started;
+    if (paidReturn && snap && PANELS[snap.pid] && fresh && !crsNewer){
+      try { localStorage.removeItem('pnpPayStarted'); } catch (e) {}
+      var lock = document.getElementById('pglock-' + snap.pid);
+      var open = document.getElementById('pgopen-' + snap.pid);
+      if (lock) lock.classList.add('hidden');
+      if (open) open.classList.remove('hidden');
+      renderGuide(snap.pid);
+      var idx = 0;
+      PROVINCES.forEach(function(p, i){ if (p.id === snap.pid) idx = i; });
+      var tab = tabsEl.children[idx];
+      if (tab && tab.click) tab.click();
+      var hub = document.getElementById('pnpHub');
+      if (hub) setTimeout(function(){ hub.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
+    }
+  })();
   SOON.forEach(function(s){
     tabsEl.appendChild(el('<span class="pnp-tab soon" title="Calculator being verified against the official grid">' + s + ' · soon</span>'));
   });
