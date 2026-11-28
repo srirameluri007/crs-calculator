@@ -2494,6 +2494,8 @@
         }).then(function(r){ return r.json(); }).then(function(data){
           if(data && (data.success === 'true' || data.success === true)){
             form.reset(); btn.textContent = 'Subscribed ✓'; msg.textContent = 'You’re on the list — watch your inbox for the next draw alert.'; msg.className = 'sub-msg ok';
+          } else if(data && data.message && /activation/i.test(data.message)){
+            btn.disabled = false; btn.textContent = 'Subscribe free'; msg.textContent = 'You’re almost on the list — draw alerts are being switched on right now. Please try once more in a little while.'; msg.className = 'sub-msg ok';
           } else {
             btn.disabled = false; btn.textContent = 'Subscribe free'; msg.textContent = 'That didn’t go through — please try again in a moment.'; msg.className = 'sub-msg err';
           }
